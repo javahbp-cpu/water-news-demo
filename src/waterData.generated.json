@@ -1,0 +1,764 @@
+{
+  "hero": {
+    "worldCoverage2024": 91.45,
+    "worldUnservedMillion2024": 696.2,
+    "worldPopulation2024": 8141808945
+  },
+  "coverage": [
+    {
+      "name": "World",
+      "coverage": 91.45,
+      "sanitation": 82.15,
+      "population": 8141808945
+    },
+    {
+      "name": "Sub-Saharan Africa",
+      "coverage": 67.53,
+      "sanitation": 37.1,
+      "population": 1291044964
+    },
+    {
+      "name": "South Asia",
+      "coverage": 95.94,
+      "sanitation": 81.96,
+      "population": 1677384532
+    },
+    {
+      "name": "East Asia & Pacific",
+      "coverage": 95.27,
+      "sanitation": 94.78,
+      "population": 2388319494
+    },
+    {
+      "name": "Latin America & Caribbean",
+      "coverage": 97.55,
+      "sanitation": 90.34,
+      "population": 662186388
+    },
+    {
+      "name": "Europe & Central Asia",
+      "coverage": 97.99,
+      "sanitation": 97.44,
+      "population": 928263208
+    },
+    {
+      "name": "Fragile and conflict affected situations",
+      "coverage": 70.73,
+      "sanitation": 46.81,
+      "population": 1081767572
+    },
+    {
+      "name": "Least developed countries: UN classification",
+      "coverage": 69.61,
+      "sanitation": 42.32,
+      "population": 1187777591
+    }
+  ],
+  "unserved": [
+    {
+      "name": "World",
+      "unserved": 696.2,
+      "coverage": 91.45
+    },
+    {
+      "name": "Low & middle income",
+      "unserved": 622.8,
+      "coverage": 90.51
+    },
+    {
+      "name": "IDA total",
+      "unserved": 472.9,
+      "coverage": 75.71
+    },
+    {
+      "name": "Sub-Saharan Africa",
+      "unserved": 419.2,
+      "coverage": 67.53
+    },
+    {
+      "name": "Least developed countries: UN classification",
+      "unserved": 360.9,
+      "coverage": 69.61
+    },
+    {
+      "name": "Heavily indebted poor countries (HIPC)",
+      "unserved": 340.6,
+      "coverage": 63.83
+    },
+    {
+      "name": "South Asia",
+      "unserved": 68.2,
+      "coverage": 95.94
+    },
+    {
+      "name": "Fragile and conflict affected situations",
+      "unserved": 316.6,
+      "coverage": 70.73
+    }
+  ],
+  "stressTop": [
+    {
+      "code": "EGY",
+      "name": "Egypt, Arab Rep.",
+      "value": 7750.0
+    },
+    {
+      "code": "BHR",
+      "name": "Bahrain",
+      "value": 3877.5
+    },
+    {
+      "code": "TKM",
+      "name": "Turkmenistan",
+      "value": 1868.0
+    },
+    {
+      "code": "ARE",
+      "name": "United Arab Emirates",
+      "value": 1509.9
+    },
+    {
+      "code": "SAU",
+      "name": "Saudi Arabia",
+      "value": 974.2
+    },
+    {
+      "code": "LBY",
+      "name": "Libya",
+      "value": 817.1
+    },
+    {
+      "code": "SDN",
+      "name": "Sudan",
+      "value": 673.4
+    },
+    {
+      "code": "QAT",
+      "name": "Qatar",
+      "value": 446.4
+    },
+    {
+      "code": "MRT",
+      "name": "Mauritania",
+      "value": 337.1
+    },
+    {
+      "code": "PAK",
+      "name": "Pakistan",
+      "value": 326.0
+    },
+    {
+      "code": "UZB",
+      "name": "Uzbekistan",
+      "value": 262.5
+    },
+    {
+      "code": "SYR",
+      "name": "Syrian Arab Republic",
+      "value": 195.8
+    },
+    {
+      "code": "YEM",
+      "name": "Yemen, Rep.",
+      "value": 169.8
+    },
+    {
+      "code": "AZE",
+      "name": "Azerbaijan",
+      "value": 160.5
+    }
+  ],
+  "stressScatter": [
+    {
+      "name": "Egypt, Arab Rep.",
+      "gdpPerCapita": 3338.5,
+      "freshwaterPerCapita": 8.9,
+      "population": 116.5,
+      "stress": 7750.0
+    },
+    {
+      "name": "Bahrain",
+      "gdpPerCapita": 29653.6,
+      "freshwaterPerCapita": 2.6,
+      "population": 1.6,
+      "stress": 3877.5
+    },
+    {
+      "name": "Turkmenistan",
+      "gdpPerCapita": 6856.7,
+      "freshwaterPerCapita": 194.3,
+      "population": 7.5,
+      "stress": 1868.0
+    },
+    {
+      "name": "United Arab Emirates",
+      "gdpPerCapita": 50273.5,
+      "freshwaterPerCapita": 14.9,
+      "population": 11.0,
+      "stress": 1509.9
+    },
+    {
+      "name": "Saudi Arabia",
+      "gdpPerCapita": 35121.7,
+      "freshwaterPerCapita": 74.6,
+      "population": 35.3,
+      "stress": 974.2
+    },
+    {
+      "name": "Libya",
+      "gdpPerCapita": 6569.2,
+      "freshwaterPerCapita": 96.9,
+      "population": 7.4,
+      "stress": 817.1
+    },
+    {
+      "name": "Sudan",
+      "gdpPerCapita": 984.6,
+      "freshwaterPerCapita": 81.0,
+      "population": 50.4,
+      "stress": 673.4
+    },
+    {
+      "name": "Qatar",
+      "gdpPerCapita": 76688.7,
+      "freshwaterPerCapita": 21.1,
+      "population": 2.9,
+      "stress": 446.4
+    },
+    {
+      "name": "Mauritania",
+      "gdpPerCapita": 2110.1,
+      "freshwaterPerCapita": 82.0,
+      "population": 5.2,
+      "stress": 337.1
+    },
+    {
+      "name": "Pakistan",
+      "gdpPerCapita": 1478.8,
+      "freshwaterPerCapita": 225.7,
+      "population": 251.3,
+      "stress": 326.0
+    },
+    {
+      "name": "Uzbekistan",
+      "gdpPerCapita": 3161.7,
+      "freshwaterPerCapita": 467.7,
+      "population": 36.4,
+      "stress": 262.5
+    },
+    {
+      "name": "Azerbaijan",
+      "gdpPerCapita": 7283.8,
+      "freshwaterPerCapita": 800.2,
+      "population": 10.2,
+      "stress": 160.5
+    },
+    {
+      "name": "Jordan",
+      "gdpPerCapita": 4618.1,
+      "freshwaterPerCapita": 60.6,
+      "population": 11.6,
+      "stress": 139.3
+    },
+    {
+      "name": "Iraq",
+      "gdpPerCapita": 6073.6,
+      "freshwaterPerCapita": 798.7,
+      "population": 46.0,
+      "stress": 120.5
+    },
+    {
+      "name": "Oman",
+      "gdpPerCapita": 20285.2,
+      "freshwaterPerCapita": 296.0,
+      "population": 5.3,
+      "stress": 116.7
+    },
+    {
+      "name": "Tunisia",
+      "gdpPerCapita": 4181.1,
+      "freshwaterPerCapita": 346.1,
+      "population": 12.3,
+      "stress": 92.1
+    },
+    {
+      "name": "Algeria",
+      "gdpPerCapita": 5753.0,
+      "freshwaterPerCapita": 247.3,
+      "population": 46.8,
+      "stress": 91.5
+    },
+    {
+      "name": "Barbados",
+      "gdpPerCapita": 26544.9,
+      "freshwaterPerCapita": 283.4,
+      "population": 0.3,
+      "stress": 87.5
+    },
+    {
+      "name": "Hungary",
+      "gdpPerCapita": 23292.3,
+      "freshwaterPerCapita": 624.7,
+      "population": 9.6,
+      "stress": 78.2
+    },
+    {
+      "name": "Netherlands",
+      "gdpPerCapita": 67520.4,
+      "freshwaterPerCapita": 621.4,
+      "population": 18.0,
+      "stress": 74.9
+    },
+    {
+      "name": "Niger",
+      "gdpPerCapita": 735.3,
+      "freshwaterPerCapita": 138.3,
+      "population": 27.0,
+      "stress": 73.8
+    },
+    {
+      "name": "Malta",
+      "gdpPerCapita": 43898.6,
+      "freshwaterPerCapita": 95.1,
+      "population": 0.6,
+      "stress": 72.6
+    },
+    {
+      "name": "Iran, Islamic Rep.",
+      "gdpPerCapita": 5190.2,
+      "freshwaterPerCapita": 1435.4,
+      "population": 91.6,
+      "stress": 72.3
+    },
+    {
+      "name": "Serbia",
+      "gdpPerCapita": 13679.2,
+      "freshwaterPerCapita": 1261.5,
+      "population": 6.6,
+      "stress": 60.6
+    },
+    {
+      "name": "Cabo Verde",
+      "gdpPerCapita": 5192.5,
+      "freshwaterPerCapita": 577.2,
+      "population": 0.5,
+      "stress": 59.7
+    },
+    {
+      "name": "Somalia, Fed. Rep.",
+      "gdpPerCapita": 629.5,
+      "freshwaterPerCapita": 337.0,
+      "population": 19.0,
+      "stress": 55.0
+    },
+    {
+      "name": "Moldova",
+      "gdpPerCapita": 7576.2,
+      "freshwaterPerCapita": 640.7,
+      "population": 2.4,
+      "stress": 52.2
+    },
+    {
+      "name": "St. Kitts and Nevis",
+      "gdpPerCapita": 23960.7,
+      "freshwaterPerCapita": 513.8,
+      "population": 0.0,
+      "stress": 50.8
+    },
+    {
+      "name": "South Africa",
+      "gdpPerCapita": 6267.2,
+      "freshwaterPerCapita": 718.2,
+      "population": 64.0,
+      "stress": 47.1
+    },
+    {
+      "name": "Korea, Rep.",
+      "gdpPerCapita": 36238.6,
+      "freshwaterPerCapita": 1255.0,
+      "population": 51.8,
+      "stress": 45.0
+    },
+    {
+      "name": "Armenia",
+      "gdpPerCapita": 8556.2,
+      "freshwaterPerCapita": 2310.0,
+      "population": 3.0,
+      "stress": 44.8
+    },
+    {
+      "name": "India",
+      "gdpPerCapita": 2694.7,
+      "freshwaterPerCapita": 1014.4,
+      "population": 1450.9,
+      "stress": 44.8
+    },
+    {
+      "name": "Eswatini",
+      "gdpPerCapita": 3909.6,
+      "freshwaterPerCapita": 2165.9,
+      "population": 1.2,
+      "stress": 40.5
+    },
+    {
+      "name": "North Macedonia",
+      "gdpPerCapita": 9291.9,
+      "freshwaterPerCapita": 2948.1,
+      "population": 1.8,
+      "stress": 40.2
+    },
+    {
+      "name": "Zimbabwe",
+      "gdpPerCapita": 2497.2,
+      "freshwaterPerCapita": 763.0,
+      "population": 16.6,
+      "stress": 40.0
+    },
+    {
+      "name": "Kazakhstan",
+      "gdpPerCapita": 14154.6,
+      "freshwaterPerCapita": 3211.9,
+      "population": 20.6,
+      "stress": 38.8
+    },
+    {
+      "name": "Morocco",
+      "gdpPerCapita": 4153.2,
+      "freshwaterPerCapita": 776.9,
+      "population": 38.1,
+      "stress": 36.5
+    },
+    {
+      "name": "Belgium",
+      "gdpPerCapita": 56614.6,
+      "freshwaterPerCapita": 1027.4,
+      "population": 11.9,
+      "stress": 35.8
+    },
+    {
+      "name": "Bangladesh",
+      "gdpPerCapita": 2593.4,
+      "freshwaterPerCapita": 619.9,
+      "population": 173.6,
+      "stress": 34.2
+    },
+    {
+      "name": "Singapore",
+      "gdpPerCapita": 90674.1,
+      "freshwaterPerCapita": 106.4,
+      "population": 6.0,
+      "stress": 33.3
+    },
+    {
+      "name": "Dominican Republic",
+      "gdpPerCapita": 10875.7,
+      "freshwaterPerCapita": 2092.5,
+      "population": 11.4,
+      "stress": 30.4
+    },
+    {
+      "name": "Cyprus",
+      "gdpPerCapita": 38674.3,
+      "freshwaterPerCapita": 585.9,
+      "population": 1.4,
+      "stress": 28.6
+    }
+  ],
+  "regionTrend": [
+    {
+      "name": "中东北非",
+      "values": [
+        {
+          "year": 2014,
+          "value": 139.62
+        },
+        {
+          "year": 2015,
+          "value": 138.9
+        },
+        {
+          "year": 2016,
+          "value": 140.92
+        },
+        {
+          "year": 2017,
+          "value": 147.62
+        },
+        {
+          "year": 2018,
+          "value": 142.61
+        },
+        {
+          "year": 2019,
+          "value": 144.89
+        },
+        {
+          "year": 2020,
+          "value": 145.2
+        },
+        {
+          "year": 2021,
+          "value": 167.14
+        }
+      ]
+    },
+    {
+      "name": "南亚",
+      "values": [
+        {
+          "year": 2014,
+          "value": 37.56
+        },
+        {
+          "year": 2015,
+          "value": 37.56
+        },
+        {
+          "year": 2016,
+          "value": 37.56
+        },
+        {
+          "year": 2017,
+          "value": 37.56
+        },
+        {
+          "year": 2018,
+          "value": 37.56
+        },
+        {
+          "year": 2019,
+          "value": 37.56
+        },
+        {
+          "year": 2020,
+          "value": 37.56
+        },
+        {
+          "year": 2021,
+          "value": 37.56
+        }
+      ]
+    },
+    {
+      "name": "东亚太平洋",
+      "values": [
+        {
+          "year": 2014,
+          "value": 12.18
+        },
+        {
+          "year": 2015,
+          "value": 12.16
+        },
+        {
+          "year": 2016,
+          "value": 12.37
+        },
+        {
+          "year": 2017,
+          "value": 12.35
+        },
+        {
+          "year": 2018,
+          "value": 12.32
+        },
+        {
+          "year": 2019,
+          "value": 12.33
+        },
+        {
+          "year": 2020,
+          "value": 11.99
+        },
+        {
+          "year": 2021,
+          "value": 12.03
+        }
+      ]
+    },
+    {
+      "name": "北美",
+      "values": [
+        {
+          "year": 2014,
+          "value": 8.39
+        },
+        {
+          "year": 2015,
+          "value": 8.47
+        },
+        {
+          "year": 2016,
+          "value": 8.48
+        },
+        {
+          "year": 2017,
+          "value": 8.48
+        },
+        {
+          "year": 2018,
+          "value": 8.48
+        },
+        {
+          "year": 2019,
+          "value": 8.48
+        },
+        {
+          "year": 2020,
+          "value": 8.48
+        },
+        {
+          "year": 2021,
+          "value": 8.48
+        }
+      ]
+    },
+    {
+      "name": "欧洲中亚",
+      "values": [
+        {
+          "year": 2014,
+          "value": 6.95
+        },
+        {
+          "year": 2015,
+          "value": 6.85
+        },
+        {
+          "year": 2016,
+          "value": 6.83
+        },
+        {
+          "year": 2017,
+          "value": 6.94
+        },
+        {
+          "year": 2018,
+          "value": 6.93
+        },
+        {
+          "year": 2019,
+          "value": 6.89
+        },
+        {
+          "year": 2020,
+          "value": 6.8
+        },
+        {
+          "year": 2021,
+          "value": 6.64
+        }
+      ]
+    },
+    {
+      "name": "撒哈拉以南非洲",
+      "values": [
+        {
+          "year": 2014,
+          "value": 3.17
+        },
+        {
+          "year": 2015,
+          "value": 3.24
+        },
+        {
+          "year": 2016,
+          "value": 3.28
+        },
+        {
+          "year": 2017,
+          "value": 3.29
+        },
+        {
+          "year": 2018,
+          "value": 3.34
+        },
+        {
+          "year": 2019,
+          "value": 3.37
+        },
+        {
+          "year": 2020,
+          "value": 3.4
+        },
+        {
+          "year": 2021,
+          "value": 3.41
+        }
+      ]
+    },
+    {
+      "name": "拉丁美洲",
+      "values": [
+        {
+          "year": 2014,
+          "value": 2.42
+        },
+        {
+          "year": 2015,
+          "value": 2.45
+        },
+        {
+          "year": 2016,
+          "value": 2.52
+        },
+        {
+          "year": 2017,
+          "value": 2.54
+        },
+        {
+          "year": 2018,
+          "value": 2.57
+        },
+        {
+          "year": 2019,
+          "value": 2.6
+        },
+        {
+          "year": 2020,
+          "value": 2.61
+        },
+        {
+          "year": 2021,
+          "value": 2.62
+        }
+      ]
+    }
+  ],
+  "regionLatest": [
+    {
+      "name": "中东北非",
+      "value": 167.14
+    },
+    {
+      "name": "南亚",
+      "value": 37.56
+    },
+    {
+      "name": "东亚太平洋",
+      "value": 12.03
+    },
+    {
+      "name": "北美",
+      "value": 8.48
+    },
+    {
+      "name": "欧洲中亚",
+      "value": 6.64
+    },
+    {
+      "name": "撒哈拉以南非洲",
+      "value": 3.41
+    },
+    {
+      "name": "拉丁美洲",
+      "value": 2.62
+    }
+  ],
+  "sources": [
+    "task1_drinking_water_coverage.csv",
+    "task2_stress_raw.csv",
+    "task2_stress_index_wide.csv",
+    "task3_water_stress_by_region.csv"
+  ]
+}
