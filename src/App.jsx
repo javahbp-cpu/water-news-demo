@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import * as echarts from 'echarts'
 import gsap from 'gsap'
@@ -41,6 +41,43 @@ function fmtPeople(value) {
   return `${(value / 1e8).toFixed(1)}亿`
 }
 
+const sections = [
+  { id: 'top', label: '封面' },
+  { id: 'opening', label: '开场' },
+  { id: 'map', label: '地图' },
+  { id: 'coverage', label: '覆盖' },
+  { id: 'people', label: '人口' },
+  { id: 'stress', label: '压力' },
+  { id: 'relation', label: '结构' },
+  { id: 'trend', label: '趋势' },
+  { id: 'concept', label: '图 2' }
+]
+
+function AnimatedNumber({ value, decimals = 0, suffix = '', prefix = '' }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!ref.current) return undefined
+    const target = { current: 0 }
+    const tween = gsap.to(target, {
+      current: value,
+      duration: 1.35,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: ref.current,
+        start: 'top 86%',
+        once: true
+      },
+      onUpdate: () => {
+        ref.current.textContent = target.current.toFixed(decimals)
+      }
+    })
+    return () => tween.kill()
+  }, [value, decimals, suffix, prefix])
+
+  return <>{prefix}<span ref={ref}>{Number(0).toFixed(decimals)}</span>{suffix}</>
+}
+
 function useEChart(ref, optionFactory, deps = []) {
   useEffect(() => {
     if (!ref.current) return undefined
@@ -56,19 +93,28 @@ function useEChart(ref, optionFactory, deps = []) {
   }, deps)
 }
 
-function Kpi({ value, label, note }) {
+function Kpi({ value, label, note, decimals = 0, suffix = '', prefix = '' }) {
   return (
     <div className="kpi reveal">
-      <strong>{value}</strong>
+      <strong>
+        {typeof value === 'number' ? (
+          <AnimatedNumber value={value} decimals={decimals} suffix={suffix} prefix={prefix} />
+        ) : value}
+      </strong>
       <span>{label}</span>
       {note && <em>{note}</em>}
     </div>
   )
 }
 
-function CoverageChart() {
+function CoverageChart({ mode = 'coverage' }) {
   const ref = useRef(null)
-  const rows = useMemo(() => [...data.coverage].sort((a, b) => a.coverage - b.coverage), [])
+  const rows = useMemo(() => {
+    if (mode === 'gap') {
+      return [...data.unserved].filter((d) => d.name !== 'World').sort((a, b) => a.unserved - b.unserved)
+    }
+    return [...data.coverage].sort((a, b) => a.coverage - b.coverage)
+  }, [mode])
   useEChart(ref, () => ({
     backgroundColor: 'transparent',
     grid: { top: 18, left: 118, right: 38, bottom: 28 },
@@ -79,14 +125,17 @@ function CoverageChart() {
       textStyle: { color: '#ecfbff' },
       formatter(params) {
         const item = rows[params[0].dataIndex]
+        if (mode === 'gap') {
+          return `${labelOf(item.name)}<br/>未获基本饮水服务人口：${fmtMillion(item.unserved)}<br/>覆盖率：${item.coverage}%`
+        }
         return `${labelOf(item.name)}<br/>基本饮水：${item.coverage}%<br/>基本卫生：${item.sanitation ?? '-'}%`
       }
     },
     xAxis: {
       type: 'value',
       min: 0,
-      max: 100,
-      axisLabel: { color: '#9bb7c7', formatter: '{value}%' },
+      max: mode === 'gap' ? undefined : 100,
+      axisLabel: { color: '#9bb7c7', formatter: mode === 'gap' ? '{value}M' : '{value}%' },
       splitLine: { lineStyle: { color: 'rgba(255,255,255,.08)' } }
     },
     yAxis: {
@@ -97,24 +146,52 @@ function CoverageChart() {
       axisLabel: { color: '#dff8ff', fontSize: 12 }
     },
     series: [{
-      name: '基本饮水覆盖率',
+      name: mode === 'gap' ? '未获基本饮水服务人口' : '基本饮水覆盖率',
       type: 'bar',
-      data: rows.map((d) => d.coverage),
+      data: rows.map((d) => mode === 'gap' ? d.unserved : d.coverage),
       barWidth: 14,
       itemStyle: {
         borderRadius: [0, 14, 14, 0],
         color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          { offset: 0, color: '#1e63ff' },
-          { offset: 0.55, color: '#16c8ff' },
-          { offset: 1, color: '#81f6d7' }
+          { offset: 0, color: mode === 'gap' ? '#5f2cff' : '#1e63ff' },
+          { offset: 0.55, color: mode === 'gap' ? '#ff9f43' : '#16c8ff' },
+          { offset: 1, color: mode === 'gap' ? '#ffe082' : '#81f6d7' }
         ])
       },
-      label: { show: true, position: 'right', color: '#ffffff', formatter: ({ value }) => `${value}%` }
+      label: { show: true, position: 'right', color: '#ffffff', formatter: ({ value }) => mode === 'gap' ? `${value}M` : `${value}%` }
     }],
     animationDuration: 1200,
     animationEasing: 'cubicOut'
-  }), [rows])
+  }), [rows, mode])
   return <div className="chart chart-tall" ref={ref} />
+}
+
+function CoverageSwitcher() {
+  const [mode, setMode] = useState('coverage')
+  const sectionRef = useRef(null)
+
+  useEffect(() => {
+    if (!sectionRef.current) return undefined
+    const trigger = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: 'top 45%',
+      end: 'bottom 45%',
+      onEnter: () => setMode('coverage'),
+      onEnterBack: () => setMode('coverage'),
+      onLeave: () => setMode('gap')
+    })
+    return () => trigger.kill()
+  }, [])
+
+  return (
+    <div className="switch-chart" ref={sectionRef}>
+      <div className="mode-toggle" aria-label="切换图表口径">
+        <button className={mode === 'coverage' ? 'active' : ''} onClick={() => setMode('coverage')}>覆盖率</button>
+        <button className={mode === 'gap' ? 'active' : ''} onClick={() => setMode('gap')}>缺口人口</button>
+      </div>
+      <CoverageChart mode={mode} />
+    </div>
+  )
 }
 
 function UnservedChart() {
@@ -185,6 +262,7 @@ const pressurePoints = [
 
 function WorldPressureMap() {
   const ref = useRef(null)
+  const [selected, setSelected] = useState(pressurePoints.find((d) => d.code === 'PAK') || pressurePoints[0])
 
   useEffect(() => {
     if (!ref.current) return undefined
@@ -233,6 +311,7 @@ function WorldPressureMap() {
             .html(`<b>${d.name}</b><br/>水资源压力指数：${d.value}%`)
         })
         .on('mouseleave', () => tip.style('opacity', 0))
+        .on('click', (_, d) => setSelected(d))
 
       points.append('circle')
         .attr('class', 'map-point-halo')
@@ -266,7 +345,17 @@ function WorldPressureMap() {
     return () => window.removeEventListener('resize', draw)
   }, [])
 
-  return <div className="world-map" ref={ref} />
+  return (
+    <div className="world-map-wrap">
+      <div className="world-map" ref={ref} />
+      <div className="map-lock-card">
+        <span>当前锁定国家</span>
+        <strong>{selected.name}</strong>
+        <p>水资源压力指数 <b>{selected.value}%</b></p>
+        <small>点击地图上的点位可以切换国家</small>
+      </div>
+    </div>
+  )
 }
 
 function StressRanking() {
@@ -399,17 +488,45 @@ function StressScatter() {
 }
 
 function PolicyFlow() {
-  const nodes = ['中央统筹', '黄河流域', '西北山区', '西南山区', '重点县域', '农村供水', '水污染治理']
+  const [year, setYear] = useState(2024)
+  const [active, setActive] = useState('中央统筹')
+  const nodes = [
+    { name: '中央统筹', desc: '作为政策与资金的调度中心，向重点区域和重点领域形成资源流动。' },
+    { name: '黄河流域', desc: '强调流域协同、生态保护和高质量发展之间的平衡。' },
+    { name: '西北山区', desc: '适合表现供水稳定性、防冻和工程管护压力。' },
+    { name: '西南山区', desc: '地形复杂，供水工程更依赖区域适配和长期运营。' },
+    { name: '重点县域', desc: '承接政策倾斜的末端场景，可对应贫困县、山区县等对象。' },
+    { name: '农村供水', desc: '从“有水喝”转向“喝好水、稳定供水”的民生工程。' },
+    { name: '水污染治理', desc: '与地表水水质改善、水环境监管和地方执行能力相关。' }
+  ]
+  const activeNode = nodes.find((node) => node.name === active) || nodes[0]
+
   return (
-    <div className="policy-flow">
-      {nodes.map((node, index) => <span key={node} className={`flow-node n${index}`}>{node}</span>)}
-      <div className="flow-line l1" />
-      <div className="flow-line l2" />
-      <div className="flow-line l3" />
-      <div className="flow-line l4" />
-      <div className="pulse-dot d1" />
-      <div className="pulse-dot d2" />
-      <div className="pulse-dot d3" />
+    <div className="policy-wrap">
+      <div className="policy-years" aria-label="概念年份轴">
+        {[2016, 2019, 2022, 2024].map((item) => (
+          <button key={item} className={year === item ? 'active' : ''} onClick={() => setYear(item)}>{item}</button>
+        ))}
+      </div>
+      <div className={`policy-flow y${year}`}>
+        {nodes.map((node, index) => (
+          <button key={node.name} className={`flow-node n${index} ${active === node.name ? 'active' : ''}`} onClick={() => setActive(node.name)}>
+            {node.name}
+          </button>
+        ))}
+        <div className="flow-line l1" />
+        <div className="flow-line l2" />
+        <div className="flow-line l3" />
+        <div className="flow-line l4" />
+        <div className="pulse-dot d1" />
+        <div className="pulse-dot d2" />
+        <div className="pulse-dot d3" />
+      </div>
+      <div className="policy-note">
+        <span>{year} / 概念演示</span>
+        <strong>{activeNode.name}</strong>
+        <p>{activeNode.desc}</p>
+      </div>
     </div>
   )
 }
@@ -424,7 +541,46 @@ function SectionText({ kicker, title, children }) {
   )
 }
 
+function useActiveSection() {
+  const [active, setActive] = useState('top')
+
+  useEffect(() => {
+    const observed = sections
+      .map((section) => document.getElementById(section.id))
+      .filter(Boolean)
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible?.target?.id) setActive(visible.target.id)
+    }, { rootMargin: '-35% 0px -45% 0px', threshold: [0.05, 0.25, 0.5] })
+    observed.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
+  return active
+}
+
+function ChapterNav({ active }) {
+  return (
+    <aside className="chapter-nav" aria-label="章节导航">
+      {sections.map((section, index) => (
+        <button
+          key={section.id}
+          className={active === section.id ? 'active' : ''}
+          onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+        >
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          {section.label}
+        </button>
+      ))}
+    </aside>
+  )
+}
+
 export default function App() {
+  const activeSection = useActiveSection()
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.to('.progress-bar', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.2 } })
@@ -438,6 +594,19 @@ export default function App() {
       })
       gsap.to('.pulse-dot', { offsetDistance: '100%', duration: 4, repeat: -1, ease: 'none', stagger: 0.7 })
       gsap.to('.flow-node', { boxShadow: '0 0 34px rgba(104,226,255,.42)', duration: 1.6, yoyo: true, repeat: -1, stagger: 0.2, ease: 'sine.inOut' })
+      gsap.to('.map-card .world-map svg', {
+        scale: 1.45,
+        xPercent: -16,
+        yPercent: 2,
+        transformOrigin: '60% 42%',
+        ease: 'power2.inOut',
+        scrollTrigger: {
+          trigger: '#map',
+          start: 'top 34%',
+          end: 'bottom 55%',
+          scrub: 0.6
+        }
+      })
     })
     return () => ctx.revert()
   }, [])
@@ -445,6 +614,7 @@ export default function App() {
   return (
     <main>
       <div className="progress"><div className="progress-bar" /></div>
+      <ChapterNav active={activeSection} />
 
       <section className="hero" id="top">
         <div className="hero-water" />
@@ -454,21 +624,21 @@ export default function App() {
           <h1 className="hero-title"><span>全球水困局</span><span>与破局之路</span></h1>
           <p className="hero-copy">先把有数据支撑的前半部分做完整：全球基础饮水覆盖、水资源压力、区域趋势，以及“中国治理”开头的政策资源概念动效。后半部分等客户补齐投资、海外项目和巴基斯坦案例数据后再接上。</p>
           <div className="hero-kpis">
-            <Kpi value={`${data.hero.worldCoverage2024}%`} label="2024 年全球基本饮水服务覆盖率" note="World Bank 指标整理" />
-            <Kpi value={fmtMillion(data.hero.worldUnservedMillion2024)} label="估算仍未获得基本饮水服务人口" note="由覆盖率 × 总人口计算" />
-            <Kpi value="167.14%" label="2021 年中东北非区域水资源压力指数" note="区域压力最高" />
+            <Kpi value={data.hero.worldCoverage2024} decimals={2} suffix="%" label="2024 年全球基本饮水服务覆盖率" note="World Bank 指标整理" />
+            <Kpi value={data.hero.worldUnservedMillion2024} decimals={1} suffix="百万" label="估算仍未获得基本饮水服务人口" note="由覆盖率 × 总人口计算" />
+            <Kpi value={167.14} decimals={2} suffix="%" label="2021 年中东北非区域水资源压力指数" note="区域压力最高" />
           </div>
         </div>
       </section>
 
-      <section className="chapter chapter-intro">
+      <section className="chapter chapter-intro" id="opening">
         <div className="chapter-bg" />
         <SectionText kicker="00 / OPENING" title="这部分不是单纯摆图表，而是把数据变成一段能往下读的叙事。">
           当前数据已经能说明三个问题：全球基本饮水服务仍有缺口；水资源压力在少数国家和区域高度集中；不同区域的压力曲线差异很大。页面会按这个顺序展开。
         </SectionText>
       </section>
 
-      <section className="chapter two-col reverse map-chapter">
+      <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
         <div className="glass-card reveal map-card"><div className="card-head"><span>全球极高水资源压力点位</span><b>2022</b></div><WorldPressureMap /></div>
         <SectionText kicker="01 / MAP" title="先给读者一张世界图，问题集中在哪里会更清楚。">
@@ -476,15 +646,15 @@ export default function App() {
         </SectionText>
       </section>
 
-      <section className="chapter two-col">
+      <section className="chapter two-col" id="coverage">
         <div className="chapter-bg" />
         <SectionText kicker="02 / DRINKING WATER" title="基础饮水覆盖率接近全球普及，但差距集中在脆弱地区。">
           2024 年全球基本饮水服务覆盖率约 91.45%。这个数字看起来很高，但撒哈拉以南非洲、最不发达国家、脆弱和冲突影响地区仍明显落后。
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率</span><b>2024</b></div><CoverageChart /></div>
+        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><CoverageSwitcher /></div>
       </section>
 
-      <section className="chapter two-col reverse">
+      <section className="chapter two-col reverse" id="people">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>Million people</b></div><UnservedChart /></div>
         <SectionText kicker="03 / PEOPLE" title="从比例换成人数后，问题会更直观。">
@@ -492,7 +662,7 @@ export default function App() {
         </SectionText>
       </section>
 
-      <section className="chapter two-col">
+      <section className="chapter two-col" id="stress">
         <div className="chapter-bg" />
         <SectionText kicker="04 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
           这里用淡水提取占可再生总量的比例衡量压力。由于埃及、巴林等国家数值远高于其他国家，图表使用对数轴，避免极端值把其他国家压扁。
@@ -500,7 +670,7 @@ export default function App() {
         <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><StressRanking /></div>
       </section>
 
-      <section className="chapter two-col reverse">
+      <section className="chapter two-col reverse" id="relation">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>Selected countries</b></div><StressScatter /></div>
         <SectionText kicker="05 / RELATION" title="同样是高压力，背后的结构不一样。">
@@ -508,7 +678,7 @@ export default function App() {
         </SectionText>
       </section>
 
-      <section className="chapter two-col">
+      <section className="chapter two-col" id="trend">
         <div className="chapter-bg" />
         <SectionText kicker="06 / REGION TREND" title="区域趋势里，中东北非是一条明显抬高的曲线。">
           task3 的区域数据最完整，覆盖 2014-2021 年。中东北非在 2021 年达到 167.14%，与其他区域拉开明显差距，适合作为前半部分的视觉高潮。
@@ -516,7 +686,7 @@ export default function App() {
         <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014-2021</b></div><RegionTrendChart /></div>
       </section>
 
-      <section className="chapter concept">
+      <section className="chapter concept" id="concept">
         <div className="chapter-bg" />
         <SectionText kicker="07 / CONCEPT MOTION" title="图 2 按客户确认，先做政策资源流动的概念动效。">
           这一段不标成严格数据图。它负责承接“中国探索”章节：用中央节点、重点区域、供水和治污节点之间的光点流动，表现“政策资源并非平均撒布，而是围绕重点区域动态调整”。
