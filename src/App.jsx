@@ -75,7 +75,13 @@ function AnimatedNumber({ value, decimals = 0, suffix = '', prefix = '' }) {
     return () => tween.kill()
   }, [value, decimals, suffix, prefix])
 
-  return <>{prefix}<span ref={ref}>{Number(0).toFixed(decimals)}</span>{suffix}</>
+  return (
+    <>
+      {prefix}
+      <span className="kpi-number" ref={ref}>{Number(0).toFixed(decimals)}</span>
+      {suffix && <span className={`kpi-unit ${suffix.length > 1 ? 'word' : ''}`}>{suffix}</span>}
+    </>
+  )
 }
 
 function useEChart(ref, optionFactory, deps = []) {
@@ -490,6 +496,37 @@ function StressScatter() {
 function PolicyFlow() {
   const [year, setYear] = useState(2024)
   const [active, setActive] = useState('中央统筹')
+  const yearThemes = {
+    2016: {
+      title: '基础建设启动期',
+      desc: '重点表现基础设施补短板，资源先流向农村供水和水污染治理两个基础领域。',
+      nodes: ['中央统筹', '农村供水', '水污染治理'],
+      hotLines: ['l2'],
+      dotCount: 2
+    },
+    2019: {
+      title: '流域协同强化期',
+      desc: '政策重心转向流域协同和重点区域治理，黄河流域、西北山区开始被突出强调。',
+      nodes: ['中央统筹', '黄河流域', '西北山区'],
+      hotLines: ['l1', 'l2'],
+      dotCount: 3
+    },
+    2022: {
+      title: '后普及运营期',
+      desc: '普及之后，重点转为山区供水稳定性、工程管护和县域层面的长期运营。',
+      nodes: ['中央统筹', '西南山区', '重点县域', '农村供水'],
+      hotLines: ['l3', 'l4'],
+      dotCount: 4
+    },
+    2024: {
+      title: '系统治理整合期',
+      desc: '供水、水质、重点县域和区域治理被放在同一张网络里，表现多目标协同。',
+      nodes: ['中央统筹', '黄河流域', '西北山区', '西南山区', '重点县域', '农村供水', '水污染治理'],
+      hotLines: ['l1', 'l2', 'l3', 'l4'],
+      dotCount: 5
+    }
+  }
+  const yearTheme = yearThemes[year]
   const nodes = [
     { name: '中央统筹', desc: '作为政策与资金的调度中心，向重点区域和重点领域形成资源流动。' },
     { name: '黄河流域', desc: '强调流域协同、生态保护和高质量发展之间的平衡。' },
@@ -510,22 +547,26 @@ function PolicyFlow() {
       </div>
       <div className={`policy-flow y${year}`}>
         {nodes.map((node, index) => (
-          <button key={node.name} className={`flow-node n${index} ${active === node.name ? 'active' : ''}`} onClick={() => setActive(node.name)}>
+          <button
+            key={node.name}
+            className={`flow-node n${index} ${active === node.name ? 'active' : ''} ${yearTheme.nodes.includes(node.name) ? 'year-hot' : ''}`}
+            onClick={() => setActive(node.name)}
+          >
             {node.name}
           </button>
         ))}
-        <div className="flow-line l1" />
-        <div className="flow-line l2" />
-        <div className="flow-line l3" />
-        <div className="flow-line l4" />
-        <div className="pulse-dot d1" />
-        <div className="pulse-dot d2" />
-        <div className="pulse-dot d3" />
+        {['l1', 'l2', 'l3', 'l4'].map((line) => (
+          <div key={line} className={`flow-line ${line} ${yearTheme.hotLines.includes(line) ? 'hot' : ''}`} />
+        ))}
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div key={index} className={`pulse-dot d${(index % 3) + 1} ${index >= yearTheme.dotCount ? 'muted' : ''}`} />
+        ))}
       </div>
       <div className="policy-note">
-        <span>{year} / 概念演示</span>
+        <span>{year} / {yearTheme.title}</span>
         <strong>{activeNode.name}</strong>
         <p>{activeNode.desc}</p>
+        <p className="year-note">{yearTheme.desc}</p>
       </div>
     </div>
   )
