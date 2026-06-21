@@ -230,6 +230,55 @@ main { position: relative; overflow: hidden; }
 .chart { position: relative; z-index: 1; height: 380px; }
 .chart-tall { height: 560px; }
 
+.map-card {
+  min-height: 520px;
+}
+.world-map {
+  position: relative;
+  z-index: 1;
+  min-height: 440px;
+}
+.world-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.map-graticule {
+  fill: none;
+  stroke: rgba(143, 190, 220, .13);
+  stroke-width: .7;
+}
+.map-country {
+  fill: rgba(70, 128, 156, .26);
+  stroke: rgba(191, 238, 255, .18);
+  stroke-width: .55;
+  vector-effect: non-scaling-stroke;
+}
+.map-point {
+  cursor: default;
+}
+.map-point-halo {
+  opacity: .18;
+  animation: mapPulse 2.8s ease-in-out infinite;
+}
+.map-point-core {
+  opacity: .86;
+  stroke: rgba(255,255,255,.72);
+  stroke-width: 1.1;
+}
+.map-point-label {
+  fill: #ecfbff;
+  font-size: 11px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: rgba(2, 8, 18, .82);
+  stroke-width: 3px;
+}
+@keyframes mapPulse {
+  0%, 100% { opacity: .12; transform: scale(1); }
+  50% { opacity: .28; transform: scale(1.18); }
+}
+
 .d3-scatter {
   position: relative;
   z-index: 1;

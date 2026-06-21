@@ -4,6 +4,7 @@ import * as echarts from 'echarts'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from './waterData.generated.json'
+import worldGeo from './assets/world.geo.json'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -160,6 +161,112 @@ function UnservedChart() {
     }]
   }), [rows])
   return <div className="chart" ref={ref} />
+}
+
+const pressurePoints = [
+  { code: 'EGY', lon: 30.8, lat: 26.8 },
+  { code: 'BHR', lon: 50.55, lat: 26.07 },
+  { code: 'TKM', lon: 59.56, lat: 38.97 },
+  { code: 'ARE', lon: 54.37, lat: 23.42 },
+  { code: 'SAU', lon: 45.08, lat: 23.89 },
+  { code: 'LBY', lon: 17.23, lat: 26.34 },
+  { code: 'SDN', lon: 30.22, lat: 12.86 },
+  { code: 'QAT', lon: 51.18, lat: 25.35 },
+  { code: 'MRT', lon: -10.94, lat: 21.01 },
+  { code: 'PAK', lon: 69.35, lat: 30.38 },
+  { code: 'UZB', lon: 64.59, lat: 41.38 },
+  { code: 'SYR', lon: 38.99, lat: 34.8 },
+  { code: 'YEM', lon: 48.5, lat: 15.55 },
+  { code: 'AZE', lon: 47.58, lat: 40.14 }
+].map((point) => ({
+  ...point,
+  ...data.stressTop.find((item) => item.code === point.code)
+})).filter((point) => point.value)
+
+function WorldPressureMap() {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!ref.current) return undefined
+    const root = ref.current
+
+    const draw = () => {
+      const width = root.clientWidth || 760
+      const height = Math.max(420, Math.min(560, width * 0.58))
+      d3.select(root).selectAll('*').remove()
+
+      const svg = d3.select(root).append('svg').attr('viewBox', `0 0 ${width} ${height}`)
+      const projection = d3.geoNaturalEarth1().fitExtent([[22, 34], [width - 22, height - 34]], worldGeo)
+      const path = d3.geoPath(projection)
+      const graticule = d3.geoGraticule10()
+      const radius = d3.scaleSqrt().domain(d3.extent(pressurePoints, (d) => d.value)).range([6, 28])
+      const color = d3.scaleSequentialLog(d3.interpolateYlOrRd).domain(d3.extent(pressurePoints, (d) => d.value))
+
+      svg.append('path')
+        .datum(graticule)
+        .attr('class', 'map-graticule')
+        .attr('d', path)
+
+      svg.append('g')
+        .selectAll('path')
+        .data(worldGeo.features)
+        .join('path')
+        .attr('class', 'map-country')
+        .attr('d', path)
+
+      const tip = d3.select(root).append('div').attr('class', 'd3-tip')
+
+      const points = svg.append('g')
+        .selectAll('g')
+        .data(pressurePoints)
+        .join('g')
+        .attr('class', 'map-point')
+        .attr('transform', (d) => {
+          const [x, y] = projection([d.lon, d.lat])
+          return `translate(${x},${y})`
+        })
+        .on('mousemove', (event, d) => {
+          tip
+            .style('opacity', 1)
+            .style('left', `${event.offsetX + 12}px`)
+            .style('top', `${event.offsetY - 12}px`)
+            .html(`<b>${d.name}</b><br/>水资源压力指数：${d.value}%`)
+        })
+        .on('mouseleave', () => tip.style('opacity', 0))
+
+      points.append('circle')
+        .attr('class', 'map-point-halo')
+        .attr('r', 0)
+        .attr('fill', (d) => color(d.value))
+        .transition()
+        .duration(900)
+        .delay((_, i) => i * 70)
+        .attr('r', (d) => radius(d.value) * 1.8)
+
+      points.append('circle')
+        .attr('class', 'map-point-core')
+        .attr('r', 0)
+        .attr('fill', (d) => color(d.value))
+        .transition()
+        .duration(900)
+        .delay((_, i) => i * 70)
+        .attr('r', (d) => radius(d.value))
+
+      const labels = new Set(['EGY', 'SAU', 'PAK', 'TKM'])
+      points.filter((d) => labels.has(d.code))
+        .append('text')
+        .attr('class', 'map-point-label')
+        .attr('x', (d) => radius(d.value) + 5)
+        .attr('y', 4)
+        .text((d) => d.name.replace(', Arab Rep.', ''))
+    }
+
+    draw()
+    window.addEventListener('resize', draw)
+    return () => window.removeEventListener('resize', draw)
+  }, [])
+
+  return <div className="world-map" ref={ref} />
 }
 
 function StressRanking() {
@@ -361,9 +468,17 @@ export default function App() {
         </SectionText>
       </section>
 
+      <section className="chapter two-col reverse map-chapter">
+        <div className="chapter-bg" />
+        <div className="glass-card reveal map-card"><div className="card-head"><span>全球极高水资源压力点位</span><b>2022</b></div><WorldPressureMap /></div>
+        <SectionText kicker="01 / MAP" title="先给读者一张世界图，问题集中在哪里会更清楚。">
+          这里用现有的水资源压力指数做点位地图。点的大小和颜色代表压力强度，重点突出中东北非、南亚和中亚一带，为后面的排行、散点图和区域趋势做铺垫。
+        </SectionText>
+      </section>
+
       <section className="chapter two-col">
         <div className="chapter-bg" />
-        <SectionText kicker="01 / DRINKING WATER" title="基础饮水覆盖率接近全球普及，但差距集中在脆弱地区。">
+        <SectionText kicker="02 / DRINKING WATER" title="基础饮水覆盖率接近全球普及，但差距集中在脆弱地区。">
           2024 年全球基本饮水服务覆盖率约 91.45%。这个数字看起来很高，但撒哈拉以南非洲、最不发达国家、脆弱和冲突影响地区仍明显落后。
         </SectionText>
         <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率</span><b>2024</b></div><CoverageChart /></div>
@@ -372,14 +487,14 @@ export default function App() {
       <section className="chapter two-col reverse">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>Million people</b></div><UnservedChart /></div>
-        <SectionText kicker="02 / PEOPLE" title="从比例换成人数后，问题会更直观。">
+        <SectionText kicker="03 / PEOPLE" title="从比例换成人数后，问题会更直观。">
           低覆盖率和大人口规模叠加后，缺口会被放大。全球约 6.96 亿人仍未获得基本饮水服务，中低收入经济体承担了其中大部分压力。
         </SectionText>
       </section>
 
       <section className="chapter two-col">
         <div className="chapter-bg" />
-        <SectionText kicker="03 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
+        <SectionText kicker="04 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
           这里用淡水提取占可再生总量的比例衡量压力。由于埃及、巴林等国家数值远高于其他国家，图表使用对数轴，避免极端值把其他国家压扁。
         </SectionText>
         <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><StressRanking /></div>
@@ -388,14 +503,14 @@ export default function App() {
       <section className="chapter two-col reverse">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>Selected countries</b></div><StressScatter /></div>
-        <SectionText kicker="04 / RELATION" title="同样是高压力，背后的结构不一样。">
+        <SectionText kicker="05 / RELATION" title="同样是高压力，背后的结构不一样。">
           气泡大小代表人口，横轴是人均淡水资源，纵轴是水资源压力。巴基斯坦、印度这类人口大国，和海湾小国的压力结构并不相同。
         </SectionText>
       </section>
 
       <section className="chapter two-col">
         <div className="chapter-bg" />
-        <SectionText kicker="05 / REGION TREND" title="区域趋势里，中东北非是一条明显抬高的曲线。">
+        <SectionText kicker="06 / REGION TREND" title="区域趋势里，中东北非是一条明显抬高的曲线。">
           task3 的区域数据最完整，覆盖 2014-2021 年。中东北非在 2021 年达到 167.14%，与其他区域拉开明显差距，适合作为前半部分的视觉高潮。
         </SectionText>
         <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014-2021</b></div><RegionTrendChart /></div>
@@ -403,7 +518,7 @@ export default function App() {
 
       <section className="chapter concept">
         <div className="chapter-bg" />
-        <SectionText kicker="06 / CONCEPT MOTION" title="图 2 按客户确认，先做政策资源流动的概念动效。">
+        <SectionText kicker="07 / CONCEPT MOTION" title="图 2 按客户确认，先做政策资源流动的概念动效。">
           这一段不标成严格数据图。它负责承接“中国探索”章节：用中央节点、重点区域、供水和治污节点之间的光点流动，表现“政策资源并非平均撒布，而是围绕重点区域动态调整”。
         </SectionText>
         <div className="glass-card reveal concept-card"><PolicyFlow /></div>
