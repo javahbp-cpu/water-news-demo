@@ -3,5 +3,15 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/water-news-demo/'
+  base: '/water-news-demo/',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three', '@react-three/fiber', '@react-three/drei', 'three-globe'],
+          charts: ['echarts', 'd3']
+        }
+      }
+    }
+  }
 })

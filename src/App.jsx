@@ -6,6 +6,7 @@ import { GridComponent, LegendComponent, TooltipComponent } from 'echarts/compon
 import { CanvasRenderer } from 'echarts/renderers'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Lenis from 'lenis'
 import data from './waterData.generated.json'
 import { chinaData, overseasProjects, pakistanData, sourceLinks } from './chinaData'
 import worldGeo from './assets/world.geo.json'
@@ -15,6 +16,8 @@ import earthWater from './assets/earth-water.webp'
 import waterInfra from './assets/water-infra.webp'
 import clearRiver from './assets/clear-river.webp'
 import forestWaterfall from './assets/forest-waterfall.webp'
+import WaterResourceGlobe from './GlobeScene'
+import WaterOrb from './WaterOrb'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -1067,6 +1070,31 @@ export default function App() {
   const activeSection = useActiveSection()
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    const lenis = new Lenis({
+      duration: 1.08,
+      smoothWheel: true,
+      wheelMultiplier: 0.88,
+      touchMultiplier: 1.15,
+      lerp: 0.09
+    })
+
+    const update = (time) => {
+      lenis.raf(time * 1000)
+    }
+
+    lenis.on('scroll', ScrollTrigger.update)
+    gsap.ticker.add(update)
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      lenis.off('scroll', ScrollTrigger.update)
+      gsap.ticker.remove(update)
+      lenis.destroy()
+    }
+  }, [])
+
+  useEffect(() => {
     const root = document.documentElement
     const onPointerMove = (event) => {
       root.style.setProperty('--flow-x', `${event.clientX}px`)
@@ -1090,10 +1118,9 @@ export default function App() {
       })
       gsap.to('.pulse-dot', { offsetDistance: '100%', duration: 4, repeat: -1, ease: 'none', stagger: 0.7 })
       gsap.to('.flow-node', { boxShadow: '0 0 34px rgba(104,226,255,.42)', duration: 1.6, yoyo: true, repeat: -1, stagger: 0.2, ease: 'sine.inOut' })
-      gsap.to('.map-card .world-map svg', {
-        scale: 1.45,
-        xPercent: -16,
-        yPercent: 2,
+      gsap.to('.map-card .globe-3d-stage', {
+        scale: 1.05,
+        yPercent: -3,
         transformOrigin: '60% 42%',
         ease: 'power2.inOut',
         scrollTrigger: {
@@ -1117,6 +1144,7 @@ export default function App() {
 
       <section className="hero" id="top">
         <div className="hero-water" />
+        <div className="hero-water-3d" aria-hidden="true"><WaterOrb /></div>
         <nav className="topline"><span>DATA NEWS / WATER IN MOTION</span><span>World water resources</span></nav>
         <div className="hero-content">
           <p className="eyebrow">流淌的危机</p>
@@ -1161,9 +1189,9 @@ export default function App() {
 
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
-        <div className="glass-card reveal map-card"><div className="card-head"><span>全球极高水资源压力点位</span><b>2022</b></div><InsightChip>高压力点位集中在中东北非、南亚和中亚一带。</InsightChip><WorldPressureMap /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>点位大小与颜色表示淡水提取量占可再生淡水资源总量的比例。</SourceNote></div>
+        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>球体点位叠加高水压国家与海外水利项目；弧线用于表现中国水利合作的空间连接关系。</SourceNote></div>
         <SectionText kicker="01 / MAP" title="高压力国家沿着干旱带聚集。">
-          点位地图按水资源压力指数绘制。点的大小和颜色代表压力强度，中东北非、南亚和中亚形成较明显的高值带。
+          3D 地球按水资源压力指数标出高值国家，并叠加海外水利项目点位。中东北非、南亚和中亚形成较明显的高压力带，项目弧线则呈现跨区域水利合作的空间路径。
         </SectionText>
       </section>
 

@@ -1510,9 +1510,224 @@ main::before {
   gap: 12px;
 }
 
+.hero-water-3d {
+  position: absolute;
+  right: clamp(18px, 31vw, 470px);
+  top: 12vh;
+  z-index: 1;
+  width: min(36vw, 500px);
+  min-width: 280px;
+  aspect-ratio: 1;
+  pointer-events: none;
+  opacity: .78;
+  filter: drop-shadow(0 28px 80px rgba(30, 185, 228, .2));
+}
+
+.water-orb-stage,
+.water-orb-stage canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  display: block;
+}
+
+.water-orb-stage {
+  position: relative;
+}
+
+.water-orb-stage::after {
+  content: "";
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.34), transparent 66%);
+  filter: blur(24px);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.water-orb-fallback {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255,255,255,.86), transparent 9%),
+    radial-gradient(circle at 48% 42%, rgba(122,240,201,.56), transparent 34%),
+    radial-gradient(circle at 50% 50%, rgba(35,184,231,.38), transparent 68%);
+}
+
+.globe-3d-wrap {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, .42fr);
+  gap: 18px;
+  align-items: stretch;
+  min-height: 520px;
+}
+
+.globe-3d-stage {
+  position: relative;
+  min-height: 520px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 32px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(80, 210, 255, .18), transparent 42%),
+    linear-gradient(145deg, rgba(221,250,255,.58), rgba(182,235,244,.24));
+  box-shadow: inset 0 0 80px rgba(38,154,190,.14);
+}
+
+.globe-3d-stage canvas {
+  position: relative;
+  z-index: 2;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 520px;
+  cursor: grab;
+}
+
+.globe-3d-stage canvas:active {
+  cursor: grabbing;
+}
+
+.globe-glow {
+  position: absolute;
+  inset: auto 10% 6% 10%;
+  z-index: 1;
+  height: 24%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(29, 179, 221, .22), transparent 68%);
+  filter: blur(18px);
+}
+
+.globe-fallback {
+  display: grid;
+  place-items: center;
+  min-height: 520px;
+  color: #0e5d72;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.globe-info-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 30px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.68), rgba(221,248,255,.38)),
+    radial-gradient(circle at 80% 8%, rgba(122,240,201,.26), transparent 34%);
+  box-shadow: 0 24px 70px rgba(34,128,164,.16);
+}
+
+.globe-panel-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: #0088a8;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.globe-info-panel strong {
+  display: block;
+  color: #07354f;
+  font-size: clamp(24px, 2.4vw, 36px);
+  line-height: 1.12;
+}
+
+.globe-info-panel p {
+  margin: 10px 0 0;
+  color: rgba(8,48,68,.7);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.globe-legend {
+  display: grid;
+  gap: 8px;
+  color: rgba(8,48,68,.72);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.globe-legend span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.globe-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 18px currentColor;
+}
+
+.globe-legend .stress { color: #ffb25f; background: #ffb25f; }
+.globe-legend .project { color: #40dcbf; background: #40dcbf; }
+.globe-legend .arc {
+  width: 22px;
+  height: 3px;
+  border-radius: 999px;
+  color: #34c8ff;
+  background: linear-gradient(90deg, #34c8ff, #7af0c9);
+}
+
+.globe-pick-list {
+  display: grid;
+  gap: 8px;
+}
+
+.globe-pick-list button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(17, 119, 158, .16);
+  border-radius: 16px;
+  color: rgba(7,53,79,.82);
+  background: rgba(255,255,255,.48);
+  cursor: pointer;
+  transition: .2s ease;
+  font-size: 12px;
+}
+
+.globe-pick-list button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(0,151,184,.32);
+  background: rgba(255,255,255,.74);
+}
+
+.globe-pick-list span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.globe-pick-list b {
+  flex: 0 0 auto;
+  max-width: 58px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #0088a8;
+}
+
 @media (max-width: 980px) {
   .chapter { min-height: auto; padding: 76px 0; }
   .hero-photo { width: min(100%, 520px); top: auto; }
+  .hero-water-3d { right: 2vw; top: 18vh; width: min(44vw, 420px); opacity: .56; }
+  .globe-3d-wrap { grid-template-columns: 1fr; min-height: auto; }
+  .globe-3d-stage, .globe-3d-stage canvas, .globe-fallback { min-height: 460px; }
   .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid { grid-template-columns: 1fr; }
   .diversion-panel { grid-template-columns: 1fr; }
   .investment-stats { grid-template-columns: 1fr; }
@@ -1555,6 +1770,19 @@ main::before {
   .chart, .chart-tall, .d3-scatter { height: 410px; }
   .map-card .world-map { min-height: 360px; }
   .map-lock-card { position: relative; right: auto; bottom: auto; width: 100%; margin-top: 10px; }
+  .hero-water-3d {
+    right: -70px;
+    top: 120px;
+    width: 340px;
+    min-width: 0;
+    opacity: .38;
+  }
+  .globe-3d-stage,
+  .globe-3d-stage canvas,
+  .globe-fallback {
+    min-height: 390px;
+  }
+  .globe-info-panel { padding: 14px; border-radius: 24px; }
   .source-note { font-size: 10px; }
   .china-chapter { width: calc(100% - 24px); padding-top: 80px; }
   .china-metric { min-height: 160px; }
