@@ -5,6 +5,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import data from './waterData.generated.json'
 import worldGeo from './assets/world.geo.json'
+import forestStream from './assets/forest-stream.jpg'
+import jinzuRiver from './assets/jinzu-river.jpg'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -111,6 +113,23 @@ function Kpi({ value, label, note, decimals = 0, suffix = '', prefix = '' }) {
       {note && <em>{note}</em>}
     </div>
   )
+}
+
+function ImagePanel({ image, eyebrow, title, caption, tone = 'blue' }) {
+  return (
+    <figure className={`image-panel ${tone} reveal`}>
+      <img src={image} alt={title} />
+      <figcaption>
+        <span>{eyebrow}</span>
+        <strong>{title}</strong>
+        <p>{caption}</p>
+      </figcaption>
+    </figure>
+  )
+}
+
+function InsightChip({ children }) {
+  return <div className="insight-chip">{children}</div>
 }
 
 function CoverageChart({ mode = 'coverage' }) {
@@ -654,16 +673,25 @@ export default function App() {
 
   return (
     <main>
+      <div className="water-current" aria-hidden="true" />
+      <div className="water-lines" aria-hidden="true" />
       <div className="progress"><div className="progress-bar" /></div>
       <ChapterNav active={activeSection} />
 
       <section className="hero" id="top">
         <div className="hero-water" />
-        <nav className="topline"><span>DATA NEWS / FRONT HALF</span><span>World water resources</span></nav>
+        <nav className="topline"><span>DATA NEWS / WATER IN MOTION</span><span>World water resources</span></nav>
         <div className="hero-content">
           <p className="eyebrow">流淌的危机</p>
           <h1 className="hero-title"><span>全球水困局</span><span>与破局之路</span></h1>
-          <p className="hero-copy">先把有数据支撑的前半部分做完整：全球基础饮水覆盖、水资源压力、区域趋势，以及“中国治理”开头的政策资源概念动效。后半部分等客户补齐投资、海外项目和巴基斯坦案例数据后再接上。</p>
+          <p className="hero-copy">从一滴水进入日常生活，到一条河承载区域发展，水危机不是单一数字。页面用覆盖率、人口缺口、压力指数和区域趋势，把全球水问题拆成一段可以继续往下读的故事。</p>
+          <div className="hero-photo reveal">
+            <img src={forestStream} alt="森林溪流" />
+            <div>
+              <span>FLOWING CONTEXT</span>
+              <strong>水不是背景，它是这篇报道的主线。</strong>
+            </div>
+          </div>
           <div className="hero-kpis">
             <Kpi value={data.hero.worldCoverage2024} decimals={2} suffix="%" label="2024 年全球基本饮水服务覆盖率" note="World Bank 指标整理" />
             <Kpi value={data.hero.worldUnservedMillion2024} decimals={1} suffix="百万" label="估算仍未获得基本饮水服务人口" note="由覆盖率 × 总人口计算" />
@@ -677,11 +705,26 @@ export default function App() {
         <SectionText kicker="00 / OPENING" title="这部分不是单纯摆图表，而是把数据变成一段能往下读的叙事。">
           当前数据已经能说明三个问题：全球基本饮水服务仍有缺口；水资源压力在少数国家和区域高度集中；不同区域的压力曲线差异很大。页面会按这个顺序展开。
         </SectionText>
+        <div className="image-collage">
+          <ImagePanel
+            image={jinzuRiver}
+            eyebrow="RIVER SYSTEM"
+            title="河流连接供给、生态和城市。"
+            caption="页面不只展示水量，也会把人口、区域和治理放在同一条叙事线上。"
+          />
+          <ImagePanel
+            image={forestStream}
+            eyebrow="WATER FLOW"
+            title="流动感用于串起章节。"
+            caption="后续滚动中，背景水纹、图表动画和概念流线会一起推进。"
+            tone="green"
+          />
+        </div>
       </section>
 
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
-        <div className="glass-card reveal map-card"><div className="card-head"><span>全球极高水资源压力点位</span><b>2022</b></div><WorldPressureMap /></div>
+        <div className="glass-card reveal map-card"><div className="card-head"><span>全球极高水资源压力点位</span><b>2022</b></div><InsightChip>高压力点位集中在中东北非、南亚和中亚一带。</InsightChip><WorldPressureMap /></div>
         <SectionText kicker="01 / MAP" title="先给读者一张世界图，问题集中在哪里会更清楚。">
           这里用现有的水资源压力指数做点位地图。点的大小和颜色代表压力强度，重点突出中东北非、南亚和中亚一带，为后面的排行、散点图和区域趋势做铺垫。
         </SectionText>
@@ -692,12 +735,12 @@ export default function App() {
         <SectionText kicker="02 / DRINKING WATER" title="基础饮水覆盖率接近全球普及，但差距集中在脆弱地区。">
           2024 年全球基本饮水服务覆盖率约 91.45%。这个数字看起来很高，但撒哈拉以南非洲、最不发达国家、脆弱和冲突影响地区仍明显落后。
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><CoverageSwitcher /></div>
+        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><InsightChip>全球覆盖率接近 91.45%，但脆弱地区仍明显落后。</InsightChip><CoverageSwitcher /></div>
       </section>
 
       <section className="chapter two-col reverse" id="people">
         <div className="chapter-bg" />
-        <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>Million people</b></div><UnservedChart /></div>
+        <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>Million people</b></div><InsightChip>比例换成人数后，撒哈拉以南非洲的缺口会被放大。</InsightChip><UnservedChart /></div>
         <SectionText kicker="03 / PEOPLE" title="从比例换成人数后，问题会更直观。">
           低覆盖率和大人口规模叠加后，缺口会被放大。全球约 6.96 亿人仍未获得基本饮水服务，中低收入经济体承担了其中大部分压力。
         </SectionText>
@@ -708,12 +751,12 @@ export default function App() {
         <SectionText kicker="04 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
           这里用淡水提取占可再生总量的比例衡量压力。由于埃及、巴林等国家数值远高于其他国家，图表使用对数轴，避免极端值把其他国家压扁。
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><StressRanking /></div>
+        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，所以这里采用对数轴。</InsightChip><StressRanking /></div>
       </section>
 
       <section className="chapter two-col reverse" id="relation">
         <div className="chapter-bg" />
-        <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>Selected countries</b></div><StressScatter /></div>
+        <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>Selected countries</b></div><InsightChip>人口规模会改变压力的含义：高压力小国和人口大国不是同一种问题。</InsightChip><StressScatter /></div>
         <SectionText kicker="05 / RELATION" title="同样是高压力，背后的结构不一样。">
           气泡大小代表人口，横轴是人均淡水资源，纵轴是水资源压力。巴基斯坦、印度这类人口大国，和海湾小国的压力结构并不相同。
         </SectionText>
@@ -724,22 +767,22 @@ export default function App() {
         <SectionText kicker="06 / REGION TREND" title="区域趋势里，中东北非是一条明显抬高的曲线。">
           task3 的区域数据最完整，覆盖 2014-2021 年。中东北非在 2021 年达到 167.14%，与其他区域拉开明显差距，适合作为前半部分的视觉高潮。
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014-2021</b></div><RegionTrendChart /></div>
+        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014-2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /></div>
       </section>
 
       <section className="chapter concept" id="concept">
         <div className="chapter-bg" />
-        <SectionText kicker="07 / CONCEPT MOTION" title="图 2 按客户确认，先做政策资源流动的概念动效。">
-          这一段不标成严格数据图。它负责承接“中国探索”章节：用中央节点、重点区域、供水和治污节点之间的光点流动，表现“政策资源并非平均撒布，而是围绕重点区域动态调整”。
+        <SectionText kicker="07 / CONCEPT MOTION" title="中国探索从政策流动开始。">
+          这一段承接“中国探索”章节。用中央节点、重点区域、供水和治污节点之间的光点流动，表现政策资源并非平均撒布，而是围绕重点区域动态调整。
         </SectionText>
         <div className="glass-card reveal concept-card"><PolicyFlow /></div>
       </section>
 
       <section className="finale">
         <div className="finale-inner reveal">
-          <span className="eyebrow">NEXT DATA NEEDED</span>
-          <h2>前半部分已可成型，后半部分等六类数据补齐后继续接。 </h2>
-          <p>后续再补：中国投资额、农村自来水/规模化供水、地表水水质、南水北调、海外项目明细、巴基斯坦合作成效。当前页面数据来源：{data.sources.join('、')}。</p>
+          <span className="eyebrow">DATA & METHOD</span>
+          <h2>数据先给出问题的轮廓，后续章节再补中国治理和国际合作的细节。</h2>
+          <p>当前图表使用 {data.sources.join('、')}。未获基本饮水服务人口由覆盖率和总人口估算。政策流动部分为概念动效，不标成严格数据图。图片来源：Unsplash / Cristofer Maximilian，Wikimedia Commons / RESPITE。</p>
           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>回到顶部</button>
         </div>
       </section>
