@@ -1118,18 +1118,6 @@ export default function App() {
       })
       gsap.to('.pulse-dot', { offsetDistance: '100%', duration: 4, repeat: -1, ease: 'none', stagger: 0.7 })
       gsap.to('.flow-node', { boxShadow: '0 0 34px rgba(104,226,255,.42)', duration: 1.6, yoyo: true, repeat: -1, stagger: 0.2, ease: 'sine.inOut' })
-      gsap.to('.map-card .globe-3d-stage', {
-        scale: 1.05,
-        yPercent: -3,
-        transformOrigin: '60% 42%',
-        ease: 'power2.inOut',
-        scrollTrigger: {
-          trigger: '#map',
-          start: 'top 34%',
-          end: 'bottom 55%',
-          scrub: 0.6
-        }
-      })
     })
     return () => ctx.revert()
   }, [])

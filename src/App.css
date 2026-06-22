@@ -1572,6 +1572,8 @@ main::before {
   border: 1px solid rgba(255,255,255,.18);
   border-radius: 32px;
   overflow: hidden;
+  transform: none !important;
+  contain: layout paint;
   background:
     radial-gradient(circle at 50% 48%, rgba(80, 210, 255, .18), transparent 42%),
     linear-gradient(145deg, rgba(221,250,255,.58), rgba(182,235,244,.24));
