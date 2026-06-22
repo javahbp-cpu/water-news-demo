@@ -704,7 +704,7 @@ function ChinaActionDashboard() {
           image={forestWaterfall}
           eyebrow="CHINA WATER ACTION"
           title="从供水普及转向稳定运行。"
-          caption="这一段用治理场景图承接数据：覆盖率、水质和跨区域调水，最后都落在长期运营。"
+          caption="农村供水进入高覆盖阶段后，水质、工程管护和跨区域调度共同决定服务质量。"
           tone="green"
         />
       </div>
@@ -728,7 +728,7 @@ function ChinaActionDashboard() {
         { label: '生态环境部公报', url: chinaData.waterQualitySources[3].url },
         { label: chinaData.diversion.sourceLabel, url: chinaData.diversion.source }
       ]}>
-        口径说明：水质采用全国地表水总体断面数据；调水量只有一个完整调水年度，不绘制成趋势线。
+        方法说明：水质采用全国地表水总体断面数据；南水北调采用 2025—2026 调水年度公开报道数据。
       </SourceNote>
     </div>
   )
@@ -835,7 +835,7 @@ function OverseasPortfolio() {
         <article>
           <span>已知投资额</span>
           <strong>{knownInvestment}<em>亿美元</em></strong>
-          <p>仅 2 个项目提供金额，不能做完整投资排行。</p>
+          <p>金额字段仅覆盖部分项目，因此本节以空间分布和项目类型为主。</p>
         </article>
         <article>
           <span>项目类型</span>
@@ -853,7 +853,7 @@ function OverseasPortfolio() {
         ))}
       </div>
       <SourceNote links={[{ label: 'CIDCA', url: sourceLinks.cidca }, { label: '水利部国际合作', url: sourceLinks.mwrInternational }]}>
-        口径说明：海外项目表适合展示国家分布和项目类型；投资额缺失较多，不做金额排名。
+        方法说明：海外项目按国家点位和项目类型展示；投资额只用于已披露金额的项目，不外推总规模。
       </SourceNote>
     </div>
   )
@@ -931,7 +931,7 @@ function PakistanCaseDashboard() {
         </div>
       </div>
       <SourceNote links={[{ label: 'World Bank · Pakistan', url: sourceLinks.pakistan }]}>
-        口径说明：这里呈现巴基斯坦水资源与农业背景指标，以及卡洛特水电站案例卡片；现有数据不足以证明“合作直接导致某项指标改善”。
+        方法说明：巴基斯坦部分呈现水资源与农业背景指标，并列出卡洛特水电站案例；趋势指标不用于推断单一项目成效。
       </SourceNote>
     </div>
   )
@@ -1124,10 +1124,10 @@ export default function App() {
           <p className="hero-copy">全球基本饮水服务覆盖率已经超过九成，仍有约 6.96 亿人被留在数字之外。更棘手的是，缺水、人口和区域发展并不总在同一个地方相遇。</p>
           <div className="hero-photo reveal">
             <img src={clearRiver} alt="高山河流" decoding="async" fetchpriority="high" />
-            <div>
-              <span>FLOWING CONTEXT</span>
-              <strong>水不是背景，它是这篇报道的主线。</strong>
-            </div>
+          <div>
+            <span>FLOWING CONTEXT</span>
+            <strong>水的流向，决定风险和治理的方向。</strong>
+          </div>
           </div>
           <div className="hero-kpis">
             <Kpi value={data.hero.worldCoverage2024} decimals={2} suffix="%" label="2024 年全球基本饮水服务覆盖率" note="World Bank 指标整理" />
@@ -1139,21 +1139,21 @@ export default function App() {
 
       <section className="chapter chapter-intro" id="opening">
         <div className="chapter-bg" />
-        <SectionText kicker="00 / OPENING" title="九成覆盖率之外，剩下的人在哪里？">
-          平均数会遮住差距。先看饮水服务覆盖，再把比例换成人数，最后把视线移到水资源压力最集中的国家和区域，问题的轮廓才会出现。
+        <SectionText kicker="00 / OPENING" title="九成覆盖率之外，缺口仍然存在。">
+          全球基本饮水服务覆盖率持续提高，但平均值无法呈现地区差异。把覆盖率换算成人数，再叠加水资源压力，风险分布会更加清晰。
         </SectionText>
         <div className="image-collage">
           <ImagePanel
             image={droughtChild}
             eyebrow="HUMAN SCALE"
-            title="比例背后，是取水的人。"
-            caption="当覆盖率换算成人数，缺口不再是抽象百分比，而是每天需要取水的现实。"
+            title="比例最终会落到人身上。"
+            caption="覆盖率越接近高位，剩余缺口越集中，也越容易被平均数遮住。"
           />
           <ImagePanel
             image={earthWater}
             eyebrow="PLANETARY VIEW"
-            title="水问题同时发生在全球尺度。"
-            caption="地图、排行和趋势线负责回答：哪些地方压力最高，哪些人最容易被落下。"
+            title="全球视角揭示压力分布。"
+            caption="地图、排行和趋势线共同回答：压力在哪里集中，缺口由哪些地区承担。"
             tone="green"
           />
         </div>
@@ -1162,8 +1162,8 @@ export default function App() {
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
         <div className="glass-card reveal map-card"><div className="card-head"><span>全球极高水资源压力点位</span><b>2022</b></div><InsightChip>高压力点位集中在中东北非、南亚和中亚一带。</InsightChip><WorldPressureMap /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>点位大小与颜色表示淡水提取量占可再生淡水资源总量的比例。</SourceNote></div>
-        <SectionText kicker="01 / MAP" title="先给读者一张世界图，问题集中在哪里会更清楚。">
-          这里用现有的水资源压力指数做点位地图。点的大小和颜色代表压力强度，重点突出中东北非、南亚和中亚一带，为后面的排行、散点图和区域趋势做铺垫。
+        <SectionText kicker="01 / MAP" title="高压力国家沿着干旱带聚集。">
+          点位地图按水资源压力指数绘制。点的大小和颜色代表压力强度，中东北非、南亚和中亚形成较明显的高值带。
         </SectionText>
       </section>
 
@@ -1178,7 +1178,7 @@ export default function App() {
       <section className="chapter two-col reverse" id="people">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><InsightChip>比例换成人数后，撒哈拉以南非洲的缺口会被放大。</InsightChip><UnservedChart /><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>估算值 = 地区总人口 ×（1 - 基本饮水服务覆盖率）。</SourceNote></div>
-        <SectionText kicker="03 / PEOPLE" title="从比例换成人数后，问题会更直观。">
+        <SectionText kicker="03 / PEOPLE" title="换算成人数后，缺口更加集中。">
           低覆盖率和大人口规模叠加后，缺口会被放大。全球约 6.96 亿人仍未获得基本饮水服务，中低收入经济体承担了其中大部分压力。
         </SectionText>
       </section>
@@ -1186,9 +1186,9 @@ export default function App() {
       <section className="chapter two-col" id="stress">
         <div className="chapter-bg" />
         <SectionText kicker="04 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
-          这里用淡水提取占可再生总量的比例衡量压力。由于埃及、巴林等国家数值远高于其他国家，图表使用对数轴，避免极端值把其他国家压扁。
+          水资源压力以淡水提取量占可再生淡水资源总量的比例衡量。埃及、巴林等国家数值远高于其他国家，因此图表采用对数轴展示。
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，所以这里采用对数轴。</InsightChip><StressRanking /><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>数值超过 100% 表示取水量高于当期可再生淡水资源量，图中横轴采用对数刻度。</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，图表采用对数轴展示。</InsightChip><StressRanking /><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>数值超过 100% 表示取水量高于当期可再生淡水资源量，图中横轴采用对数刻度。</SourceNote></div>
       </section>
 
       <section className="chapter two-col reverse" id="relation">
@@ -1204,13 +1204,13 @@ export default function App() {
         <SectionText kicker="06 / REGION TREND" title="区域趋势里，中东北非是一条明显抬高的曲线。">
           2014—2021 年间，中东北非始终处在高位，2021 年达到 167.14%。其他区域的曲线相对平缓，压力并没有平均分布。
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014—2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>区域值按 World Bank 地区聚合口径展示；各指标最新年份不同，不做跨年份因果比较。</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014—2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>区域值按 World Bank 地区聚合口径展示；各指标最新年份不同，不进行跨年份因果比较。</SourceNote></div>
       </section>
 
       <section className="chapter concept" id="concept">
         <div className="chapter-bg" />
-        <SectionText kicker="07 / POLICY FLOW" title="把水送到哪里，也要把治理能力送到哪里。">
-          这里不用概念图代替数据。它只负责说明治理关系：中央统筹连接流域、山区、县域供水和污染治理，年份切换展示不同阶段的政策侧重。
+        <SectionText kicker="07 / POLICY FLOW" title="供水工程背后，是治理资源的重新分配。">
+          政策流向图呈现治理关系：中央统筹连接流域、山区、县域供水和污染治理。年份切换对应不同阶段的政策侧重。
         </SectionText>
         <div className="glass-card reveal concept-card"><PolicyFlow /></div>
       </section>
@@ -1219,16 +1219,16 @@ export default function App() {
         <div className="chapter-bg" />
         <div className="china-heading reveal">
           <span className="eyebrow">08 / CHINA IN ACTION</span>
-          <h2>覆盖率之后，投入、水质和长期运行成为下一道题。</h2>
-          <p>新增数据让“中国行动”不再只是概念段落：农村供水投入、覆盖率、水质改善和跨区域调水共同构成治理侧的回应。</p>
+          <h2>覆盖率之后，投入、水质和长期运行成为新的重点。</h2>
+          <p>中国章节聚焦农村供水投入、覆盖率、水质改善和跨区域调水。这些指标共同指向一个变化：工程建设之后，稳定运行和水质保障变得更重要。</p>
         </div>
         <div className="glass-card reveal china-card"><ChinaActionDashboard /></div>
       </section>
 
       <section className="chapter two-col overseas-chapter" id="overseas">
         <div className="chapter-bg" />
-        <SectionText kicker="09 / OVERSEAS PROJECTS" title="水治理也在跨境流动，但项目数据更适合看分布。">
-          客户补充的海外项目覆盖水电站、供水、水坝、河道治理、灌溉和水利信息化。由于大部分项目缺少投资额，页面重点展示国家点位和项目类型，而不做金额排行。
+        <SectionText kicker="09 / OVERSEAS PROJECTS" title="海外水利项目呈现出多类型分布。">
+          海外项目覆盖水电站、供水、水坝、河道治理、灌溉和水利信息化。本节以国家点位和项目类型展示项目分布，金额信息仅用于已披露项目。
         </SectionText>
         <div className="glass-card reveal overseas-card">
           <div className="card-head"><span>中国海外水利项目</span><b>2006—2024</b></div>
@@ -1243,19 +1243,19 @@ export default function App() {
           <ImagePanel
             image={waterInfra}
             eyebrow="CASE STUDY"
-            title="工程可以成为案例入口。"
-            caption="巴基斯坦案例用项目卡片连接水资源压力、农业灌溉和能源基础设施。"
+            title="案例从工程项目进入。"
+            caption="巴基斯坦部分以卡洛特水电站为入口，同时呈现水资源压力和农业用水背景。"
           />
           <ImagePanel
             image={droughtGround}
             eyebrow="CONTEXT"
-            title="但背景压力仍需要单独说明。"
-            caption="地下水超采、灌溉效率和水资源压力不是一个项目能单独解释的结果。"
+            title="背景压力需要单独观察。"
+            caption="地下水超采、灌溉效率和水资源压力来自长期结构，不适合由单一项目解释。"
             tone="green"
           />
         </div>
-        <SectionText kicker="10 / PAKISTAN CASE" title="巴基斯坦适合作为案例，但要把“背景”和“成效”分开写。">
-          现有数据能支持水资源压力、灌溉农地占比、谷物单产等背景趋势，也能做卡洛特水电站项目卡片；但缺少灌溉保证率、地下水超采量的年度序列，因此不直接写成因果结论。
+        <SectionText kicker="10 / PAKISTAN CASE" title="巴基斯坦案例显示了水资源压力的多重背景。">
+          巴基斯坦长期处于高水资源压力状态。灌溉农地占比、谷物单产和地下水超采共同构成案例背景；卡洛特水电站则提供了基础设施合作的具体切口。
         </SectionText>
         <div className="glass-card reveal pakistan-card"><PakistanCaseDashboard /></div>
       </section>
@@ -1263,19 +1263,19 @@ export default function App() {
       <section className="finale" id="method">
         <div className="finale-inner reveal">
           <span className="eyebrow">11 / CONCLUSION</span>
-          <h2>水危机没有一条统一曲线，也不会靠一个工程结束。</h2>
-          <p>全球平均覆盖率继续上升，但人口缺口仍集中在脆弱地区；高压力国家面对的是另一套问题。治理真正进入深水区后，供水、水质和长期运营必须放在一起看。</p>
+          <h2>水危机没有统一曲线，治理也不是单一工程。</h2>
+          <p>全球平均覆盖率继续上升，人口缺口仍集中在脆弱地区；高压力国家面对的是另一组约束。进入后普及阶段后，供水、水质和长期运营需要被放在同一张图里观察。</p>
           <div className="method-grid">
-            <article><span>数据范围</span><strong>2014—2025</strong><p>不同指标更新节奏不同，页面保留各自年份，不把它们拼成同一条时间线。</p></article>
+            <article><span>数据范围</span><strong>2014—2025</strong><p>不同指标更新节奏不同，作品保留各自年份，避免跨口径拼接。</p></article>
             <article><span>估算方法</span><strong>覆盖率 × 人口</strong><p>未获基本饮水服务人口由覆盖率和总人口计算，结果保留一位小数。</p></article>
-            <article><span>概念图边界</span><strong>不冒充统计图</strong><p>政策流动只呈现关系和阶段，不代表资金规模或项目数量。</p></article>
+            <article><span>概念图边界</span><strong>关系示意</strong><p>政策流动图用于呈现治理关系和阶段侧重，不代表资金规模或项目数量。</p></article>
           </div>
           <SourceNote links={[
             { label: 'World Bank Data', url: sourceLinks.drinkingWater },
             { label: '水利部', url: chinaData.ruralWater.source },
             { label: '生态环境部', url: chinaData.waterQualitySources[4].url },
             { label: 'World Bank Pakistan', url: sourceLinks.pakistan }
-          ]}>数据文件：{data.sources.join('、')}、1_rural_water_investment.csv、2_rural_water_coverage.csv、3_surface_water_quality.csv、4_south_north_diversion.csv、5_overseas_water_projects.csv、6_pakistan_cooperation.csv。图片：客户提供素材图与公开素材混合使用。</SourceNote>
+          ]}>数据文件：{data.sources.join('、')}、1_rural_water_investment.csv、2_rural_water_coverage.csv、3_surface_water_quality.csv、4_south_north_diversion.csv、5_overseas_water_projects.csv、6_pakistan_cooperation.csv。图片素材用于情境表达，不作为统计证据。</SourceNote>
           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>回到顶部</button>
         </div>
       </section>
