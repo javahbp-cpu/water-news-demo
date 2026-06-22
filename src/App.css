@@ -1562,13 +1562,16 @@ main::before {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(230px, .42fr);
   gap: 18px;
-  align-items: stretch;
-  min-height: 520px;
+  align-items: start;
 }
 
 .globe-3d-stage {
   position: relative;
-  min-height: 520px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  min-height: 0;
+  max-height: 590px;
   border: 1px solid rgba(255,255,255,.18);
   border-radius: 32px;
   overflow: hidden;
@@ -1585,7 +1588,7 @@ main::before {
   z-index: 2;
   width: 100% !important;
   height: 100% !important;
-  min-height: 520px;
+  min-height: 0;
   cursor: grab;
 }
 
@@ -1606,13 +1609,17 @@ main::before {
 .globe-fallback {
   display: grid;
   place-items: center;
-  min-height: 520px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   color: #0e5d72;
   font-weight: 900;
   letter-spacing: .12em;
 }
 
 .globe-info-panel {
+  align-self: stretch;
+  min-height: 0;
+  max-height: 590px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1684,6 +1691,8 @@ main::before {
 .globe-pick-list {
   display: grid;
   gap: 8px;
+  overflow: auto;
+  padding-right: 2px;
 }
 
 .globe-pick-list button {
@@ -1729,7 +1738,8 @@ main::before {
   .hero-photo { width: min(100%, 520px); top: auto; }
   .hero-water-3d { right: 2vw; top: 18vh; width: min(44vw, 420px); opacity: .56; }
   .globe-3d-wrap { grid-template-columns: 1fr; min-height: auto; }
-  .globe-3d-stage, .globe-3d-stage canvas, .globe-fallback { min-height: 460px; }
+  .globe-3d-stage, .globe-fallback { max-height: none; }
+  .globe-info-panel { max-height: none; }
   .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid { grid-template-columns: 1fr; }
   .diversion-panel { grid-template-columns: 1fr; }
   .investment-stats { grid-template-columns: 1fr; }
@@ -1780,9 +1790,8 @@ main::before {
     opacity: .38;
   }
   .globe-3d-stage,
-  .globe-3d-stage canvas,
   .globe-fallback {
-    min-height: 390px;
+    min-height: 0;
   }
   .globe-info-panel { padding: 14px; border-radius: 24px; }
   .source-note { font-size: 10px; }
