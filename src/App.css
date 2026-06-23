@@ -251,6 +251,12 @@ main { position: relative; overflow: hidden; }
   font-size: 17px;
   line-height: 1.95;
 }
+.story-copy p {
+  margin-top: 18px;
+}
+.story-copy p:first-child {
+  margin-top: 24px;
+}
 
 .glass-card {
   position: relative;
