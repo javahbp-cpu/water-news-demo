@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import * as echarts from 'echarts/core'
 import { BarChart, LineChart } from 'echarts/charts'
@@ -16,12 +16,13 @@ import earthWater from './assets/earth-water.webp'
 import waterInfra from './assets/water-infra.webp'
 import clearRiver from './assets/clear-river.webp'
 import forestWaterfall from './assets/forest-waterfall.webp'
-import WaterResourceGlobe from './GlobeScene'
-import WaterOrb from './WaterOrb'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
 echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer])
+
+const WaterResourceGlobe = lazy(() => import('./GlobeScene'))
+const WaterOrb = lazy(() => import('./WaterOrb'))
 
 const nameZh = {
   World: '全球',
@@ -66,8 +67,10 @@ const sections = [
   { id: 'trend', label: '趋势' },
   { id: 'concept', label: '流向' },
   { id: 'china', label: '中国' },
+  { id: 'debate', label: '迭代' },
   { id: 'overseas', label: '海外' },
   { id: 'pakistan', label: '案例' },
+  { id: 'wisdom', label: '互鉴' },
   { id: 'method', label: '来源' }
 ]
 
@@ -164,6 +167,67 @@ function SourceNote({ children, links = [] }) {
         <a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
       ))}
     </div>
+  )
+}
+
+function LazyWhenVisible({ children, fallback = null, rootMargin = '480px' }) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    if (visible || !ref.current) return undefined
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true)
+        observer.disconnect()
+      }
+    }, { rootMargin })
+    observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [rootMargin, visible])
+
+  return <div ref={ref}>{visible ? children : fallback}</div>
+}
+
+function ThreeFallback({ type = 'globe' }) {
+  return (
+    <div className={`three-fallback ${type}`}>
+      <i />
+      <span>{type === 'orb' ? '水面动效加载中' : '3D 地球加载中'}</span>
+    </div>
+  )
+}
+
+function HeroWaterVisual() {
+  const [use3D, setUse3D] = useState(() => {
+    if (typeof window === 'undefined') return false
+    const width = Math.max(window.innerWidth || 0, document.documentElement.clientWidth || 0)
+    return width > 720 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  })
+
+  useEffect(() => {
+    const update = () => {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const width = Math.max(window.innerWidth || 0, document.documentElement.clientWidth || 0)
+      setUse3D(width > 720 && !reduced)
+    }
+    update()
+    const frame = requestAnimationFrame(update)
+    window.addEventListener('resize', update)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  if (!use3D) return <div className="mobile-water-surface" />
+
+  return (
+    <LazyWhenVisible fallback={<ThreeFallback type="orb" />} rootMargin="120px">
+      <Suspense fallback={<ThreeFallback type="orb" />}>
+        <WaterOrb />
+      </Suspense>
+    </LazyWhenVisible>
   )
 }
 
@@ -663,6 +727,159 @@ function InvestmentBarChart() {
   return <div className="chart investment-chart" ref={ref} role="img" aria-label="2021 与 2022 年农村供水完成投资对比" />
 }
 
+function RuralCoverageChart() {
+  const ref = useRef(null)
+  const rows = chinaData.ruralCoverage
+  useEChart(ref, () => {
+    const mobile = isMobile()
+    return ({
+      backgroundColor: 'transparent',
+      color: ['#35c8ff', '#7af0c9'],
+      grid: { top: 54, left: mobile ? 36 : 46, right: mobile ? 12 : 20, bottom: 34 },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(4,12,24,.94)',
+        borderColor: 'rgba(53,200,255,.34)',
+        textStyle: { color: '#ecfbff' }
+      },
+      legend: { top: 4, right: 0, textStyle: { color: '#b9d7e6', fontSize: mobile ? 10 : 11 } },
+      xAxis: {
+        type: 'category',
+        data: rows.map((item) => item.year),
+        axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11 },
+        axisLine: { lineStyle: { color: 'rgba(255,255,255,.15)' } }
+      },
+      yAxis: {
+        type: 'value',
+        min: 70,
+        max: 100,
+        axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11, formatter: '{value}%' },
+        splitLine: { lineStyle: { color: 'rgba(255,255,255,.08)' } }
+      },
+      series: [
+        {
+          name: '自来水普及率',
+          type: 'line',
+          smooth: true,
+          symbolSize: 8,
+          lineStyle: { width: 4 },
+          areaStyle: { color: 'rgba(53,200,255,.12)' },
+          data: rows.map((item) => item.tap)
+        },
+        {
+          name: '规模化供水覆盖率',
+          type: 'line',
+          smooth: true,
+          symbolSize: 8,
+          lineStyle: { width: 3 },
+          data: rows.map((item) => item.scaled ?? null)
+        }
+      ]
+    })
+  }, [])
+  return <div className="chart rural-coverage-chart" ref={ref} role="img" aria-label="2015 至 2023 年农村自来水普及率与规模化供水覆盖率趋势图" />
+}
+
+function DiversionAnnualChart() {
+  const ref = useRef(null)
+  const rows = chinaData.diversionAnnual
+  useEChart(ref, () => {
+    const mobile = isMobile()
+    return ({
+      backgroundColor: 'transparent',
+      color: ['#35c8ff', '#ffd166'],
+      grid: { top: 54, left: mobile ? 42 : 56, right: mobile ? 42 : 56, bottom: 38 },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(4,12,24,.94)',
+        borderColor: 'rgba(122,240,201,.34)',
+        textStyle: { color: '#ecfbff' },
+        formatter(params) {
+          const row = rows[params[0].dataIndex]
+          return `${row.year} 年度<br/>年度净调水：${row.value} 亿m³<br/>期末累计：${row.cumulative} 亿m³`
+        }
+      },
+      legend: { top: 4, right: 0, textStyle: { color: '#b9d7e6', fontSize: mobile ? 10 : 11 } },
+      xAxis: {
+        type: 'category',
+        data: rows.map((item) => item.year),
+        axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11 },
+        axisLine: { lineStyle: { color: 'rgba(255,255,255,.15)' } }
+      },
+      yAxis: [
+        {
+          type: 'value',
+          name: '年度',
+          axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11 },
+          splitLine: { lineStyle: { color: 'rgba(255,255,255,.08)' } }
+        },
+        {
+          type: 'value',
+          name: '累计',
+          axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11 },
+          splitLine: { show: false }
+        }
+      ],
+      series: [
+        {
+          name: '年度净调水量',
+          type: 'bar',
+          data: rows.map((item) => item.value),
+          barWidth: mobile ? 14 : 20,
+          itemStyle: { borderRadius: [8, 8, 0, 0] }
+        },
+        {
+          name: '期末累计量',
+          type: 'line',
+          yAxisIndex: 1,
+          smooth: true,
+          symbolSize: 7,
+          lineStyle: { width: 3 },
+          data: rows.map((item) => item.cumulative)
+        }
+      ]
+    })
+  }, [])
+  return <div className="chart diversion-chart" ref={ref} role="img" aria-label="南水北调年度净调水量和累计调水量趋势图" />
+}
+
+function GroundwaterRecoveryPanel() {
+  return (
+    <div className="groundwater-grid">
+      {chinaData.groundwaterRecovery.slice(1).map((item) => (
+        <article key={`${item.region}-${item.metric}-${item.year}`}>
+          <span>{item.year} · {item.region}</span>
+          <strong>{item.value}<em>{item.unit}</em></strong>
+          <p>{item.metric}：{item.note}</p>
+        </article>
+      ))}
+    </div>
+  )
+}
+
+function DebateDashboard() {
+  return (
+    <div className="debate-dashboard">
+      <div className="debate-grid">
+        <div className="debate-chart-panel">
+          <div className="card-head"><span>南水北调年度净调水量 / 累计量</span><b>2015—2024</b></div>
+          <InsightChip>从建设成果转向运行议题：调水、生态补水、地下水恢复和成本约束需要一起观察。</InsightChip>
+          <DiversionAnnualChart />
+        </div>
+        <div className="debate-text-panel">
+          <span>争议与迭代</span>
+          <strong>宏大工程不是终点，长期运行才是考验。</strong>
+          <p>南水北调累计调水量持续增长，同时也带来全生命周期成本、生态影响、水价承受力和受水区节水约束等讨论。作品在这里不做单向结论，而是把“工程成效”和“后续治理问题”并置。</p>
+        </div>
+      </div>
+      <GroundwaterRecoveryPanel />
+      <SourceNote links={[{ label: '南水北调十周年专题', url: sourceLinks.nsbd }, { label: '中国政府网', url: 'https://www.gov.cn/yaowen/liebiao/202412/content_6992281.htm' }]}>
+        数据来自客户补充的 4a、4b、4c 南水北调与地下水恢复数据；年度值采用累计节点差分口径。
+      </SourceNote>
+    </div>
+  )
+}
+
 function ChinaActionDashboard() {
   return (
     <div className="china-dashboard">
@@ -670,7 +887,7 @@ function ChinaActionDashboard() {
         <div className="china-metric">
           <span>2025 农村自来水普及率</span>
           <strong><AnimatedNumber value={chinaData.ruralWater.tapWater2025} suffix="%" /></strong>
-          <small>离 2030 年 98% 的目标还有 2 个百分点</small>
+          <small>2015 年为 75%，普及率继续向高位推进</small>
         </div>
         <div className="china-metric">
           <span>规模化供水覆盖农村人口</span>
@@ -684,14 +901,19 @@ function ChinaActionDashboard() {
         </div>
       </div>
       <div className="china-quality-panel">
-        <div className="card-head"><span>全国地表水总体水质</span><b>2016—2023</b></div>
-        <InsightChip>Ⅰ—Ⅲ类断面占比从 67.8% 升至 89.4%，劣Ⅴ类下降到 0.7%。</InsightChip>
+        <div className="card-head"><span>全国地表水总体水质</span><b>2016—2025</b></div>
+        <InsightChip>Ⅰ—Ⅲ类断面占比从 67.8% 升至 90.2%，劣Ⅴ类下降到 0.4%（2025 为季度通报口径）。</InsightChip>
         <ChinaQualityChart />
+      </div>
+      <div className="china-quality-panel">
+        <div className="card-head"><span>农村自来水普及率与规模化供水</span><b>2015—2023</b></div>
+        <InsightChip>高覆盖之后，治理重心从“建起来”转向“稳定运行、规模化供水和水质保障”。</InsightChip>
+        <RuralCoverageChart />
       </div>
       <div className="china-split">
         <div className="investment-panel">
-          <div className="card-head"><span>农村供水投入</span><b>2021—2022</b></div>
-          <InsightChip>年度投资只有 2021、2022 两个可比点，其他为累计或不同口径。</InsightChip>
+          <div className="card-head"><span>农村供水投入</span><b>2018—2023</b></div>
+          <InsightChip>年度投入从数百亿元进入千亿元量级，公共产品属性决定了持续投入的重要性。</InsightChip>
           <InvestmentBarChart />
           <div className="investment-stats">
             {chinaData.investments.filter((item) => item.type === 'cumulative').map((item) => (
@@ -731,7 +953,7 @@ function ChinaActionDashboard() {
         { label: '生态环境部公报', url: chinaData.waterQualitySources[3].url },
         { label: chinaData.diversion.sourceLabel, url: chinaData.diversion.source }
       ]}>
-        方法说明：水质采用全国地表水总体断面数据；南水北调采用 2025—2026 调水年度公开报道数据。
+        方法说明：水质采用全国地表水总体断面数据；农村供水、投资和南水北调数据来自客户补充数据包与公开来源。
       </SourceNote>
     </div>
   )
@@ -827,18 +1049,19 @@ function OverseasProjectMap() {
 
 function OverseasPortfolio() {
   const knownInvestment = overseasProjects.filter((item) => item.investment).reduce((sum, item) => sum + item.investment, 0)
+  const countryCount = new Set(overseasProjects.map((item) => item.country)).size
   return (
     <div className="overseas-dashboard">
       <div className="portfolio-kpis">
         <article>
           <span>项目数量</span>
           <strong>{overseasProjects.length}</strong>
-          <p>覆盖 9 个国家，类型包括水电站、供水、水坝、河道治理等。</p>
+          <p>覆盖 {countryCount} 个国家，类型包括水电站、供水、水坝、河道治理等。</p>
         </article>
         <article>
           <span>已知投资额</span>
-          <strong>{knownInvestment}<em>亿美元</em></strong>
-          <p>金额字段仅覆盖部分项目，因此本节以空间分布和项目类型为主。</p>
+          <strong>{knownInvestment.toFixed(1)}<em>亿美元</em></strong>
+          <p>金额字段仅覆盖已披露项目，因此本节以空间分布和项目类型为主。</p>
         </article>
         <article>
           <span>项目类型</span>
@@ -908,6 +1131,68 @@ function PakistanTrendChart({ metric }) {
   return <div className="chart pakistan-chart" ref={ref} role="img" aria-label={`巴基斯坦${current.label}趋势图`} />
 }
 
+function PakistanCooperationChart() {
+  const ref = useRef(null)
+  const rows = pakistanData.trends.guarantee.values
+  useEChart(ref, () => {
+    const mobile = isMobile()
+    return ({
+      backgroundColor: 'transparent',
+      color: ['#7af0c9', '#ffd166'],
+      grid: { top: 56, left: mobile ? 42 : 54, right: mobile ? 42 : 54, bottom: 38 },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(4,12,24,.94)',
+        borderColor: 'rgba(122,240,201,.34)',
+        textStyle: { color: '#ecfbff' },
+        formatter(params) {
+          const row = rows[params[0].dataIndex]
+          return `${row.year} 年<br/>全国灌溉保证率：${row.value}%<br/>中巴水利合作项目数：${row.projects} 个`
+        }
+      },
+      legend: { top: 4, right: 0, textStyle: { color: '#b9d7e6', fontSize: mobile ? 10 : 11 } },
+      xAxis: {
+        type: 'category',
+        data: rows.map((item) => item.year),
+        axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11 },
+        axisLine: { lineStyle: { color: 'rgba(255,255,255,.15)' } }
+      },
+      yAxis: [
+        {
+          type: 'value',
+          min: 70,
+          max: 86,
+          axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11, formatter: '{value}%' },
+          splitLine: { lineStyle: { color: 'rgba(255,255,255,.08)' } }
+        },
+        {
+          type: 'value',
+          axisLabel: { color: '#a9c4d2', fontSize: mobile ? 9 : 11 },
+          splitLine: { show: false }
+        }
+      ],
+      series: [
+        {
+          name: '全国灌溉保证率',
+          type: 'line',
+          smooth: true,
+          symbolSize: 8,
+          lineStyle: { width: 4 },
+          data: rows.map((item) => item.value)
+        },
+        {
+          name: '中巴水利合作项目数',
+          type: 'bar',
+          yAxisIndex: 1,
+          barWidth: mobile ? 14 : 20,
+          data: rows.map((item) => item.projects)
+        }
+      ]
+    })
+  }, [])
+  return <div className="chart pakistan-chart" ref={ref} role="img" aria-label="巴基斯坦全国灌溉保证率与中巴水利合作项目数趋势图" />
+}
+
 function PakistanCaseDashboard() {
   const [metric, setMetric] = useState('stress')
   const current = pakistanData.trends[metric]
@@ -935,6 +1220,36 @@ function PakistanCaseDashboard() {
       </div>
       <SourceNote links={[{ label: 'World Bank · Pakistan', url: sourceLinks.pakistan }]}>
         方法说明：巴基斯坦部分呈现水资源与农业背景指标，并列出卡洛特水电站案例；趋势指标不用于推断单一项目成效。
+      </SourceNote>
+    </div>
+  )
+}
+
+function WisdomDashboard() {
+  return (
+    <div className="wisdom-dashboard">
+      <div className="wisdom-grid">
+        <div className="wisdom-copy">
+          <span>从技术合作到规则对话</span>
+          <strong>合作的价值，不只在单个工程。</strong>
+          <p>数据包给出的巴基斯坦补充指标显示：2015—2024 年，中巴水利合作项目数与全国灌溉保证率同步上升，但 2022 年洪灾也提示了气候冲击下的波动。这一段更适合表达“技术、工程、运营与制度能力”如何共同进入水治理，而不是把所有变化归因于单一项目。</p>
+        </div>
+        <div className="wisdom-chart-panel">
+          <div className="card-head"><span>巴基斯坦灌溉保证率与合作项目数</span><b>2015—2024</b></div>
+          <PakistanCooperationChart />
+        </div>
+      </div>
+      <div className="cooperation-card-grid">
+        {pakistanData.cooperationCards.map((item) => (
+          <article key={item.label}>
+            <span>{item.label}</span>
+            <strong>{item.value}<em>{item.unit}</em></strong>
+            <p>{item.note}</p>
+          </article>
+        ))}
+      </div>
+      <SourceNote links={[{ label: 'World Bank · Pakistan water report', url: sourceLinks.pakistanWaterReport }, { label: 'World Bank · groundwater case', url: sourceLinks.pakistanGroundwater }]}>
+        说明：客户文案中“世界银行誉为南南水资源合作典范、每年减少 6.8 亿美元干旱损失”等表述，未在本次可核验数据包和公开检索中找到可靠对应来源，因此页面未直接写成事实。
       </SourceNote>
     </div>
   )
@@ -1070,13 +1385,13 @@ export default function App() {
   const activeSection = useActiveSection()
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth <= 720) return undefined
     const lenis = new Lenis({
-      duration: 1.08,
+      duration: 0.82,
       smoothWheel: true,
-      wheelMultiplier: 0.88,
-      touchMultiplier: 1.15,
-      lerp: 0.09
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1,
+      lerp: 0.12
     })
 
     const update = (time) => {
@@ -1132,7 +1447,9 @@ export default function App() {
 
       <section className="hero" id="top">
         <div className="hero-water" />
-        <div className="hero-water-3d" aria-hidden="true"><WaterOrb /></div>
+        <div className="hero-water-3d" aria-hidden="true">
+          <HeroWaterVisual />
+        </div>
         <nav className="topline"><span>DATA NEWS / WATER IN MOTION</span><span>World water resources</span></nav>
         <div className="hero-content">
           <p className="eyebrow">流淌的危机</p>
@@ -1177,7 +1494,7 @@ export default function App() {
 
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
-        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>球体点位叠加高水压国家与海外水利项目；弧线用于表现中国水利合作的空间连接关系。</SourceNote></div>
+        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>球体点位叠加高水压国家与海外水利项目；弧线用于表现中国水利合作的空间连接关系。</SourceNote></div>
         <SectionText kicker="01 / MAP" title="高压力国家沿着干旱带聚集。">
           3D 地球按水资源压力指数标出高值国家，并叠加海外水利项目点位。中东北非、南亚和中亚形成较明显的高压力带，项目弧线则呈现跨区域水利合作的空间路径。
         </SectionText>
@@ -1241,14 +1558,25 @@ export default function App() {
         <div className="glass-card reveal china-card"><ChinaActionDashboard /></div>
       </section>
 
+      <section className="chapter two-col reverse debate-chapter" id="debate">
+        <div className="chapter-bg" />
+        <div className="glass-card reveal debate-card">
+          <div className="card-head"><span>争议与迭代</span><b>POST-BUILD</b></div>
+          <DebateDashboard />
+        </div>
+        <SectionText kicker="09 / DEBATE & ITERATION" title="从建设攻坚到运营考验，复杂性并没有消失。">
+          当覆盖率和工程规模进入高位，问题的重心会从“有没有”转向“稳不稳、好不好、能否长期运行”。南水北调、农村供水和水污染治理的后续讨论，都指向同一个问题：工程必须嵌入长期制度与运营能力。
+        </SectionText>
+      </section>
+
       <section className="chapter two-col overseas-chapter" id="overseas">
         <div className="chapter-bg" />
-        <SectionText kicker="09 / OVERSEAS PROJECTS" title="海外水利项目呈现出多类型分布。">
+        <SectionText kicker="10 / OVERSEAS PROJECTS" title="海外水利项目呈现出多类型分布。">
           海外项目覆盖水电站、供水、水坝、河道治理、灌溉和水利信息化。本节以国家点位和项目类型展示项目分布，金额信息仅用于已披露项目。
         </SectionText>
         <div className="glass-card reveal overseas-card">
           <div className="card-head"><span>中国海外水利项目</span><b>2006—2024</b></div>
-          <InsightChip>10 个项目覆盖 9 个国家，已知投资额只覆盖其中 2 个项目。</InsightChip>
+          <InsightChip>15 个项目覆盖 12 个国家，项目类型从水电站扩展到供水、水坝、灌溉和水利信息化。</InsightChip>
           <OverseasPortfolio />
         </div>
       </section>
@@ -1270,15 +1598,26 @@ export default function App() {
             tone="green"
           />
         </div>
-        <SectionText kicker="10 / PAKISTAN CASE" title="巴基斯坦案例显示了水资源压力的多重背景。">
+        <SectionText kicker="11 / PAKISTAN CASE" title="巴基斯坦案例显示了水资源压力的多重背景。">
           巴基斯坦长期处于高水资源压力状态。灌溉农地占比、谷物单产和地下水超采共同构成案例背景；卡洛特水电站则提供了基础设施合作的具体切口。
         </SectionText>
         <div className="glass-card reveal pakistan-card"><PakistanCaseDashboard /></div>
       </section>
 
+      <section className="chapter two-col wisdom-chapter" id="wisdom">
+        <div className="chapter-bg" />
+        <SectionText kicker="12 / SHARED WISDOM" title="从项目出海，到治理经验的相互校准。">
+          水治理经验并不是单向输出。巴基斯坦案例提示我们，工程、灌溉、农业生产和气候风险必须放在同一个系统里看。真正有价值的，是技术合作之后形成的运营能力、规则能力和长期适配能力。
+        </SectionText>
+        <div className="glass-card reveal wisdom-card">
+          <div className="card-head"><span>智慧交融</span><b>2015—2024</b></div>
+          <WisdomDashboard />
+        </div>
+      </section>
+
       <section className="finale" id="method">
         <div className="finale-inner reveal">
-          <span className="eyebrow">11 / CONCLUSION</span>
+          <span className="eyebrow">13 / CONCLUSION</span>
           <h2>水危机没有统一曲线，治理也不是单一工程。</h2>
           <p>全球平均覆盖率继续上升，人口缺口仍集中在脆弱地区；高压力国家面对的是另一组约束。进入后普及阶段后，供水、水质和长期运营需要被放在同一张图里观察。</p>
           <div className="method-grid">

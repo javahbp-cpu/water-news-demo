@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/water-news-demo/',
   build: {
+    modulePreload: false,
     rollupOptions: {
       output: {
         manualChunks: {
