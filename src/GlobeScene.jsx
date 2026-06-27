@@ -165,6 +165,11 @@ export default function WaterResourceGlobe({ stressPoints, projects }) {
           </Canvas>
         </Suspense>
         <div className="globe-glow" aria-hidden="true" />
+        <div className="globe-stage-stat" aria-label="3D 地球数据摘要">
+          <span>空间对照</span>
+          <strong>{stressPoints.length} 个高压力点 / {projects.length} 个水利项目</strong>
+          <p>同屏观察水资源压力带与海外项目落点，避免地图左下区域留白。</p>
+        </div>
       </div>
 
       <aside className="globe-info-panel">

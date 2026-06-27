@@ -52,40 +52,11 @@ export const chinaData = {
     { year: 2019, url: 'https://www.mee.gov.cn/hjzl/sthjzk/zghjzkgb/202006/P020200602509464172096.pdf' },
     { year: 2024, url: 'https://www.mee.gov.cn/hjzl/sthjzk/zghjzkgb/' }
   ],
-  diversion: {
-    waterYear: '2025—2026',
-    supply: 3.59,
-    unit: '亿立方米',
-    destination: '河北、天津',
-    source: 'https://epaper.gmw.cn/gmrb/html/content/202606/03/content_15633.html',
-    sourceLabel: '光明日报'
-  },
-  diversionAnnual: [
-    { year: 2015, value: 21.6, cumulative: 21.6 },
-    { year: 2016, value: 34.8, cumulative: 56.4 },
-    { year: 2017, value: 51.8, cumulative: 108.2 },
-    { year: 2018, value: 75.9, cumulative: 184.1 },
-    { year: 2019, value: 74.4, cumulative: 258.5 },
-    { year: 2020, value: 87.3, cumulative: 345.8 },
-    { year: 2021, value: 85.4, cumulative: 431.2 },
-    { year: 2022, value: 91.8, cumulative: 523.0 },
-    { year: 2023, value: 82.5, cumulative: 605.5 },
-    { year: 2024, value: 74.7, cumulative: 680.2 }
-  ],
-  diversionCumulative: [
-    { date: '2018-12-12', label: '4周年', total: 222, middle: 191, east: 31 },
-    { date: '2020-12-22', label: '6周年', total: 394, middle: 348, east: 46 },
-    { date: '2023-02-05', label: '东中线突破600亿m³', total: 600 },
-    { date: '2024-11-30', label: '10周年', total: 767, middle: 680, east: 87 },
-    { date: '2025-12-21', label: '11周年', total: 845 }
-  ],
-  groundwaterRecovery: [
-    { year: 2015, region: '北京市平原区', metric: '浅层地下水埋深', value: 25.75, unit: 'm', note: '基准年' },
-    { year: 2019, region: '北京市平原区', metric: '浅层地下水埋深', value: 22.59, unit: 'm', note: '较2015年回升3.16m' },
-    { year: 2022, region: '华北超采区', metric: '深层承压水位回升', value: 6.72, unit: 'm', note: '相对治理前' },
-    { year: 2022, region: '华北超采区', metric: '浅层地下水位回升', value: 1.89, unit: 'm', note: '相对治理前' },
-    { year: 2023, region: '华北超采区', metric: '采补平衡面积比例', value: 90, unit: '%', note: '约90%区域初步采补平衡' },
-    { year: 2024, region: '生态补水沿线', metric: '累计生态补水', value: 118, unit: '亿m³', note: '向50余条河流累计补水' }
+  waterGovernanceFocus: [
+    '流域统筹',
+    '农村供水',
+    '水环境治理',
+    '节水型社会建设'
   ]
 }
 
