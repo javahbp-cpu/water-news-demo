@@ -1893,6 +1893,7 @@ main::before {
 
 .hero-title {
   max-width: 920px;
+  font-size: clamp(50px, 8.2vw, 118px);
   letter-spacing: .025em;
   font-family: "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", serif;
 }
@@ -1905,6 +1906,20 @@ main::before {
   max-width: 680px;
 }
 
+.hero-photo {
+  position: relative;
+  right: auto;
+  top: auto;
+  width: min(480px, 100%);
+  min-height: 300px;
+  margin: 18px 0 20px auto;
+  transform: none;
+}
+
+.hero-photo img {
+  min-height: 300px;
+}
+
 .hero-water-3d {
   right: clamp(-130px, -6vw, -60px);
   top: 18vh;
@@ -1915,6 +1930,107 @@ main::before {
 
 .shortage-section {
   width: min(1240px, calc(100% - 40px));
+}
+
+.case-chapter {
+  width: min(1160px, calc(100% - 40px));
+  min-height: auto;
+}
+
+.turkana-case-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(320px, .9fr) minmax(0, 1fr);
+  gap: 26px;
+  align-items: stretch;
+  padding: 28px;
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: 36px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.78), rgba(225,248,255,.48)),
+    radial-gradient(circle at 12% 20%, rgba(255,209,102,.16), transparent 28%);
+  box-shadow: 0 30px 90px rgba(20, 108, 139, .16);
+  overflow: hidden;
+}
+
+.turkana-photo-stack {
+  display: grid;
+  grid-template-columns: .92fr 1fr;
+  gap: 12px;
+  align-items: end;
+}
+
+.turkana-photo-stack figure {
+  position: relative;
+  min-height: 390px;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow: 0 18px 50px rgba(11,74,104,.18);
+  background: #fff;
+}
+
+.turkana-photo-stack figure:nth-child(2) {
+  transform: translateY(28px);
+}
+
+.turkana-photo-stack img {
+  width: 100%;
+  height: 100%;
+  min-height: 390px;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.turkana-photo-stack figcaption {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(5, 31, 52, .68);
+  backdrop-filter: blur(10px);
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.turkana-copy {
+  align-self: center;
+}
+
+.turkana-copy > span {
+  color: #0088a8;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+
+.turkana-copy strong {
+  display: block;
+  margin-top: 14px;
+  color: #062d44;
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1.12;
+}
+
+.turkana-copy p {
+  margin: 18px 0 0;
+  color: rgba(8,48,68,.72);
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.turkana-copy .source-note {
+  border-color: rgba(8,48,68,.12);
+  color: rgba(8,48,68,.58);
+}
+
+.turkana-copy .source-note a {
+  color: #087f9f;
 }
 
 .shortage-card {
@@ -2092,7 +2208,7 @@ main::before {
 
 .finale-mosaic {
   display: grid;
-  grid-template-columns: 1.15fr .9fr .9fr .9fr 1.15fr;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
   margin: 34px auto 0;
 }
@@ -2108,7 +2224,8 @@ main::before {
 }
 
 .finale-mosaic figure:nth-child(2),
-.finale-mosaic figure:nth-child(4) {
+.finale-mosaic figure:nth-child(4),
+.finale-mosaic figure:nth-child(6) {
   transform: translateY(26px);
 }
 
@@ -2143,7 +2260,7 @@ main::before {
   .globe-3d-wrap { grid-template-columns: 1fr; min-height: auto; }
   .globe-3d-stage, .globe-fallback { max-height: none; }
   .globe-info-panel { max-height: none; }
-  .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid, .debate-grid, .wisdom-grid, .bri-timeline { grid-template-columns: 1fr; }
+  .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid, .debate-grid, .wisdom-grid, .bri-timeline, .turkana-case-card { grid-template-columns: 1fr; }
   .groundwater-grid, .cooperation-card-grid { grid-template-columns: 1fr 1fr; }
   .diversion-panel { grid-template-columns: 1fr; }
   .investment-stats { grid-template-columns: 1fr; }
@@ -2161,7 +2278,9 @@ main::before {
   .case-visual-stack .image-panel.green { transform: none; }
   .finale-mosaic { grid-template-columns: 1fr 1fr; }
   .finale-mosaic figure:nth-child(2),
-  .finale-mosaic figure:nth-child(4) { transform: none; }
+  .finale-mosaic figure:nth-child(4),
+  .finale-mosaic figure:nth-child(6),
+  .turkana-photo-stack figure:nth-child(2) { transform: none; }
 }
 
 @media (max-width: 640px) {
@@ -2223,6 +2342,9 @@ main::before {
   .concept-card { min-height: 650px; }
   .method-grid { gap: 10px; }
   .finale-mosaic { grid-template-columns: 1fr; }
+  .turkana-photo-stack { grid-template-columns: 1fr; }
+  .turkana-photo-stack figure,
+  .turkana-photo-stack img { min-height: 320px; }
   .finale-mosaic figure,
   .finale-mosaic img { min-height: 220px; }
   .finale { padding: 76px 16px; }

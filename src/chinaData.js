@@ -207,5 +207,6 @@ export const sourceLinks = {
   pakistanGroundwater: 'https://documents1.worldbank.org/curated/en/174121579803266899/pdf/Groundwater-and-Surface-Water-in-the-Mega-Irrigation-Systems-of-Pakistan-The-Case-for-Conjunctive-Management.pdf',
   cidca: 'http://www.cidca.gov.cn/',
   mwrInternational: 'http://www.mwr.gov.cn/',
-  nsbd: 'https://www.nsbd.cn/zt/zxgctsszn/'
+  nsbd: 'https://www.nsbd.cn/zt/zxgctsszn/',
+  turkanaCase: 'https://www.unicef.org/kenya/stories/drought-hope-advancing-water-sanitation-and-hygiene-turkana-county'
 }
