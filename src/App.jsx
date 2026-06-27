@@ -82,7 +82,7 @@ const sections = [
   { id: 'pakistan', label: '案例' },
   { id: 'wisdom', label: '互鉴' },
   { id: 'route', label: '丝路' },
-  { id: 'method', label: '来源' }
+  { id: 'method', label: '结语' }
 ]
 
 const isMobile = () => window.innerWidth <= 640
@@ -323,7 +323,7 @@ function CoverageSwitcher() {
 
   return (
     <div className="switch-chart" ref={sectionRef}>
-      <div className="mode-toggle" aria-label="切换图表口径">
+      <div className="mode-toggle" aria-label="切换图表视图">
         <button className={mode === 'coverage' ? 'active' : ''} onClick={() => setMode('coverage')}>覆盖率</button>
         <button className={mode === 'gap' ? 'active' : ''} onClick={() => setMode('gap')}>缺口人口</button>
       </div>
@@ -537,7 +537,7 @@ function TurkanaCasePanel() {
         <strong>从干旱到希望：安全供水改变日常生活。</strong>
         <p>UNICEF Kenya 记录的 Turkana County 案例显示，长期干旱会把取水距离、儿童上学、牲畜生存和公共卫生问题连在一起。Kalopiria Water Supply System 通过太阳能钻孔和管道把取水时间压缩到日常可承受范围，SCORE 项目则继续扩展安全饮水、卫生设施和社区水点运维。</p>
         <p>这个案例对应文案里的“宏观气泡图下沉至微观社区”：缺水不是抽象指标，而是具体家庭、学校和牲畜共同承担的生活压力。</p>
-        <SourceNote links={[{ label: 'UNICEF Kenya · Turkana case', url: sourceLinks.turkanaCase }]}>案例用于说明全球短缺问题在社区层面的具体表现；图片来自客户提供的 UNICEF 页面截图素材。</SourceNote>
+        <SourceNote links={[{ label: 'UNICEF Kenya · Turkana case', url: sourceLinks.turkanaCase }]}>资料来源：UNICEF Kenya</SourceNote>
       </div>
     </div>
   )
@@ -929,7 +929,7 @@ function DebateDashboard() {
       </div>
       <GroundwaterRecoveryPanel />
       <SourceNote links={[{ label: '南水北调十周年专题', url: sourceLinks.nsbd }, { label: '中国政府网', url: 'https://www.gov.cn/yaowen/liebiao/202412/content_6992281.htm' }]}>
-        数据来自客户补充的 4a、4b、4c 南水北调与地下水恢复数据；年度值采用累计节点差分口径。
+        资料来源：南水北调公开资料、中国政府网
       </SourceNote>
     </div>
   )
@@ -957,7 +957,7 @@ function ChinaActionDashboard() {
       </div>
       <div className="china-quality-panel">
         <div className="card-head"><span>全国地表水总体水质</span><b>2016—2025</b></div>
-        <InsightChip>Ⅰ—Ⅲ类断面占比从 67.8% 升至 90.2%，劣Ⅴ类下降到 0.4%（2025 为季度通报口径）。</InsightChip>
+        <InsightChip>Ⅰ—Ⅲ类断面占比从 67.8% 升至 90.2%，劣Ⅴ类下降到 0.4%（2025 为季度通报数据）。</InsightChip>
         <ChinaQualityChart />
       </div>
         <div className="china-quality-panel">
@@ -1008,7 +1008,7 @@ function ChinaActionDashboard() {
         { label: '生态环境部公报', url: chinaData.waterQualitySources[3].url },
         { label: chinaData.diversion.sourceLabel, url: chinaData.diversion.source }
       ]}>
-        方法说明：水质采用全国地表水总体断面数据；农村供水、投资和南水北调数据来自客户补充数据包与公开来源。
+        资料来源：水利部、生态环境部、南水北调公开资料
       </SourceNote>
     </div>
   )
@@ -1134,7 +1134,7 @@ function OverseasPortfolio() {
         ))}
       </div>
       <SourceNote links={[{ label: 'CIDCA', url: sourceLinks.cidca }, { label: '水利部国际合作', url: sourceLinks.mwrInternational }]}>
-        海外项目覆盖水电站、供水、水坝、河道治理、灌溉和水利信息化；金额信息仅用于已披露项目。
+        资料来源：CIDCA、水利部国际合作公开资料
       </SourceNote>
     </div>
   )
@@ -1377,7 +1377,7 @@ function PakistanCaseDashboard() {
         </div>
       </div>
       <SourceNote links={[{ label: 'World Bank · Pakistan', url: sourceLinks.pakistan }]}>
-        巴基斯坦长期处于高水资源压力状态。灌溉农地占比、谷物单产和地下水超采共同构成案例背景；卡洛特水电站则提供了基础设施合作的具体切口。
+        资料来源：World Bank Pakistan
       </SourceNote>
     </div>
   )
@@ -1407,7 +1407,7 @@ function WisdomDashboard() {
         ))}
       </div>
       <SourceNote links={[{ label: 'World Bank · Pakistan water report', url: sourceLinks.pakistanWaterReport }, { label: 'World Bank · groundwater case', url: sourceLinks.pakistanGroundwater }]}>
-        灌溉保证率从55%提升至68%，地下水年超采量削减19亿立方米，谷物单产提高24%。世界银行将这一合作誉为“南南水资源合作的典范”，确认其每年为巴基斯坦减少6.8亿美元干旱损失，惠及3200万人口。
+        资料来源：World Bank Pakistan water reports
       </SourceNote>
     </div>
   )
@@ -1656,7 +1656,7 @@ export default function App() {
           <div className="card-head"><span>世界水资源短缺热力图</span><b>HOTSPOTS</b></div>
           <InsightChip>深色国家与放大气泡代表更高水资源压力，帮助读者先看到“危机在哪里”。</InsightChip>
           <WorldPressureMap />
-          <SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>以淡水提取量占可再生淡水资源总量的比例衡量水资源压力；部分小国以点位突出显示。</SourceNote>
+          <SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote>
         </div>
         <SectionText kicker="01 / GLOBAL CRISIS" title="全球水困局：共同的危机与交汇的挑战">
           <p>地球表面的颜色不仅是风景，更是人类生存状态的映射。在南亚的部分农田，土壤正在经历不可逆的板结；在北非的村庄，居民每天为获取基本生活用水要跋涉数十公里。数据显示，全球有近7亿人口生活在极度缺水的阴影之下，且这一数字在部分年份甚至呈现16%的波动增长趋势。</p>
@@ -1671,7 +1671,7 @@ export default function App() {
 
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
-        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>球体点位叠加高水压国家与海外水利项目；弧线用于表现中国水利合作的空间连接关系。</SourceNote></div>
+        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>资料来源：World Bank、CIDCA</SourceNote></div>
         <SectionText kicker="02 / MAP" title="高压力国家沿着干旱带聚集。">
           <p>水资源承压严峻的国家大多沿干旱带呈条带、片区状聚集，足以说明，在特定地理区间内，缺水危机早已根植于当地的生存环境之中。将全球水资源压力指数与海外水利项目叠加在同一空间维度下观察，中东北非、南亚和中亚形成了一条清晰的高压力带。</p>
         </SectionText>
@@ -1682,12 +1682,12 @@ export default function App() {
         <SectionText kicker="03 / DRINKING WATER" title="覆盖率稳步提升，但短板集中在脆弱地区。">
           <p>进一步的数据分析清晰表明：虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。伴随着整体覆盖率不断向100%靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题，缺口的治理难度也被持续放大。这也再次印证，水资源压力从来不会平均分摊，严峻的缺水负担正高度集中在部分国家，且已逼近承载极限。</p>
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><InsightChip>全球覆盖率接近 91.45%，但脆弱地区仍明显落后。</InsightChip><CoverageSwitcher /><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>基本饮水服务指取水往返不超过 30 分钟、来自改善水源的饮水服务。</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><InsightChip>全球覆盖率接近 91.45%，但脆弱地区仍明显落后。</InsightChip><CoverageSwitcher /><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>资料来源：World Bank</SourceNote></div>
       </section>
 
       <section className="chapter two-col reverse" id="people">
         <div className="chapter-bg" />
-        <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><InsightChip>比例换成人数后，撒哈拉以南非洲的缺口会被放大。</InsightChip><UnservedChart /><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>估算值 = 地区总人口 ×（1 - 基本饮水服务覆盖率）。</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><InsightChip>比例换成人数后，撒哈拉以南非洲的缺口会被放大。</InsightChip><UnservedChart /><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>资料来源：World Bank</SourceNote></div>
         <SectionText kicker="04 / PEOPLE" title="换算成人数后，缺口更加集中。">
           <p>进一步的数据分析清晰表明：虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。伴随着整体覆盖率不断向100%靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题，缺口的治理难度也被持续放大。这也再次印证，水资源压力从来不会平均分摊，严峻的缺水负担正高度集中在部分国家，且已逼近承载极限。</p>
         </SectionText>
@@ -1698,12 +1698,12 @@ export default function App() {
         <SectionText kicker="05 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
           <p>国家水资源压力排行。水资源压力不是平均分布，而是在少数国家被推到极端。水资源压力以淡水提取量占可再生淡水资源总量的比例衡量。埃及、巴林等国家数值远高于其他国家，因此图表采用对数轴展示。</p>
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，图表采用对数轴展示。</InsightChip><StressRanking /><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>数值超过 100% 表示取水量高于当期可再生淡水资源量，图中横轴采用对数刻度。</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，图表采用对数轴展示。</InsightChip><StressRanking /><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
       </section>
 
       <section className="chapter two-col reverse" id="relation">
         <div className="chapter-bg" />
-        <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>代表国家</b></div><InsightChip>人口规模会改变压力的含义：高压力小国和人口大国不是同一种问题。</InsightChip><StressScatter /><SourceNote links={[{ label: 'World Bank · 人均淡水资源', url: sourceLinks.freshwater }]}>横轴和纵轴均为对数刻度，气泡面积表示人口规模。</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>代表国家</b></div><InsightChip>人口规模会改变压力的含义：高压力小国和人口大国不是同一种问题。</InsightChip><StressScatter /><SourceNote links={[{ label: 'World Bank · 人均淡水资源', url: sourceLinks.freshwater }]}>资料来源：World Bank</SourceNote></div>
         <SectionText kicker="06 / RELATION" title="同样是深陷高压，缺水成因却截然不同。">
           <p>同样是深陷水资源高压困境，缺水的内在成因却截然不同：一部分地区受制于先天自然条件，属于原生性资源禀赋匮乏；另一部分区域则因水体环境遭到破坏，由后天污染造成可用水源短缺。从区域数据走势可以清晰看到，中东北非地区的水资源压力始终居高不下，干旱的先天底色叠加人口增长与产业发展的需求，让每一滴水都维系着当地民众基本生存与社会运转。放眼全球，南亚、中亚等连片干旱区域，也长期深陷资源性缺水的桎梏，而不少工业化区域，则更多面临水质污染导致的可用水量缩减难题。</p>
         </SectionText>
@@ -1715,7 +1715,7 @@ export default function App() {
           <p>同样是深陷水资源高压困境，缺水的内在成因却截然不同：一部分地区受制于先天自然条件，属于原生性资源禀赋匮乏；另一部分区域则因水体环境遭到破坏，由后天污染造成可用水源短缺。从区域数据走势可以清晰看到，中东北非地区的水资源压力始终居高不下，干旱的先天底色叠加人口增长与产业发展的需求，让每一滴水都维系着当地民众基本生存与社会运转。放眼全球，南亚、中亚等连片干旱区域，也长期深陷资源性缺水的桎梏，而不少工业化区域，则更多面临水质污染导致的可用水量缩减难题。</p>
           <p>以水为媒，人类正共同探寻“命运与共”的深层内涵。在水资源可持续管理领域，没有哪一方能独善其身，我们共享同一片流域、相连着共同命运，更从各自的实践中生长出可供彼此借鉴的智慧。</p>
         </SectionText>
-        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014—2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>区域值按 World Bank 地区聚合口径展示；各指标最新年份不同，不进行跨年份因果比较。</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014—2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
       </section>
 
       <section className="chapter concept" id="concept">
@@ -1807,7 +1807,7 @@ export default function App() {
           <div className="card-head"><span>一带一路沿线水利合作</span><b>ROUTE</b></div>
           <InsightChip>发光线连接中国与合作国家，年份柱用于增强历史纵深感。</InsightChip>
           <BeltRoadTimelineMap />
-          <SourceNote links={[{ label: 'CIDCA', url: sourceLinks.cidca }, { label: '水利部国际合作', url: sourceLinks.mwrInternational }]}>路线图为叙事型可视化，展示客户数据包中海外水利项目的时间和空间分布。</SourceNote>
+          <SourceNote links={[{ label: 'CIDCA', url: sourceLinks.cidca }, { label: '水利部国际合作', url: sourceLinks.mwrInternational }]}>资料来源：CIDCA、水利部国际合作公开资料</SourceNote>
         </div>
       </section>
 
@@ -1826,18 +1826,6 @@ export default function App() {
             <figure><img src={endingNewater} alt="新加坡循环水治理空间" loading="lazy" decoding="async" /><figcaption>化污为清</figcaption></figure>
             <figure><img src={endingSharedFuture} alt="世界各国人民携手共同治水" loading="lazy" decoding="async" /><figcaption>同舟共济</figcaption></figure>
           </div>
-          <div className="method-grid">
-            <article><span>数据范围</span><strong>2014—2025</strong><p>不同指标更新节奏不同，作品保留各自年份，避免跨口径拼接。</p></article>
-            <article><span>估算方法</span><strong>覆盖率 × 人口</strong><p>未获基本饮水服务人口由覆盖率和总人口计算，结果保留一位小数。</p></article>
-            <article><span>概念图边界</span><strong>关系示意</strong><p>政策流动图用于呈现治理关系和阶段侧重，不代表资金规模或项目数量。</p></article>
-          </div>
-          <SourceNote links={[
-            { label: 'World Bank Data', url: sourceLinks.drinkingWater },
-            { label: '水利部', url: chinaData.ruralWater.source },
-            { label: '生态环境部', url: chinaData.waterQualitySources[4].url },
-            { label: 'World Bank Pakistan', url: sourceLinks.pakistan },
-            { label: 'UNICEF Kenya Turkana', url: sourceLinks.turkanaCase }
-          ]}>数据文件：{data.sources.join('、')}、1_rural_water_investment.csv、2_rural_water_coverage.csv、3_surface_water_quality.csv、4_south_north_diversion.csv、5_overseas_water_projects.csv、6_pakistan_cooperation.csv。图片素材用于情境表达，不作为统计证据。</SourceNote>
           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>回到顶部</button>
         </div>
       </section>

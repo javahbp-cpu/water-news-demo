@@ -43,7 +43,7 @@ export const chinaData = {
     { year: 2022, good: 87.9, poor: 0.7 },
     { year: 2023, good: 89.4, poor: 0.7 },
     { year: 2024, good: 89.8, poor: 0.5 },
-    { year: 2025, good: 90.2, poor: 0.4, note: '季度通报口径' }
+    { year: 2025, good: 90.2, poor: 0.4, note: '季度通报数据' }
   ],
   waterQualitySources: [
     { year: 2016, url: 'https://www.mee.gov.cn/hjzl/sthjzk/zghjzkgb/201706/P020170605833655914077.pdf' },
@@ -168,7 +168,7 @@ export const pakistanData = {
     guarantee: {
       label: '全国灌溉保证率',
       unit: '%',
-      note: '数据包补充口径：项目数与全国灌溉保证率',
+      note: '中巴水利合作项目数与全国灌溉保证率',
       values: [
         { year: 2015, value: 72.4, projects: 2 },
         { year: 2016, value: 74.1, projects: 3 },
@@ -184,10 +184,10 @@ export const pakistanData = {
     }
   },
   cooperationCards: [
-    { label: '中巴水利合作项目数', value: 16, unit: '个', note: '2024 年数据包补充口径' },
-    { label: '全国灌溉保证率', value: 84.1, unit: '%', note: '2024 年数据包补充口径' },
-    { label: '人均水资源量下降', value: 83, unit: '%', note: '1951—2017 文献口径' },
-    { label: '农业用水地表水满足', value: 40, unit: '%', note: '政府文件/文献综合口径' }
+    { label: '中巴水利合作项目数', value: 16, unit: '个', note: '2024 年统计' },
+    { label: '全国灌溉保证率', value: 84.1, unit: '%', note: '2024 年统计' },
+    { label: '人均水资源量下降', value: 83, unit: '%', note: '1951—2017 年变化' },
+    { label: '农业用水地表水满足', value: 40, unit: '%', note: '政府文件与研究资料' }
   ],
   caseCards: [
     { label: '卡洛特水电站装机容量', value: 720, unit: 'MW', note: '2022 年投运项目' },
