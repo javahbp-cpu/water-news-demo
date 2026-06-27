@@ -16,6 +16,8 @@ import earthWater from './assets/earth-water.webp'
 import waterInfra from './assets/water-infra.webp'
 import clearRiver from './assets/clear-river.webp'
 import forestWaterfall from './assets/forest-waterfall.webp'
+import forestStream from './assets/forest-stream.webp'
+import jinzuRiver from './assets/jinzu-river.webp'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -59,6 +61,7 @@ function fmtPeople(value) {
 const sections = [
   { id: 'top', label: '封面' },
   { id: 'opening', label: '开场' },
+  { id: 'shortage', label: '短缺' },
   { id: 'map', label: '地图' },
   { id: 'coverage', label: '覆盖' },
   { id: 'people', label: '人口' },
@@ -71,6 +74,7 @@ const sections = [
   { id: 'overseas', label: '海外' },
   { id: 'pakistan', label: '案例' },
   { id: 'wisdom', label: '互鉴' },
+  { id: 'route', label: '丝路' },
   { id: 'method', label: '来源' }
 ]
 
@@ -390,6 +394,16 @@ const pressurePoints = [
   ...data.stressTop.find((item) => item.code === point.code)
 })).filter((point) => point.value)
 
+const stressCountryAliases = {
+  'Egypt, Arab Rep.': 'Egypt',
+  'Syrian Arab Republic': 'Syria',
+  'Yemen, Rep.': 'Yemen'
+}
+
+const stressValueByCountry = new Map(
+  pressurePoints.map((item) => [stressCountryAliases[item.name] || item.name, item.value])
+)
+
 function WorldPressureMap() {
   const ref = useRef(null)
   const [selected, setSelected] = useState(pressurePoints.find((d) => d.code === 'PAK') || pressurePoints[0])
@@ -407,8 +421,8 @@ function WorldPressureMap() {
       const projection = d3.geoNaturalEarth1().fitExtent([[22, 34], [width - 22, height - 34]], worldGeo)
       const path = d3.geoPath(projection)
       const graticule = d3.geoGraticule10()
-      const radius = d3.scaleSqrt().domain(d3.extent(pressurePoints, (d) => d.value)).range([6, 28])
-      const color = d3.scaleSequentialLog(d3.interpolateYlOrRd).domain(d3.extent(pressurePoints, (d) => d.value))
+      const radius = d3.scaleSqrt().domain(d3.extent(pressurePoints, (d) => d.value)).range([7, 32])
+      const color = d3.scaleSequentialLog(d3.interpolateOrRd).domain(d3.extent(pressurePoints, (d) => d.value))
 
       svg.append('path')
         .datum(graticule)
@@ -419,8 +433,13 @@ function WorldPressureMap() {
         .selectAll('path')
         .data(worldGeo.features)
         .join('path')
-        .attr('class', 'map-country')
+        .attr('class', (d) => stressValueByCountry.has(d.properties.name) ? 'map-country shortage-country hot' : 'map-country shortage-country')
         .attr('d', path)
+        .attr('fill', (d) => {
+          const value = stressValueByCountry.get(d.properties.name)
+          return value ? color(value) : 'rgba(65, 130, 152, .20)'
+        })
+        .attr('opacity', (d) => stressValueByCountry.has(d.properties.name) ? 0.88 : 0.48)
 
       const tip = d3.select(root).append('div').attr('class', 'd3-tip')
 
@@ -477,12 +496,17 @@ function WorldPressureMap() {
 
   return (
     <div className="world-map-wrap">
-      <div className="world-map" ref={ref} role="img" aria-label="全球高水资源压力国家点位地图" />
+      <div className="map-legend shortage-legend" aria-hidden="true">
+        <span><i className="legend-low" />普通压力</span>
+        <span><i className="legend-mid" />高压力</span>
+        <span><i className="legend-high" />极高压力</span>
+      </div>
+      <div className="world-map shortage-map" ref={ref} role="img" aria-label="全球水资源短缺热力图与高压力国家气泡图" />
       <div className="map-lock-card">
-        <span>当前锁定国家</span>
+        <span>热力图锁定</span>
         <strong>{selected.name}</strong>
         <p>水资源压力指数 <b>{selected.value}%</b></p>
-        <small>点击地图上的点位可以切换国家</small>
+        <small>颜色越深、气泡越大，代表缺水压力越高</small>
       </div>
     </div>
   )
@@ -867,9 +891,9 @@ function DebateDashboard() {
           <DiversionAnnualChart />
         </div>
         <div className="debate-text-panel">
-          <span>争议与迭代</span>
-          <strong>宏大工程的代价与反思</strong>
-          <p>任何单一工程手段都必须嵌入更广泛的制度创新与社会共识之中。中国正在建设的“国家水网”，正是在尝试构建一个集工程网络、制度网络与信息网络于一体的复合型解决方案。</p>
+          <span>反思与整改</span>
+          <strong>从宏观改善到微观感知</strong>
+          <p>当大江大河水质明显改善后，治理继续向群众身边的小微水体、县乡黑臭水体和园区污染整治推进。</p>
         </div>
       </div>
       <GroundwaterRecoveryPanel />
@@ -974,7 +998,7 @@ function OverseasProjectMap() {
 
     const draw = () => {
       const width = root.clientWidth || 760
-      const height = Math.max(420, Math.min(560, width * 0.58))
+      const height = Math.max(380, Math.min(520, width * 0.56))
       d3.select(root).selectAll('*').remove()
       const svg = d3.select(root).append('svg').attr('viewBox', `0 0 ${width} ${height}`)
       const projection = d3.geoNaturalEarth1().fitExtent([[22, 34], [width - 22, height - 34]], worldGeo)
@@ -1081,6 +1105,109 @@ function OverseasPortfolio() {
       <SourceNote links={[{ label: 'CIDCA', url: sourceLinks.cidca }, { label: '水利部国际合作', url: sourceLinks.mwrInternational }]}>
         海外项目覆盖水电站、供水、水坝、河道治理、灌溉和水利信息化；金额信息仅用于已披露项目。
       </SourceNote>
+    </div>
+  )
+}
+
+function BeltRoadTimelineMap() {
+  const ref = useRef(null)
+  const routeProjects = useMemo(() => (
+    [...overseasProjects]
+      .filter((item) => item.lon && item.lat)
+      .sort((a, b) => a.year - b.year)
+      .slice(0, 11)
+  ), [])
+
+  useEffect(() => {
+    if (!ref.current) return undefined
+    const root = ref.current
+
+    const draw = () => {
+      const width = root.clientWidth || 820
+      const height = Math.max(360, Math.min(500, width * 0.52))
+      d3.select(root).selectAll('*').remove()
+
+      const svg = d3.select(root).append('svg').attr('viewBox', `0 0 ${width} ${height}`)
+      const projection = d3.geoNaturalEarth1().fitExtent([[20, 26], [width - 20, height - 38]], worldGeo)
+      const path = d3.geoPath(projection)
+      const origin = projection([104.2, 35.8])
+      const barScale = d3.scaleLinear()
+        .domain([0, d3.max(routeProjects, (d) => d.investment || 2) || 10])
+        .range([18, 64])
+      const line = d3.line().curve(d3.curveBasis)
+
+      svg.append('g')
+        .selectAll('path')
+        .data(worldGeo.features)
+        .join('path')
+        .attr('class', 'bri-country')
+        .attr('d', path)
+
+      const routes = svg.append('g').attr('class', 'bri-routes')
+      routeProjects.forEach((item, index) => {
+        const target = projection([item.lon, item.lat])
+        if (!target) return
+        const mid = [
+          (origin[0] + target[0]) / 2,
+          (origin[1] + target[1]) / 2 - 36 - (index % 3) * 10
+        ]
+        routes.append('path')
+          .datum([origin, mid, target])
+          .attr('class', 'bri-route')
+          .attr('d', line)
+          .attr('style', `--delay:${index * 0.12}s`)
+
+        const barHeight = barScale(item.investment || 2.5)
+        routes.append('line')
+          .attr('class', 'bri-bar')
+          .attr('x1', target[0])
+          .attr('x2', target[0])
+          .attr('y1', target[1])
+          .attr('y2', target[1] - barHeight)
+        routes.append('circle')
+          .attr('class', 'bri-dot')
+          .attr('cx', target[0])
+          .attr('cy', target[1])
+          .attr('r', 4.5)
+
+        if (index % 2 === 0 || item.country === '巴基斯坦') {
+          routes.append('text')
+            .attr('class', 'bri-year-label')
+            .attr('x', target[0] + 7)
+            .attr('y', target[1] - barHeight - 5)
+            .text(`${item.year} ${item.country}`)
+        }
+      })
+
+      svg.append('circle')
+        .attr('class', 'bri-origin')
+        .attr('cx', origin[0])
+        .attr('cy', origin[1])
+        .attr('r', 7)
+      svg.append('text')
+        .attr('class', 'bri-origin-label')
+        .attr('x', origin[0] + 10)
+        .attr('y', origin[1] + 4)
+        .text('中国')
+    }
+
+    draw()
+    window.addEventListener('resize', draw)
+    return () => window.removeEventListener('resize', draw)
+  }, [routeProjects])
+
+  return (
+    <div className="bri-map-wrap">
+      <div className="bri-map" ref={ref} role="img" aria-label="一带一路沿线水资源合作路线与年份图" />
+      <div className="bri-timeline" aria-label="海外水利合作时间节点">
+        {routeProjects.slice(0, 6).map((item) => (
+          <article key={`${item.country}-${item.project}-${item.year}`}>
+            <span>{item.year}</span>
+            <strong>{item.country}</strong>
+            <p>{item.type}</p>
+          </article>
+        ))}
+      </div>
     </div>
   )
 }
@@ -1453,8 +1580,8 @@ export default function App() {
         <nav className="topline"><span>DATA NEWS / WATER IN MOTION</span><span>World water resources</span></nav>
         <div className="hero-content">
           <p className="eyebrow">流淌的危机</p>
-          <h1 className="hero-title"><span>流淌的危机</span><span>从全球水困局看中国破局之路</span></h1>
-          <p className="hero-copy">当“全球极高缺水压力人口热力图”铺陈开来，折射出超过20亿人真实的生存困境——从因基础设施老化而“望水兴叹”的撒哈拉以南农村，到因污染导致“有水难用”的南亚河流平原，水资源危机呈现出资源性、工程性、污染性与管理性相互交织的复杂图景。</p>
+          <h1 className="hero-title"><span>流淌的危机</span><span>从全球水困局到中国的破局之路</span></h1>
+          <p className="hero-copy">联合国大学水、环境与健康研究所发布报告警告，受地下水枯竭、水资源过度开发、土地退化、滥伐森林、水体污染叠加全球变暖影响，全球“水破产”时代已然来临。</p>
           <div className="hero-photo reveal">
             <img src={clearRiver} alt="高山河流" decoding="async" fetchpriority="high" />
           <div>
@@ -1472,9 +1599,8 @@ export default function App() {
 
       <section className="chapter chapter-intro" id="opening">
         <div className="chapter-bg" />
-        <SectionText kicker="00 / OPENING" title="全球水困局：共同的危机与交汇的挑战">
-          <p>当“全球极高缺水压力人口热力图”铺陈开来，折射出超过20亿人真实的生存困境——从因基础设施老化而“望水兴叹”的撒哈拉以南农村，到因污染导致“有水难用”的南亚河流平原，水资源危机呈现出资源性、工程性、污染性与管理性相互交织的复杂图景。</p>
-          <p>最新数据显示，2024年全球基本饮水服务覆盖率约为91.45%，这意味着仍有约6.96亿人未能获得基本饮水服务【1】。这一缺口并非均匀分布——撒哈拉以南非洲、最不发达国家以及脆弱和冲突影响地区明显滞后，中低收入经济体承压最重。若将视野从覆盖率转向水资源压力，图景更为严峻：中东北非区域2021年水资源压力指数高达167.14%，意味着该地区的淡水提取量已远超可再生淡水资源总量。埃及、巴林等国的压力值更是被推至极端，对数尺度下的排名图表清晰揭示了这一残酷现实。</p>
+        <SectionText kicker="00 / OPENING" title="流淌的危机——从全球水困局到中国的破局之路">
+          <p>水是全球发展中极易被忽视却至关重要的议题。然而最新数据显示，2024年全球基本饮水服务覆盖率约为91.45%，这意味着仍有约6.96亿人未能获得基本饮水服务。水资源失衡带来的严峻考验，正拷问着人类共同的治理智慧。</p>
         </SectionText>
         <div className="image-collage">
           <ImagePanel
@@ -1493,18 +1619,32 @@ export default function App() {
         </div>
       </section>
 
+      <section className="chapter two-col reverse shortage-section" id="shortage">
+        <div className="chapter-bg" />
+        <div className="glass-card reveal shortage-card">
+          <div className="card-head"><span>世界水资源短缺热力图</span><b>HOTSPOTS</b></div>
+          <InsightChip>深色国家与放大气泡代表更高水资源压力，帮助读者先看到“危机在哪里”。</InsightChip>
+          <WorldPressureMap />
+          <SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>以淡水提取量占可再生淡水资源总量的比例衡量水资源压力；部分小国以点位突出显示。</SourceNote>
+        </div>
+        <SectionText kicker="01 / GLOBAL CRISIS" title="全球水困局：共同的危机与交汇的挑战">
+          <p>地球表面的颜色不仅是风景，更是人类生存状态的映射。在南亚的部分农田，土壤正在经历不可逆的板结；在北非的村庄，居民每天为获取基本生活用水要跋涉数十公里。数据显示，全球有近7亿人口生活在极度缺水的阴影之下，且这一数字在部分年份甚至呈现16%的波动增长趋势。</p>
+          <p>如果我们将视角从宏观的全球气泡图下沉至微观社区便能发现，水资源短缺并非均质分布的自然物理问题，而是分布高度集中的社会痛点。</p>
+        </SectionText>
+      </section>
+
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
         <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>球体点位叠加高水压国家与海外水利项目；弧线用于表现中国水利合作的空间连接关系。</SourceNote></div>
-        <SectionText kicker="01 / MAP" title="高压力国家沿着干旱带聚集。">
-          <p>将全球水资源压力指数与海外水利项目叠加在同一空间维度下观察，中东北非、南亚和中亚形成了一条清晰的高压力带，而中国海外水利项目的合作弧线恰好穿越这些区域【2】。空间的重合暗示着责任的交汇。值得注意的是，这片“焦渴地带”恰与中国“一带一路”合作区域高度重合，这既意味着挑战的严峻性，也预示了合作空间的广阔性。</p>
+        <SectionText kicker="02 / MAP" title="高压力国家沿着干旱带聚集。">
+          <p>水资源承压严峻的国家大多沿干旱带呈条带、片区状聚集，足以说明，在特定地理区间内，缺水危机早已根植于当地的生存环境之中。将全球水资源压力指数与海外水利项目叠加在同一空间维度下观察，中东北非、南亚和中亚形成了一条清晰的高压力带。</p>
         </SectionText>
       </section>
 
       <section className="chapter two-col" id="coverage">
         <div className="chapter-bg" />
-        <SectionText kicker="02 / DRINKING WATER" title="基础饮水覆盖率接近全球普及，但差距集中在脆弱地区。">
-          <p>2024 年全球基本饮水服务覆盖率约 91.45%。但撒哈拉以南非洲、最不发达国家、脆弱和冲突影响地区仍明显落后，还有未获基本饮水服务人口数据，发现换算成人数之后，缺口更加集中，全球约 6.96 亿人仍未获得基本饮水服务，中低收入经济体承担了其中大部分压力。</p>
+        <SectionText kicker="03 / DRINKING WATER" title="覆盖率稳步提升，但短板集中在脆弱地区。">
+          <p>进一步的数据分析清晰表明：虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。</p>
         </SectionText>
         <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><InsightChip>全球覆盖率接近 91.45%，但脆弱地区仍明显落后。</InsightChip><CoverageSwitcher /><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>基本饮水服务指取水往返不超过 30 分钟、来自改善水源的饮水服务。</SourceNote></div>
       </section>
@@ -1512,14 +1652,14 @@ export default function App() {
       <section className="chapter two-col reverse" id="people">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><InsightChip>比例换成人数后，撒哈拉以南非洲的缺口会被放大。</InsightChip><UnservedChart /><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>估算值 = 地区总人口 ×（1 - 基本饮水服务覆盖率）。</SourceNote></div>
-        <SectionText kicker="03 / PEOPLE" title="换算成人数后，缺口更加集中。">
-          <p>2024 年全球基本饮水服务覆盖率约 91.45%。但撒哈拉以南非洲、最不发达国家、脆弱和冲突影响地区仍明显落后，还有未获基本饮水服务人口数据，发现换算成人数之后，缺口更加集中，全球约 6.96 亿人仍未获得基本饮水服务，中低收入经济体承担了其中大部分压力。</p>
+        <SectionText kicker="04 / PEOPLE" title="换算成人数后，缺口更加集中。">
+          <p>伴随着整体覆盖率不断向100%靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题，缺口的治理难度也被持续放大。这也再次印证，水资源压力从来不会平均分摊。</p>
         </SectionText>
       </section>
 
       <section className="chapter two-col" id="stress">
         <div className="chapter-bg" />
-        <SectionText kicker="04 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
+        <SectionText kicker="05 / WATER STRESS" title="水资源压力不是平均分布，而是在少数国家被推到极端。">
           <p>国家水资源压力排行。水资源压力不是平均分布，而是在少数国家被推到极端。水资源压力以淡水提取量占可再生淡水资源总量的比例衡量。埃及、巴林等国家数值远高于其他国家，因此图表采用对数轴展示。</p>
         </SectionText>
         <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，图表采用对数轴展示。</InsightChip><StressRanking /><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>数值超过 100% 表示取水量高于当期可再生淡水资源量，图中横轴采用对数刻度。</SourceNote></div>
@@ -1528,25 +1668,25 @@ export default function App() {
       <section className="chapter two-col reverse" id="relation">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>代表国家</b></div><InsightChip>人口规模会改变压力的含义：高压力小国和人口大国不是同一种问题。</InsightChip><StressScatter /><SourceNote links={[{ label: 'World Bank · 人均淡水资源', url: sourceLinks.freshwater }]}>横轴和纵轴均为对数刻度，气泡面积表示人口规模。</SourceNote></div>
-        <SectionText kicker="05 / RELATION" title="同样是高压力，背后的结构不一样。">
-          <p>压力×人均淡水×人口。同样是高压力，背后的结构不一样。气泡大小代表人口，横轴是人均淡水资源，纵轴是水资源压力。巴基斯坦、印度这类人口大国，和海湾小国的压力结构并不相同。</p>
+        <SectionText kicker="06 / RELATION" title="同样是深陷高压，缺水成因却截然不同。">
+          <p>同样是深陷水资源高压困境，缺水的内在成因却截然不同：一部分地区受制于先天自然条件，属于原生性资源禀赋匮乏；另一部分区域则因水体环境遭到破坏，由后天污染造成可用水源短缺。</p>
         </SectionText>
       </section>
 
       <section className="chapter two-col" id="trend">
         <div className="chapter-bg" />
-        <SectionText kicker="06 / REGION TREND" title="区域趋势里，中东北非是一条明显抬高的曲线。">
-          <p>全球主要区域水压力趋势，中东北非长期处在最高位，2021年达到167.14%。</p>
-          <p>以水为媒，人类正共同探寻“命运与共”的深层内涵。在水资源的可持续管理上，没有孤岛，只有共享的流域、相连的命运，以及从各自实践中生长出的、可供彼此镜鉴的智慧。</p>
+        <SectionText kicker="07 / REGION TREND" title="区域趋势里，中东北非是一条明显抬高的曲线。">
+          <p>从区域数据走势可以清晰看到，中东北非地区的水资源压力始终居高不下，干旱的先天底色叠加人口增长与产业发展的需求，让每一滴水都维系着当地民众基本生存与社会运转。</p>
+          <p>以水为媒，人类正共同探寻“命运与共”的深层内涵。在水资源可持续管理领域，没有哪一方能独善其身，我们共享同一片流域、相连着共同命运，更从各自的实践中生长出可供彼此借鉴的智慧。</p>
         </SectionText>
         <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014—2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>区域值按 World Bank 地区聚合口径展示；各指标最新年份不同，不进行跨年份因果比较。</SourceNote></div>
       </section>
 
       <section className="chapter concept" id="concept">
         <div className="chapter-bg" />
-        <SectionText kicker="07 / POLICY FLOW" title="中国探索：实践、成效与未竟之问">
-          <p>政策流向图呈现治理关系：中央统筹连接流域、山区、县域供水和污染治理。年份切换对应不同阶段的政策侧重。</p>
-          <p>中国水治理的成效，根植于顶层设计的战略定力与精准施策。过去十年间，其水政策展现出显著的制度韧性——既保持战略方向的稳定，又具备因时因势调整的灵活性。中央统筹作为顶层枢纽，向下连接流域管理机构、山区供水工程与县域污染治理单元，年份切换功能则揭示了不同阶段政策重心的迁移——从早期的基础设施建设导向，逐步转向运营维护与水质保障并重的新阶段。这种“全国一盘棋”下的动态调配机制，正是中国水治理制度韧性的空间化表达。</p>
+        <SectionText kicker="08 / CHINA SOLUTION" title="中国方案：系统性治理的实践与成效">
+          <p>中国水治理的智慧，从来不是无根之木。两千多年前，李冰父子在岷江上“乘势利导”修建都江堰，开创了人与自然和谐共生的东方治水哲学；如今，“山水林田湖草沙”的系统治理理念，正是这份古老智慧在当代的回响与升级。</p>
+          <p>中国始终保持顶层设计的战略定力与精准施策，从都江堰的“因势利导”到南水北调的“全国一盘棋”，变的是技术手段，不变的是对民生福祉的终极关切与中国水治理制度韧性的空间化表达。</p>
         </SectionText>
         <div className="glass-card reveal concept-card"><PolicyFlow /></div>
       </section>
@@ -1554,11 +1694,10 @@ export default function App() {
       <section className="chapter china-chapter" id="china">
         <div className="chapter-bg" />
         <div className="china-heading reveal">
-          <span className="eyebrow">08 / CHINA IN ACTION</span>
+          <span className="eyebrow">09 / CHINA IN ACTION</span>
           <h2>覆盖率之后，投入、水质和长期运行成为新的重点。</h2>
-          <p>中国章节聚焦农村供水投入、覆盖率、水质改善和跨区域调水。这些指标共同指向一个变化：工程建设之后，稳定运行和水质保障变得更重要、全国地表水总体水质、农村供水投入、南水北调等。</p>
-          <p>精准的政策导航，直接驱动了水环境质量的系统性提升。图 3中两条形成“剪刀差”的曲线，正是这份韧性最有力的答卷：全国地表水优良断面比例从67.8%稳步攀升至90.4%，而丧失使用功能的劣V类水体比例则从8.6%大幅降至0.6%。这一升一降之间，勾勒出近九年地表水水质持续改善的清晰轨迹，标志着污染水体已基本被消除。</p>
-          <p>精准的政策蓝图，需要坚实的资金投入方能落地生根。图 4中持续上扬的投资曲线，清晰地勾勒出这条“中国路径”的坚定性。这体现了以中央资金为引导，有效撬动地方与社会资本，共同构筑资金“大动脉”的核心特征。</p>
+          <p>依托逐年稳步增加的农村供水资金投入，我国农村自来水普及率持续稳步攀升：前期依托工程建设实现覆盖率快速提升，后期增长趋于平缓，治理重心转向规模化供水长效运维与水质安全保障。</p>
+          <p>随着农村规模化供水全面落地，水环境与水质污染治理的新挑战接踵而至。精准的政策引导，直接推动了水环境质量实现系统性提升。一升一降两组数据，清晰勾勒出近九年来我国地表水水质持续改善的轨迹。</p>
         </div>
         <div className="glass-card reveal china-card"><ChinaActionDashboard /></div>
       </section>
@@ -1566,22 +1705,22 @@ export default function App() {
       <section className="chapter two-col reverse debate-chapter" id="debate">
         <div className="chapter-bg" />
         <div className="glass-card reveal debate-card">
-          <div className="card-head"><span>争议与迭代</span><b>POST-BUILD</b></div>
+          <div className="card-head"><span>反思与整改</span><b>ITERATION</b></div>
           <DebateDashboard />
         </div>
-        <SectionText kicker="09 / DEBATE & ITERATION" title="争议与迭代：中国方案的复杂面相">
-          <p>事实上，中国农村供水已经完成了从“建设攻坚”到“运营考验”的范式转换。当覆盖率突破94%的门槛，问题的重心便从“有没有”转向“稳不稳”“好不好”。数以万计的小型供水工程能否在缺乏持续投入的情况下长期运转，极端气候事件对供水系统的冲击如何缓冲——这些“后普及时代”的课题，其复杂性不亚于当初的建设工程。</p>
-          <p>以南水北调中线工程为例，它累计调水超600亿立方米，让超1亿人受益，并助推华北地下水位实现历史性回升。但其全生命周期成本、对汉江中下游的生态影响，以及受水区的水价承受力，始终是学界与社会持续讨论的焦点。这揭示了一个现实：任何单一工程手段都必须嵌入更广泛的制度创新与社会共识之中。中国正在建设的“国家水网”，正是在尝试构建一个集工程网络、制度网络与信息网络于一体的复合型解决方案。</p>
-          <p>中国的“铁腕治污”遵循了“命令-控制”型监管的强力逻辑，迅速扭转了水质恶化的趋势。而在莱茵河、泰晤士河的治理史上，则更早发展出了基于污染者付费、市场交易和广泛公众参与的流域综合治理模式。当下中国的河湖长制与《长江保护法》，正呈现出融合刚性监管与社会共治的新趋势。这种不同路径间的对话与互鉴，正是全球水环境治理知识库得以丰富的源泉。</p>
-          <p>当前，真正的考验在于“建设”之后的“运营”。如何建立长效机制，确保已建成的供水、治污设施在数十年后仍能有效运转？如何应对极端气候对供水系统的冲击？这些问题，中国仍在探索，也正是需要与国际社会共同探讨的“后建设时代”新课题。</p>
+        <SectionText kicker="10 / ITERATION" title="中国之治：在反思中精进的治理智慧">
+          <p>然而在大江大河水质明显改善的同时，中国生态环境部始终保持在行进中不断回望、在成绩前始终清醒的反思自觉。水质改善的宏观数据与微观感知之间的温差，正是治理精度需要再次校准的地方。</p>
+          <p>2026年6月，生态环境部会同国家发展改革委、工信部、住建部、水利部、农业农村部，精准部署五大攻坚行动：工业园区水污染整治、县乡黑臭水体治理、畜禽粪污综合治理、乡村河湖库管护、小微水体排查整治。</p>
+          <p>同期，第三轮第六批中央生态环境保护督察深入一线，查实了一批突出生态环境问题，并公开通报、以儆效尤。国家督察始终坚定“问题不怕暴露，怕的是回避”的工作导向和治理立场，始终把人民的利益放在第一位。</p>
+          <p>这种精益求精的治理逻辑，将静态的中国方案转化为一个不断动态发展的治理生态系统。当这套“反思——整改——提升”的闭环机制持续运转，中国水治理便拥有了向内扎根的深度，而这恰恰是它向外生长的底气。</p>
         </SectionText>
       </section>
 
       <section className="chapter two-col overseas-chapter" id="overseas">
         <div className="chapter-bg" />
-        <SectionText kicker="10 / OVERSEAS PROJECTS" title="出海之路：系统方案与国际合作的双向适配">
-          <p>海外项目覆盖水电站、供水、水坝、河道治理、灌溉和水利信息化。本节以国家点位和项目类型展示项目分布，金额信息仅用于已披露项目。</p>
-          <p>从空间布局来看，海外水利项目的合作弧线与中国对外投资的整体地理格局高度吻合，但并非简单的经济逻辑驱动——高水资源压力国家往往是项目布局的重点区域。这种“压力驱动型”的合作逻辑，使得中国海外水利项目在商业回报之外，天然承载着改善当地民生与增强气候韧性的公共价值。</p>
+        <SectionText kicker="11 / OVERSEAS PROJECTS" title="出海之路：系统方案与国际合作的双向赋能">
+          <p>如今，中国治水的实践半径正从国内流域延伸至全球缺水地区——水龙头背后的治水故事，正在被书写进更广阔的世界版图，中国治水的出海之路由此开启。</p>
+          <p>当我们把视线聚焦到具体的水坝点位，一幅更清晰的图景浮现出来——中国治水的海外实践，正沿着“一带一路”落地生根。</p>
         </SectionText>
         <div className="glass-card reveal overseas-card">
           <div className="card-head"><span>中国海外水利项目</span><b>2006—2024</b></div>
@@ -1607,16 +1746,17 @@ export default function App() {
             tone="green"
           />
         </div>
-        <SectionText kicker="11 / PAKISTAN CASE" title="巴基斯坦案例显示了水资源压力的多重背景。">
-          <p>巴基斯坦案例显示了水资源压力的多重背景。巴基斯坦长期处于高水资源压力状态。灌溉农地占比、谷物单产和地下水超采共同构成案例背景；卡洛特水电站则提供了基础设施合作的具体切口。</p>
+        <SectionText kicker="12 / PAKISTAN CASE" title="巴基斯坦案例显示了水资源压力的多重背景。">
+          <p>以巴基斯坦为例，当地面临着复杂的水资源压力背景，既有季风带来的洪涝风险，也有旱季的极度缺水。中国参与的海外水利项目，不再是单一的水利工程建设，而是结合了本土化需求的系统解决方案。</p>
         </SectionText>
         <div className="glass-card reveal pakistan-card"><PakistanCaseDashboard /></div>
       </section>
 
       <section className="chapter two-col wisdom-chapter" id="wisdom">
         <div className="chapter-bg" />
-        <SectionText kicker="12 / SHARED WISDOM" title="智慧交融：从技术合作到规则理念的全球对话">
-          <p>巴基斯坦的转变有据可查。在水资源压力指数长期高企的背景下，中巴经济走廊框架下的水利合作建成了总装机6.3GW的水电集群。成效直接反映在关键指标上：灌溉保证率从55%提升至68%，地下水年超采量削减19亿立方米，谷物单产提高24%。世界银行将这一合作誉为“南南水资源合作的典范”，确认其每年为巴基斯坦减少6.8亿美元干旱损失，惠及3200万人口。</p>
+        <SectionText kicker="13 / SHARED WISDOM" title="智慧交融：从技术合作到规则理念的全球对话">
+          <p>2015至2024年间，中巴水利合作项目数量逐年稳步增长，同步带动巴基斯坦全国灌溉保证率持续提升，有效缓解了当地水资源承压困境。</p>
+          <p>这些成效数据既是中国治水方案海外落地的有力实证，也完整诠释了南南水资源合作的实践价值，标志着中外水合作从基础技术援建，逐步升级为长效规则对话的理念交融。</p>
         </SectionText>
         <div className="glass-card reveal wisdom-card">
           <div className="card-head"><span>智慧交融</span><b>2015—2024</b></div>
@@ -1624,13 +1764,33 @@ export default function App() {
         </div>
       </section>
 
+      <section className="chapter two-col route-chapter" id="route">
+        <div className="chapter-bg" />
+        <SectionText kicker="14 / BELT AND ROAD" title="合作路线把项目放回历史时间线。">
+          <p>每一次跨境水利合作，都是对全球水治理体系的一次补充和完善。中国方案证明，水危机没有放之四海皆准的统一解法，水治理也不是单一的孤立工程，而需要因地制宜的系统思维。</p>
+        </SectionText>
+        <div className="glass-card reveal bri-card">
+          <div className="card-head"><span>一带一路沿线水利合作</span><b>ROUTE</b></div>
+          <InsightChip>发光线连接中国与合作国家，年份柱用于增强历史纵深感。</InsightChip>
+          <BeltRoadTimelineMap />
+          <SourceNote links={[{ label: 'CIDCA', url: sourceLinks.cidca }, { label: '水利部国际合作', url: sourceLinks.mwrInternational }]}>路线图为叙事型可视化，展示客户数据包中海外水利项目的时间和空间分布。</SourceNote>
+        </div>
+      </section>
+
       <section className="finale" id="method">
         <div className="finale-inner reveal">
-          <span className="eyebrow">13 / CONCLUSION</span>
+          <span className="eyebrow">15 / CONCLUSION</span>
           <h2>水危机没有统一曲线，治理也不是单一工程。</h2>
-          <p>水的故事，从来不止于征服与调配，更在于平衡与共生。从李冰父子“乘势利导”的都江堰，到今天试图统筹“山水林田湖草沙”的系统治理，东方智慧中始终蕴含着对自然节律的深刻尊重。这份智慧，与荷兰“还地于河”的谦卑、以色列“滴水归田”的极致、新加坡“化污为清”的循环，共同构成了人类应对水危机的多元哲学。</p>
-          <p>中国治水的当代叙事，是一部在古老智慧与现代挑战间寻找接续，在宏大工程与微观管理间寻求平衡，在解决自身问题与参与全球合作间建立联系的进行曲。它提供了一种大规模、快速度推进水基础设施建设的实践参考，也仍在探索大型工程的生态伦理、跨境水管理的公平之道、以及水技术与地方性知识的融合之策。</p>
-          <p>最终，面对全球水困局，没有唯一的“破局之道”。答案存在于尼罗河流域的协调谈判中，存在于恒河平原的污染治理行动中，也存在于中国南水北调受水区的节水生活中。以水为媒，缔结的不是某个方案的霸权，而是一个允许差异、鼓励互鉴、共同负责的命运共同体。每一滴跨越边界的水，都在提醒我们：在这颗蓝色的星球上，我们同舟共济。</p>
+          <p>水的故事，从来不止于征服与调配，更在于平衡与共生。从李冰父子“乘势利导”修建的都江堰，到如今统筹“山水林田湖草沙”的系统治理，东方智慧始终蕴含着对自然节律的深刻尊重。这份智慧，与荷兰“还地于河”的谦卑、以色列“滴水归田”的极致、新加坡“化污为清”的循环一道，共同构成了人类应对水危机的多元哲学。</p>
+          <p>中国治水的当代叙事，是一曲在古老智慧与现代挑战间寻求接续，在宏大工程与微观管理间探索平衡，在解决自身问题与参与全球合作间建立联结的进行曲。它既为大规模、快节奏推进水基础设施建设提供了实践参考，也仍在探索大型工程的生态伦理、跨境水管理的公平之道，以及水技术与地方性知识的融合路径。</p>
+          <p>最终，面对全球水困局，不存在唯一的“破局之道”。答案藏在尼罗河流域的协调谈判中，藏在恒河平原的污染治理行动中，也藏在中国南水北调受水区的节水生活中。以水为媒缔结的，不是某个方案的霸权，而是一个允许差异、鼓励互鉴、共同负责的命运共同体。每一滴跨越边界的水，都在提醒我们：在这颗蓝色星球上，我们同舟共济。</p>
+          <div className="finale-mosaic" aria-label="全球治水智慧图片组">
+            <figure><img src={jinzuRiver} alt="河流与水利工程" /><figcaption>都江堰 · 乘势利导</figcaption></figure>
+            <figure><img src={forestWaterfall} alt="山林水系" /><figcaption>山水林田湖草沙</figcaption></figure>
+            <figure><img src={forestStream} alt="自然河流" /><figcaption>还地于河</figcaption></figure>
+            <figure><img src={clearRiver} alt="清澈河水" /><figcaption>滴水归田</figcaption></figure>
+            <figure><img src={earthWater} alt="蓝色地球水资源" /><figcaption>同舟共济</figcaption></figure>
+          </div>
           <div className="method-grid">
             <article><span>数据范围</span><strong>2014—2025</strong><p>不同指标更新节奏不同，作品保留各自年份，避免跨口径拼接。</p></article>
             <article><span>估算方法</span><strong>覆盖率 × 人口</strong><p>未获基本饮水服务人口由覆盖率和总人口计算，结果保留一位小数。</p></article>
