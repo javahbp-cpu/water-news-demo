@@ -548,9 +548,14 @@ main { position: relative; overflow: hidden; }
   background: #7af0c9;
   box-shadow: 0 0 0 8px rgba(122,240,201,.12), 0 0 28px rgba(122,240,201,.8);
   offset-rotate: 0deg;
+  offset-distance: 0%;
+  animation-name: policyDotFlow;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 .pulse-dot.muted {
   opacity: 0 !important;
+  animation-play-state: paused;
 }
 .d1 { offset-path: path('M340 190 C260 130 170 80 72 70'); }
 .d2 { offset-path: path('M340 190 C450 120 540 80 610 70'); }
@@ -563,6 +568,26 @@ main { position: relative; overflow: hidden; }
 .policy-flow.y2019 .pulse-dot { background: #7af0c9; }
 .policy-flow.y2022 .pulse-dot { background: #28d7ff; }
 .policy-flow.y2024 .pulse-dot { background: #ffdf72; }
+
+@keyframes policyDotFlow {
+  from {
+    offset-distance: 0%;
+    opacity: .28;
+    transform: scale(.82);
+  }
+  12% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  86% {
+    opacity: 1;
+  }
+  to {
+    offset-distance: 100%;
+    opacity: .22;
+    transform: scale(.82);
+  }
+}
 .policy-note {
   width: min(520px, 100%);
   padding: 18px 20px;

@@ -1479,7 +1479,11 @@ function PolicyFlow() {
           <div key={line} className={`flow-line ${line} ${yearTheme.hotLines.includes(line) ? 'hot' : ''}`} />
         ))}
         {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className={`pulse-dot d${(index % 3) + 1} ${index >= yearTheme.dotCount ? 'muted' : ''}`} />
+          <div
+            key={index}
+            className={`pulse-dot d${(index % 3) + 1} ${index >= yearTheme.dotCount ? 'muted' : ''}`}
+            style={{ animationDelay: `${index * 0.65}s` }}
+          />
         ))}
       </div>
       <div className="policy-note">
@@ -1589,7 +1593,6 @@ export default function App() {
       gsap.utils.toArray('.chapter').forEach((section) => {
         gsap.to(section.querySelector('.chapter-bg'), { yPercent: -18, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } })
       })
-      gsap.to('.pulse-dot', { offsetDistance: '100%', duration: 4, repeat: -1, ease: 'none', stagger: 0.7 })
       gsap.to('.flow-node', { boxShadow: '0 0 34px rgba(104,226,255,.42)', duration: 1.6, yoyo: true, repeat: -1, stagger: 0.2, ease: 'sine.inOut' })
     })
     return () => ctx.revert()
