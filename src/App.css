@@ -2312,3 +2312,59 @@ main::before {
   }
   .water-cursor { display: none; }
 }
+
+/* Section background plates: use the six client-provided images in original order */
+#top {
+  background:
+    linear-gradient(105deg, rgba(235,252,255,.72) 0%, rgba(235,252,255,.66) 44%, rgba(221, 248, 255, .26) 100%),
+    url("./assets/section-bg/section-bg-1.webp") center / cover no-repeat;
+}
+
+.chapter-bg {
+  inset: -8% -18%;
+  opacity: .96;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#shortage .chapter-bg,
+#relation .chapter-bg,
+#stress .chapter-bg,
+#map .chapter-bg,
+#case .chapter-bg,
+#coverage .chapter-bg,
+#people .chapter-bg,
+#trend .chapter-bg {
+  background-image:
+    linear-gradient(180deg, rgba(230,250,255,.72), rgba(220,247,252,.46)),
+    url("./assets/section-bg/section-bg-2.webp");
+}
+
+#concept .chapter-bg,
+#china .chapter-bg {
+  background-image:
+    linear-gradient(180deg, rgba(230,250,255,.72), rgba(220,247,252,.46)),
+    url("./assets/section-bg/section-bg-3.webp");
+}
+
+#debate .chapter-bg {
+  background-image:
+    linear-gradient(180deg, rgba(230,250,255,.72), rgba(220,247,252,.46)),
+    url("./assets/section-bg/section-bg-4.webp");
+}
+
+#overseas .chapter-bg,
+#pakistan .chapter-bg,
+#wisdom .chapter-bg,
+#route .chapter-bg {
+  background-image:
+    linear-gradient(180deg, rgba(230,250,255,.72), rgba(220,247,252,.46)),
+    url("./assets/section-bg/section-bg-5.webp");
+}
+
+#method {
+  background:
+    linear-gradient(180deg, rgba(235,252,255,.72), rgba(246,252,250,.66)),
+    url("./assets/section-bg/section-bg-6.webp") center / cover no-repeat;
+}
