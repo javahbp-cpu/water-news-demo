@@ -559,6 +559,7 @@ main { position: relative; overflow: hidden; }
 .n6 { left: 38%; bottom: 2%; }
 .flow-line {
   position: absolute;
+  --line-scale: 1;
   left: 50%;
   top: 44%;
   width: 280px;
@@ -567,6 +568,7 @@ main { position: relative; overflow: hidden; }
   transform-origin: left center;
   opacity: .42;
   transition: opacity .25s ease, filter .25s ease, height .25s ease;
+  will-change: transform, opacity, filter;
 }
 .flow-line.hot {
   height: 2px;
@@ -574,10 +576,10 @@ main { position: relative; overflow: hidden; }
   filter: drop-shadow(0 0 8px rgba(122,240,201,.48));
   background: linear-gradient(90deg, rgba(255,209,102,.88), rgba(122,240,201,.66), rgba(33,212,255,.12));
 }
-.l1 { transform: rotate(-148deg); }
-.l2 { transform: rotate(145deg); }
-.l3 { transform: rotate(-35deg); }
-.l4 { transform: rotate(38deg); }
+.l1 { transform: rotate(-148deg) scaleX(var(--line-scale)); }
+.l2 { transform: rotate(145deg) scaleX(var(--line-scale)); }
+.l3 { transform: rotate(-35deg) scaleX(var(--line-scale)); }
+.l4 { transform: rotate(38deg) scaleX(var(--line-scale)); }
 .pulse-dot {
   position: absolute;
   width: 12px;
@@ -590,6 +592,7 @@ main { position: relative; overflow: hidden; }
   animation-name: policyDotFlow;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  will-change: offset-distance, transform, opacity;
 }
 .pulse-dot.muted {
   opacity: 0 !important;

@@ -1325,6 +1325,7 @@ function WisdomDashboard() {
 function PolicyFlow() {
   const [year, setYear] = useState(2024)
   const [active, setActive] = useState('中央统筹')
+  const flowRef = useRef(null)
   const yearThemes = {
     2016: {
       title: '基础建设启动期',
@@ -1367,6 +1368,38 @@ function PolicyFlow() {
   ]
   const activeNode = nodes.find((node) => node.name === active) || nodes[0]
 
+  useEffect(() => {
+    const flow = flowRef.current
+    if (!flow || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+
+    const ctx = gsap.context(() => {
+      const idleNodes = gsap.utils.toArray('.flow-node:not(.year-hot)')
+      const hotNodes = gsap.utils.toArray('.flow-node.year-hot')
+      const hotGlows = gsap.utils.toArray('.flow-node.year-hot .flow-node-glow')
+      const allLines = gsap.utils.toArray('.flow-line')
+      const hotLines = gsap.utils.toArray('.flow-line.hot')
+      const mutedDots = gsap.utils.toArray('.pulse-dot.muted')
+      const liveDots = gsap.utils.toArray('.pulse-dot:not(.muted)')
+      const note = flow.parentElement?.querySelector('.policy-note')
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      tl
+        .set(allLines, { '--line-scale': 0.55, autoAlpha: 0.32 })
+        .set(mutedDots, { autoAlpha: 0, scale: 0.6 })
+        .to(idleNodes, { autoAlpha: 0.52, duration: 0.18 }, 0)
+        .fromTo(hotNodes, { autoAlpha: 0.72 }, { autoAlpha: 1, duration: 0.28, stagger: { each: 0.05, from: 'center' } }, 0.04)
+        .fromTo(hotGlows, { scale: 0.65, opacity: 0.18 }, { scale: 1.28, opacity: 0.78, duration: 0.42, stagger: { each: 0.05, from: 'center' } }, 0.08)
+        .fromTo(hotLines, { '--line-scale': 0, autoAlpha: 0.42 }, { '--line-scale': 1, autoAlpha: 1, duration: 0.58, stagger: 0.09 }, 0.18)
+        .fromTo(liveDots, { autoAlpha: 0, scale: 0.45 }, { autoAlpha: 1, scale: 1, duration: 0.32, stagger: 0.07 }, 0.42)
+
+      if (note) {
+        tl.fromTo(note, { y: 10, autoAlpha: 0.82 }, { y: 0, autoAlpha: 1, duration: 0.42 }, 0.16)
+      }
+    }, flow)
+
+    return () => ctx.revert()
+  }, [year])
+
   return (
     <div className="policy-wrap">
       <div className="policy-years" aria-label="概念年份轴">
@@ -1374,7 +1407,7 @@ function PolicyFlow() {
           <button key={item} className={year === item ? 'active' : ''} onClick={() => setYear(item)}>{item}</button>
         ))}
       </div>
-      <div className={`policy-flow y${year}`}>
+      <div className={`policy-flow y${year}`} ref={flowRef}>
         {nodes.map((node, index) => (
           <button
             key={node.name}
