@@ -1505,7 +1505,62 @@ main::before {
 }
 
 .overseas-chapter .section-text h2 {
+  position: relative;
   font-size: clamp(38px, 4.6vw, 62px);
+}
+
+.overseas-title-wrap {
+  position: relative;
+  display: block;
+  padding-top: clamp(54px, 5.6vw, 82px);
+  isolation: isolate;
+}
+
+.overseas-title-stack {
+  position: relative;
+  display: block;
+}
+
+.overseas-title-copy {
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+
+.overseas-ship-illustration {
+  position: absolute;
+  right: clamp(-4px, 2.4vw, 28px);
+  top: clamp(-18px, -1vw, -8px);
+  z-index: 3;
+  display: block;
+  width: min(230px, 43%);
+  margin: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(16, 76, 112, .16));
+  pointer-events: none;
+}
+
+.overseas-fish-background {
+  position: absolute;
+  left: clamp(32px, 7vw, 88px);
+  top: clamp(-8px, 1vw, 10px);
+  z-index: 1;
+  width: min(410px, 78%);
+  opacity: .28;
+  object-fit: contain;
+  transform: rotate(-4deg);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+#overseas .section-text p {
+  font-size: 19px;
+  line-height: 2.02;
+}
+
+#overseas .section-text .text-mark {
+  color: #063654;
+  font-weight: 950;
 }
 
 .project-lock-card span {
@@ -2261,6 +2316,19 @@ main::before {
   .chapter-intro { width: calc(100% - 24px); }
   .section-text h2, .china-heading h2, .finale h2 { font-size: clamp(38px, 12vw, 52px); }
   .section-text p, .china-heading p, .finale p { font-size: 15px; line-height: 1.85; }
+  .overseas-title-wrap { padding-top: 58px; }
+  .overseas-ship-illustration {
+    right: 4px;
+    top: -8px;
+    width: min(150px, 46%);
+  }
+  .overseas-fish-background {
+    left: 28px;
+    top: 0;
+    width: min(280px, 86%);
+    opacity: .24;
+  }
+  #overseas .section-text p { font-size: 17px; line-height: 1.9; }
   .glass-card, .china-card { padding: 16px; border-radius: 26px; }
   .card-head { flex-wrap: wrap; margin-bottom: 10px; letter-spacing: .08em; }
   .card-head b { margin-left: auto; }

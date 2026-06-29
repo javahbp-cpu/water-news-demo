@@ -19,6 +19,8 @@ import clientTurkana from './assets/client/turkana.jpg'
 import clientWaterQuality from './assets/client/water-quality.jpg'
 import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.png'
 import clientPakistanProjectTwo from './assets/client/china-pakistan-project-2.png'
+import shipIllustration from './assets/client/ship-illustration.png'
+import fishIllustration from './assets/client/fish-illustration.png'
 import shortageSeedling from './assets/client/shortage-seedling.jpg'
 import illustrationWaterDrop from './assets/client/illustration-water-drop.png'
 import illustrationHelp from './assets/client/illustration-help.png'
@@ -1660,10 +1662,20 @@ export default function App() {
 
       <section className="chapter two-col overseas-chapter" id="overseas">
         <div className="chapter-bg" />
-        <SectionText kicker="04 / OVERSEAS PROJECTS" title={<>出海之路：<br />系统方案与国际合作的双向赋能</>}>
+        <SectionText
+          kicker="04 / OVERSEAS PROJECTS"
+          title={(
+            <span className="overseas-title-wrap">
+              <img className="overseas-ship-illustration" src={shipIllustration} alt="" loading="lazy" decoding="async" />
+              <span className="overseas-title-stack">
+                <img className="overseas-fish-background" src={fishIllustration} alt="" loading="lazy" decoding="async" />
+                <span className="overseas-title-copy">出海之路：<br />系统方案与国际合作的双向赋能</span>
+              </span>
+            </span>
+          )}
+        >
           <p>如今，中国治水的实践半径正从国内流域延伸至全球缺水地区——水龙头背后的治水故事，正在被书写进更广阔的世界版图，中国治水的出海之路由此开启。</p>
-          <p>当我们把视线聚焦到具体的水坝点位，一幅更清晰的图景浮现出来——中国治水的海外实践，正沿着“一带一路”落地生根。</p>
-          <ClientVisual image={clientPakistanProjectOne} alt="China overseas water project collage" variant="wide-visual" />
+          <p>当我们把视线聚焦到具体的水坝点位，一幅更清晰的图景浮现出来<br /><StrongMark>——中国治水的海外实践，正沿着“一带一路”落地生根。</StrongMark></p>
         </SectionText>
         <div className="glass-card reveal overseas-card">
           <div className="card-head"><span>中国海外水利项目</span><b>2006—2024</b></div>
