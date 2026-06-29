@@ -1,8 +1,8 @@
-import React, { Suspense, useMemo, useRef } from 'react'
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-function WaterSphere() {
+function WaterSphere({ active }) {
   const meshRef = useRef(null)
   const materialRef = useRef(null)
 
@@ -14,6 +14,7 @@ function WaterSphere() {
   }), [])
 
   useFrame(({ clock }) => {
+    if (!active) return
     const time = clock.getElapsedTime()
     if (materialRef.current) materialRef.current.uniforms.uTime.value = time
     if (meshRef.current) {
@@ -83,18 +84,32 @@ function WaterOrbFallback() {
 }
 
 export default function WaterOrb() {
+  const stageRef = useRef(null)
+  const [active, setActive] = useState(false)
+
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return undefined
+    const observer = new IntersectionObserver(([entry]) => {
+      setActive(entry.isIntersecting)
+    }, { rootMargin: '180px 0px' })
+    observer.observe(stage)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className="water-orb-stage">
+    <div className="water-orb-stage" ref={stageRef}>
       <Suspense fallback={<WaterOrbFallback />}>
         <Canvas
           camera={{ position: [0, 0, 4.2], fov: 42 }}
           dpr={[1, 1.5]}
+          frameloop={active ? 'always' : 'demand'}
           gl={{ alpha: true, antialias: true, powerPreference: 'low-power' }}
         >
           <ambientLight intensity={1.2} />
           <directionalLight position={[3, 2, 4]} intensity={2.2} color="#ffffff" />
           <pointLight position={[-3, -1, 3]} intensity={1.6} color="#3fe2ff" />
-          <WaterSphere />
+          <WaterSphere active={active} />
         </Canvas>
       </Suspense>
     </div>

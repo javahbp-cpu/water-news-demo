@@ -136,17 +136,30 @@ function GlobeFallback() {
 
 export default function WaterResourceGlobe({ stressPoints, projects }) {
   const [focus, setFocus] = useState({ ...(stressPoints.find((item) => item.code === 'PAK') || stressPoints[0]), kind: 'stress' })
+  const stageRef = useRef(null)
+  const [active, setActive] = useState(false)
   const topStress = useMemo(() => [...stressPoints].sort((a, b) => b.value - a.value).slice(0, 4), [stressPoints])
   const projectPreview = useMemo(() => projects.slice(0, 4), [projects])
   const focusName = focus.kind === 'project' ? focus.project : stressDisplayName(focus)
 
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return undefined
+    const observer = new IntersectionObserver(([entry]) => {
+      setActive(entry.isIntersecting)
+    }, { rootMargin: '240px 0px' })
+    observer.observe(stage)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className="globe-3d-wrap">
-      <div className="globe-3d-stage">
+      <div className="globe-3d-stage" ref={stageRef}>
         <Suspense fallback={<GlobeFallback />}>
           <Canvas
             camera={{ position: [0, 0, 360], fov: 42 }}
             dpr={[1, 1.5]}
+            frameloop={active ? 'always' : 'demand'}
             gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
           >
             <color attach="background" args={['transparent']} />
@@ -159,7 +172,7 @@ export default function WaterResourceGlobe({ stressPoints, projects }) {
               enablePan={false}
               minPolarAngle={Math.PI / 2.5}
               maxPolarAngle={Math.PI / 1.55}
-              autoRotate
+              autoRotate={active}
               autoRotateSpeed={0.65}
             />
           </Canvas>

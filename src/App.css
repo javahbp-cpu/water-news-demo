@@ -507,6 +507,24 @@ main { position: relative; overflow: hidden; }
   font-size: 14px;
   cursor: pointer;
   transition: transform .22s ease, border-color .22s ease, background .22s ease;
+  overflow: visible;
+  isolation: isolate;
+}
+.flow-node-glow {
+  position: absolute;
+  inset: -11px -16px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(104, 226, 255, .58), rgba(122, 240, 201, .24) 42%, transparent 72%);
+  opacity: .18;
+  transform: scale(.9);
+  transform-origin: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.flow-node-label {
+  position: relative;
+  z-index: 1;
 }
 .flow-node:hover,
 .flow-node.active {
@@ -517,12 +535,18 @@ main { position: relative; overflow: hidden; }
 .flow-node.year-hot {
   border-color: rgba(122,240,201,.62);
   background: rgba(16, 72, 86, .92);
-  box-shadow: 0 0 22px rgba(122,240,201,.16);
+}
+.flow-node.year-hot .flow-node-glow {
+  opacity: .32;
 }
 .flow-node.year-hot.active,
 .flow-node.year-hot:hover {
   border-color: rgba(255,209,102,.82);
-  box-shadow: 0 0 34px rgba(255,209,102,.2);
+}
+.flow-node.year-hot.active .flow-node-glow,
+.flow-node.year-hot:hover .flow-node-glow {
+  background: radial-gradient(circle, rgba(255, 209, 102, .56), rgba(122, 240, 201, .22) 44%, transparent 72%);
+  opacity: .46;
 }
 .n0 { left: 50%; top: 42%; transform: translate(-50%, -50%); border-color: rgba(33,212,255,.68); background: rgba(15, 74, 108, .88); }
 .n0:hover,
@@ -1039,18 +1063,19 @@ main::before {
 
 .water-cursor {
   position: fixed;
-  left: var(--flow-x, 50vw);
-  top: var(--flow-y, 45vh);
+  left: 0;
+  top: 0;
   z-index: -1;
   width: 440px;
   height: 440px;
   border-radius: 50%;
   pointer-events: none;
   opacity: .34;
-  transform: translate(-50%, -50%);
+  transform: translate3d(0, 0, 0);
   background: radial-gradient(circle, rgba(72, 207, 238, .26), rgba(111, 239, 207, .08) 34%, transparent 68%);
   filter: blur(8px);
-  transition: left .8s cubic-bezier(.2,.7,.2,1), top .8s cubic-bezier(.2,.7,.2,1), opacity .5s ease;
+  transition: opacity .5s ease;
+  will-change: transform, opacity;
 }
 
 .story-stress .water-current,
@@ -2637,6 +2662,7 @@ main::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  will-change: transform;
 }
 
 #shortage .chapter-bg,

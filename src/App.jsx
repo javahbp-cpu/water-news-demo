@@ -1381,7 +1381,8 @@ function PolicyFlow() {
             className={`flow-node n${index} ${active === node.name ? 'active' : ''} ${yearTheme.nodes.includes(node.name) ? 'year-hot' : ''}`}
             onClick={() => setActive(node.name)}
           >
-            {node.name}
+            <span className="flow-node-glow" aria-hidden="true" />
+            <span className="flow-node-label">{node.name}</span>
           </button>
         ))}
         {['l1', 'l2', 'l3', 'l4'].map((line) => (
@@ -1481,13 +1482,30 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const root = document.documentElement
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth <= 720) return undefined
+    const cursor = document.querySelector('.water-cursor')
+    if (!cursor) return undefined
+
+    gsap.set(cursor, {
+      x: window.innerWidth / 2,
+      y: window.innerHeight * 0.45,
+      xPercent: -50,
+      yPercent: -50,
+      force3D: true
+    })
+
+    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.8, ease: 'power3.out' })
+    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.8, ease: 'power3.out' })
     const onPointerMove = (event) => {
-      root.style.setProperty('--flow-x', `${event.clientX}px`)
-      root.style.setProperty('--flow-y', `${event.clientY}px`)
+      xTo(event.clientX)
+      yTo(event.clientY)
     }
+
     window.addEventListener('pointermove', onPointerMove, { passive: true })
-    return () => window.removeEventListener('pointermove', onPointerMove)
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove)
+      gsap.killTweensOf(cursor)
+    }
   }, [])
 
   useEffect(() => {
@@ -1497,7 +1515,7 @@ export default function App() {
       gsap.from('.hero-title span', { yPercent: 115, opacity: 0, duration: 1.1, stagger: 0.08, ease: 'power4.out' })
       gsap.from('.hero-copy', { y: 28, opacity: 0, delay: 0.3, duration: 0.8, ease: 'power3.out' })
       gsap.utils.toArray('.reveal').forEach((el) => {
-        gsap.fromTo(el, { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 78%' } })
+        gsap.fromTo(el, { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 78%', once: true } })
       })
       gsap.utils.toArray('.turkana-case-card .scroll-copy').forEach((el, index) => {
         gsap.fromTo(el, { y: 34, opacity: 0 }, {
@@ -1515,7 +1533,7 @@ export default function App() {
       gsap.utils.toArray('.chapter').forEach((section) => {
         gsap.to(section.querySelector('.chapter-bg'), { yPercent: -18, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } })
       })
-      gsap.to('.flow-node', { boxShadow: '0 0 34px rgba(104,226,255,.42)', duration: 1.6, yoyo: true, repeat: -1, stagger: 0.2, ease: 'sine.inOut' })
+      gsap.to('.flow-node-glow', { scale: 1.2, opacity: 0.62, duration: 1.6, yoyo: true, repeat: -1, stagger: 0.2, ease: 'sine.inOut' })
     })
     return () => ctx.revert()
   }, [])
