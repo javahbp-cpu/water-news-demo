@@ -2181,8 +2181,35 @@ main::before {
   align-items: stretch;
 }
 
-.route-chapter .section-text {
-  width: min(720px, 100%);
+.route-art-panel {
+  width: min(1040px, 100%);
+  justify-self: center;
+  text-align: center;
+}
+
+.route-art-copy {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin: 0;
+  color: #063654;
+  font-family: "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", serif;
+  font-size: clamp(24px, 2.1vw, 32px);
+  font-weight: 950;
+  line-height: 1.68;
+  letter-spacing: 0;
+  text-wrap: balance;
+  text-shadow: 0 16px 38px rgba(18, 112, 146, .16);
+}
+
+.route-art-copy span {
+  display: block;
+  white-space: nowrap;
+}
+
+.route-art-copy .text-mark {
+  color: #063654;
+  font-weight: 950;
 }
 
 .bri-card {
@@ -2302,7 +2329,102 @@ main::before {
 }
 
 .finale-inner {
-  width: min(1040px, 100%);
+  width: min(1180px, 100%);
+}
+
+.finale h2 {
+  line-height: 1.06;
+}
+
+.finale-people-divider {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(82px, 9vw, 136px) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(10px, 2vw, 28px);
+  width: min(1120px, 100%);
+  min-height: clamp(96px, 12vw, 164px);
+  margin: 18px auto 24px;
+  padding: 0 clamp(6px, 1.4vw, 18px) 14px;
+}
+
+.finale-people-divider::before {
+  content: "";
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(24, 133, 165, .46), rgba(122, 240, 201, .54), rgba(24, 133, 165, .46), transparent);
+}
+
+.finale-people-run {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+  gap: clamp(2px, .7vw, 9px);
+}
+
+.finale-people-run-left {
+  justify-content: flex-end;
+}
+
+.finale-people-run-right {
+  justify-content: flex-start;
+}
+
+.finale-people-run img {
+  display: block;
+  width: clamp(14px, 3.9vw, 48px);
+  height: clamp(62px, 8.4vw, 120px);
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 14px 18px rgba(6, 45, 68, .12));
+}
+
+.finale-people-run img:nth-child(2n) {
+  transform: none;
+}
+
+.finale-people-run img:nth-child(3n) {
+  transform: none;
+}
+
+.finale-hands-mark {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  align-self: center;
+}
+
+.finale-hands-mark::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, .86), rgba(187, 245, 255, .42) 58%, transparent 74%);
+  filter: blur(4px);
+}
+
+.finale-hands-mark img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 26px rgba(6, 45, 68, .14));
+}
+
+.finale p {
+  width: min(1120px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 19px;
+  line-height: 2.02;
+  text-wrap: balance;
 }
 
 .finale-mosaic {
@@ -2401,6 +2523,7 @@ main::before {
   .chapter-intro { width: calc(100% - 24px); }
   .section-text h2, .china-heading h2, .finale h2 { font-size: clamp(38px, 12vw, 52px); }
   .section-text p, .china-heading p, .finale p { font-size: 15px; line-height: 1.85; }
+  .finale p { font-size: 17px; line-height: 1.95; }
   .overseas-title-wrap { padding-top: 58px; }
   .overseas-ship-illustration {
     right: 4px;
@@ -2414,6 +2537,31 @@ main::before {
     opacity: .24;
   }
   #overseas .section-text p { font-size: 17px; line-height: 1.9; }
+  .route-art-copy {
+    gap: 10px;
+    font-size: clamp(18px, 5.2vw, 24px);
+    line-height: 1.6;
+  }
+  .route-art-copy span {
+    white-space: normal;
+  }
+  .finale-people-divider {
+    grid-template-columns: minmax(0, 1fr) clamp(58px, 15vw, 82px) minmax(0, 1fr);
+    gap: 5px;
+    min-height: 82px;
+    margin: 14px auto 18px;
+    padding-bottom: 10px;
+  }
+  .finale-people-divider::before {
+    bottom: 11px;
+  }
+  .finale-people-run {
+    gap: 1px;
+  }
+  .finale-people-run img {
+    width: clamp(11px, 3.6vw, 24px);
+    height: clamp(48px, 13vw, 78px);
+  }
   .glass-card, .china-card { padding: 16px; border-radius: 26px; }
   .card-head { flex-wrap: wrap; margin-bottom: 10px; letter-spacing: .08em; }
   .card-head b { margin-left: auto; }

@@ -27,13 +27,13 @@ import oceanAnimalsIllustration from './assets/client/ocean-animals-illustration
 import shortageSeedling from './assets/client/shortage-seedling.jpg'
 import illustrationWaterDrop from './assets/client/illustration-water-drop.png'
 import illustrationHelp from './assets/client/illustration-help.png'
-import illustrationCooperation from './assets/client/illustration-cooperation.png'
 import endingDujiangyan from './assets/ending/dujiangyan.webp'
 import endingSystemGovernance from './assets/ending/system-governance.webp'
 import endingRoomForRiver from './assets/ending/room-for-river.webp'
 import endingDripIrrigation from './assets/ending/drip-irrigation.webp'
 import endingNewater from './assets/ending/newater.webp'
 import endingSharedFuture from './assets/ending/shared-water-future.webp'
+import unityHands from './assets/ending/people/unity-hands.png'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -41,6 +41,13 @@ echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TooltipCompone
 
 const WaterResourceGlobe = lazy(() => import('./GlobeScene'))
 const WaterOrb = lazy(() => import('./WaterOrb'))
+
+const finalePersonImages = Object.entries(import.meta.glob('./assets/ending/people/figure-*.png', { eager: true, import: 'default' }))
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, src]) => src)
+
+const finalePeopleLeft = finalePersonImages.slice(0, 9)
+const finalePeopleRight = finalePersonImages.slice(9)
 
 const nameZh = {
   World: '全球',
@@ -1718,10 +1725,13 @@ export default function App() {
 
       <section className="chapter two-col route-chapter" id="route">
         <div className="chapter-bg" />
-        <SectionText kicker="图表说明">
-          <p><StrongMark>每一次跨境水利合作，都是对全球水治理体系的一次补充和完善。</StrongMark>中国方案证明，水危机没有放之四海皆准的统一解法，水治理也不是单一的孤立工程，而需要因地制宜的系统思维。</p>
-          <ClientVisual image={illustrationCooperation} alt="water governance cooperation illustration" variant="compact-visual" />
-        </SectionText>
+        <div className="route-art-panel reveal">
+          <p className="route-art-copy">
+            <span><StrongMark>每一次跨境水利合作，都是对全球水治理体系的一次补充和完善。</StrongMark></span>
+            <span>中国方案证明，水危机没有放之四海皆准的统一解法，</span>
+            <span>水治理也不是单一的孤立工程，而需要因地制宜的系统思维。</span>
+          </p>
+        </div>
         <div className="glass-card reveal bri-card">
           <div className="card-head"><span>一带一路沿线水利合作</span><b>ROUTE</b></div>
           <InsightChip>发光线连接中国与合作国家，年份柱用于增强历史纵深感。</InsightChip>
@@ -1733,7 +1743,22 @@ export default function App() {
       <section className="finale" id="method">
         <div className="finale-inner reveal">
           <span className="eyebrow">CONCLUSION</span>
-          <h2>以水为媒，共绘人类命运共同体新图景</h2>
+          <div className="finale-people-divider" aria-hidden="true">
+            <div className="finale-people-run finale-people-run-left">
+              {finalePeopleLeft.map((src, index) => (
+                <img key={`finale-left-${index}`} src={src} alt="" loading="lazy" decoding="async" />
+              ))}
+            </div>
+            <div className="finale-hands-mark">
+              <img src={unityHands} alt="" loading="lazy" decoding="async" />
+            </div>
+            <div className="finale-people-run finale-people-run-right">
+              {finalePeopleRight.map((src, index) => (
+                <img key={`finale-right-${index}`} src={src} alt="" loading="lazy" decoding="async" />
+              ))}
+            </div>
+          </div>
+          <h2>以水为媒<br />共绘人类命运共同体新图景</h2>
           <p>水的故事，从来不止于征服与调配，更在于平衡与共生。从李冰父子“乘势利导”修建的都江堰，到如今统筹“山水林田湖草沙”的系统治理，东方智慧始终蕴含着对自然节律的深刻尊重。这份智慧，与荷兰“还地于河”的谦卑、以色列“滴水归田”的极致、新加坡“化污为清”的循环一道，共同构成了人类应对水危机的多元哲学。</p>
           <p>中国治水的当代叙事，是一曲在古老智慧与现代挑战间寻求接续，在宏大工程与微观管理间探索平衡，在解决自身问题与参与全球合作间建立联结的进行曲。它既为大规模、快节奏推进水基础设施建设提供了实践参考，也仍在探索大型工程的生态伦理、跨境水管理的公平之道，以及水技术与地方性知识的融合路径。</p>
           <p>最终，面对全球水困局，不存在唯一的“破局之道”。答案藏在尼罗河流域的协调谈判中，藏在恒河平原的污染治理行动中，也藏在不同地区不断推进的节水生活与水环境治理实践中。以水为媒缔结的，不是某个方案的霸权，而是一个允许差异、鼓励互鉴、共同负责的命运共同体。每一滴跨越边界的水，都在提醒我们：在这颗蓝色星球上，我们同舟共济。</p>
