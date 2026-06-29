@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color: #eaf8ff;
   background: #020712;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
@@ -1926,7 +1926,7 @@ main::before {
 }
 
 .hero-water-3d {
-  right: clamp(-130px, -6vw, -60px);
+  right: clamp(-70px, -3vw, -24px);
   top: 18vh;
   z-index: 0;
   width: min(32vw, 430px);
@@ -2367,4 +2367,344 @@ main::before {
   background:
     linear-gradient(180deg, rgba(235,252,255,.72), rgba(246,252,250,.66)),
     url("./assets/section-bg/section-bg-6.webp") center / cover no-repeat;
+}
+
+/* Client layout revision from 排版修改.docx */
+.text-mark {
+  color: #063654;
+  font-weight: 950;
+}
+
+.section-text.no-title {
+  transform: translateY(-18px);
+  padding: 30px 32px;
+  border-left-color: rgba(0, 116, 154, .44);
+}
+
+.section-text.no-title p,
+.section-text.no-title .story-copy p,
+.china-heading p {
+  font-size: 18px;
+  line-height: 2.05;
+}
+
+.section-text.no-title .story-copy {
+  display: grid;
+  gap: 16px;
+}
+
+.kpi.with-accent {
+  position: relative;
+  overflow: hidden;
+  padding-right: 84px;
+}
+
+.kpi-accent {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+  opacity: .88;
+  filter: drop-shadow(0 16px 30px rgba(22, 129, 165, .18));
+}
+
+.client-visual {
+  position: relative;
+  z-index: 2;
+  margin: 12px 0 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.86);
+  border-radius: 26px;
+  background: rgba(255,255,255,.7);
+  box-shadow: 0 22px 62px rgba(22, 118, 154, .14);
+}
+
+.client-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.client-visual figcaption {
+  padding: 10px 14px;
+  color: rgba(8,48,68,.7);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.client-visual.text-visual {
+  min-height: 220px;
+}
+
+.client-visual.text-visual img {
+  min-height: 220px;
+}
+
+.client-visual.compact-visual {
+  width: min(260px, 72%);
+  margin-left: auto;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.client-visual.compact-visual img {
+  object-fit: contain;
+  aspect-ratio: 1 / 1;
+}
+
+.client-visual.portrait-visual {
+  width: min(260px, 70%);
+  margin-left: auto;
+  background: rgba(255,255,255,.78);
+}
+
+.client-visual.portrait-visual img {
+  max-height: 360px;
+  object-fit: contain;
+}
+
+.client-visual.wide-visual {
+  min-height: 220px;
+  background: rgba(255,255,255,.78);
+}
+
+.client-visual.wide-visual img {
+  min-height: 220px;
+  object-fit: contain;
+}
+
+.turkana-case-card {
+  display: grid;
+  grid-template-columns: minmax(280px, .9fr) minmax(0, 1.1fr);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.turkana-visual {
+  min-height: 420px;
+  margin: 0;
+}
+
+.turkana-visual img {
+  min-height: 420px;
+}
+
+.case-art-title {
+  display: block;
+  color: #063654;
+  font-family: "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", serif;
+  font-size: clamp(44px, 6vw, 88px);
+  font-weight: 950;
+  line-height: .95;
+  letter-spacing: 0;
+}
+
+.turkana-copy p {
+  font-size: 18px;
+  line-height: 2.08;
+}
+
+.scroll-copy {
+  opacity: .001;
+  transform: translateY(24px);
+  animation: scrollCopyIn .9s ease forwards;
+  animation-timeline: view();
+  animation-range: entry 12% cover 34%;
+}
+
+.scroll-copy:nth-of-type(2) {
+  animation-delay: .08s;
+}
+
+@keyframes scrollCopyIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.china-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: 24px;
+  align-items: start;
+}
+
+.china-heading p {
+  grid-column: 1;
+}
+
+.china-quality-visual {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+  align-self: stretch;
+  min-height: 420px;
+}
+
+.china-quality-visual img {
+  min-height: 420px;
+  object-fit: cover;
+}
+
+.art-copy {
+  padding: 18px 20px;
+  border: 1px solid rgba(5, 74, 106, .14);
+  border-radius: 24px;
+  background: rgba(255,255,255,.52);
+  text-align: center;
+}
+
+.finale-art-word {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", serif;
+  font-size: 1.18em;
+  line-height: .9;
+}
+
+@media (max-width: 980px) {
+  .turkana-case-card,
+  .china-heading {
+    grid-template-columns: 1fr;
+  }
+  .china-heading p,
+  .china-quality-visual {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .client-visual.compact-visual,
+  .client-visual.portrait-visual {
+    width: min(320px, 100%);
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .section-text.no-title {
+    transform: none;
+    padding: 22px;
+  }
+  .section-text.no-title p,
+  .section-text.no-title .story-copy p,
+  .china-heading p,
+  .turkana-copy p {
+    font-size: 16px;
+    line-height: 1.9;
+  }
+  .kpi.with-accent {
+    padding-right: 22px;
+    padding-bottom: 86px;
+  }
+  .turkana-visual,
+  .turkana-visual img,
+  .china-quality-visual,
+  .china-quality-visual img {
+    min-height: 300px;
+  }
+}
+
+/* Hero client note: keep the lower-left water drop, remove the upper-right faucet, and enlarge the river photo */
+.hero-saving-cue {
+  position: absolute;
+  z-index: 2;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.hero-saving-cue-lower {
+  left: clamp(780px, 56vw, 860px);
+  top: clamp(100px, 13vh, 145px);
+  width: clamp(220px, 17vw, 290px);
+}
+
+.hero-saving-cue::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.74), rgba(187, 245, 255, .36) 52%, transparent 72%);
+  filter: blur(3px);
+}
+
+.hero-saving-cue img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 34px rgba(22, 129, 165, .18));
+}
+
+@media (min-width: 981px) {
+  .hero-photo {
+    width: min(700px, 46vw);
+    min-height: 440px;
+    margin: -340px -210px 28px auto;
+  }
+
+  .hero-photo img {
+    min-height: 440px;
+  }
+
+  .hero-kpis .kpi:nth-child(3) strong {
+    transform: translateX(-18px);
+  }
+}
+@media (max-width: 980px) {
+  .hero-saving-cue {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: min(150px, 40vw);
+    margin: 8px 0 18px;
+  }
+  .hero-saving-cue-lower {
+    width: min(150px, 40vw);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-saving-cue,
+  .hero-saving-cue-lower {
+    width: min(130px, 48vw);
+    margin-top: 14px;
+  }
+}
+
+#relation .section-text.no-title p,
+#relation .section-text.no-title .story-copy p {
+  color: rgba(8, 48, 68, .64);
+  font-size: 22px;
+  line-height: 2.14;
+}
+
+#relation .section-text.no-title .text-mark {
+  color: #063654;
+  font-weight: 950;
+}
+
+#relation .client-visual.relation-visual {
+  width: min(260px, 42%);
+  margin: 0 auto 22px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+#relation .client-visual.relation-visual img {
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+#relation .relation-copy-stack {
+  display: grid;
+  align-content: center;
+  gap: 18px;
+}
+
+#relation .relation-copy-stack .section-text.no-title {
+  transform: none;
 }
