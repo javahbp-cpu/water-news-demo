@@ -1545,8 +1545,30 @@ export default function App() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
     const ctx = gsap.context(() => {
       gsap.to('.progress-bar', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.2 } })
-      gsap.from('.hero-title span', { yPercent: 115, opacity: 0, duration: 1.1, stagger: 0.08, ease: 'power4.out' })
-      gsap.from('.hero-copy', { y: 28, opacity: 0, delay: 0.3, duration: 0.8, ease: 'power3.out' })
+      const heroTimeline = gsap.timeline({
+        defaults: { ease: 'power3.out' }
+      })
+      heroTimeline
+        .addLabel('surface', 0)
+        .fromTo('.hero-water', { scale: 0.9, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.72 }, 'surface')
+        .fromTo('.topline span', { y: -14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.48, stagger: 0.08 }, 'surface+=0.08')
+        .fromTo('.hero-content > .eyebrow', { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5 }, 'surface+=0.18')
+        .addLabel('title', 'surface+=0.28')
+        .fromTo('.hero-title span', {
+          yPercent: 118,
+          x: -18,
+          rotation: -1.6,
+          autoAlpha: 0
+        }, {
+          yPercent: 0,
+          x: 0,
+          rotation: 0,
+          autoAlpha: 1,
+          duration: 1.05,
+          stagger: 0.1,
+          ease: 'power4.out'
+        }, 'title')
+        .fromTo('.hero-copy', { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.72 }, 'title+=0.36')
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.fromTo(el, { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 78%', once: true } })
       })

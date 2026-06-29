@@ -124,6 +124,13 @@ main { position: relative; overflow: hidden; }
   letter-spacing: .18em;
   text-transform: uppercase;
 }
+.topline span,
+.hero-content > .eyebrow,
+.hero-title span,
+.hero-copy,
+.hero-water {
+  will-change: transform, opacity;
+}
 .hero-content { width: min(1180px, 100%); padding-top: 54px; }
 .eyebrow {
   display: inline-block;
