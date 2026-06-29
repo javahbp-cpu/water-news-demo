@@ -21,6 +21,8 @@ import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.p
 import clientPakistanProjectTwo from './assets/client/china-pakistan-project-2.png'
 import shipIllustration from './assets/client/ship-illustration.png'
 import fishIllustration from './assets/client/fish-illustration.png'
+import houseIllustration from './assets/client/house-illustration.png'
+import windIllustration from './assets/client/wind-illustration.png'
 import shortageSeedling from './assets/client/shortage-seedling.jpg'
 import illustrationWaterDrop from './assets/client/illustration-water-drop.png'
 import illustrationHelp from './assets/client/illustration-help.png'
@@ -1686,19 +1688,26 @@ export default function App() {
 
       <section className="chapter two-col reverse pakistan-chapter" id="pakistan">
         <div className="chapter-bg" />
-        <SectionText kicker="案例说明">
-          <p><StrongMark>以巴基斯坦为例，</StrongMark>当地面临着复杂的水资源压力背景，既有季风带来的洪涝风险，也有旱季的极度缺水。中国参与的海外水利项目，不再是单一的水利工程建设，而是结合了本土化需求的系统解决方案。</p>
-          <ClientVisual image={clientPakistanProjectOne} alt="China Pakistan water cooperation project" variant="wide-visual" />
-        </SectionText>
+        <div className="pakistan-copy-layout">
+          <SectionText kicker="案例说明">
+            <p><StrongMark>以巴基斯坦为例，</StrongMark>当地面临着复杂的水资源压力背景，既有季风带来的洪涝风险，也有旱季的极度缺水。中国参与的海外水利项目，不再是单一的水利工程建设，而是结合了本土化需求的系统解决方案。</p>
+          </SectionText>
+          <div className="pakistan-copy-art" aria-hidden="true">
+            <img className="pakistan-house-art" src={houseIllustration} alt="" loading="lazy" decoding="async" />
+            <img className="pakistan-wind-art" src={windIllustration} alt="" loading="lazy" decoding="async" />
+          </div>
+        </div>
         <div className="glass-card reveal pakistan-card"><PakistanCaseDashboard /></div>
       </section>
 
       <section className="chapter two-col wisdom-chapter" id="wisdom">
         <div className="chapter-bg" />
-        <SectionText kicker="图表说明">
-          <p><StrongMark>2015至2024年间，</StrongMark>中巴水利合作项目数量逐年稳步增长，同步带动巴基斯坦全国灌溉保证率持续提升，有效缓解了当地水资源承压困境。这些成效数据既是中国治水方案海外落地的有力实证，也完整诠释了南南水资源合作的实践价值，标志着中外水合作从基础技术援建，逐步升级为长效规则对话的理念交融，为全球缺水地区的水资源治理打造了成熟可行的合作范本。</p>
-          <ClientVisual image={clientPakistanProjectTwo} alt="China Pakistan water cooperation data" variant="wide-visual" />
-        </SectionText>
+        <div className="wisdom-copy-stack">
+          <SectionText kicker="图表说明">
+            <p><StrongMark>2015至2024年间，</StrongMark>中巴水利合作项目数量逐年稳步增长，同步带动巴基斯坦全国灌溉保证率持续提升，有效缓解了当地水资源承压困境。这些成效数据既是中国治水方案海外落地的有力实证，也完整诠释了南南水资源合作的实践价值，标志着中外水合作从基础技术援建，逐步升级为长效规则对话的理念交融，为全球缺水地区的水资源治理打造了成熟可行的合作范本。</p>
+          </SectionText>
+          <ClientVisual image={clientPakistanProjectTwo} alt="China Pakistan water cooperation data" variant="wide-visual wisdom-photo-visual" />
+        </div>
         <div className="glass-card reveal wisdom-card">
           <div className="card-head"><span>智慧交融</span><b>2015—2024</b></div>
           <WisdomDashboard />

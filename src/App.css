@@ -1251,6 +1251,31 @@ main::before {
   grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr);
 }
 
+.wisdom-copy-stack {
+  display: grid;
+  align-content: start;
+  gap: 22px;
+}
+
+.wisdom-copy-stack .section-text.no-title {
+  transform: translateY(-34px);
+}
+
+#wisdom .section-text.no-title p,
+#wisdom .section-text.no-title .story-copy p {
+  font-size: 20px;
+  line-height: 2.08;
+}
+
+.wisdom-photo-visual {
+  margin-top: -22px;
+  min-height: 250px;
+}
+
+.wisdom-photo-visual img {
+  min-height: 250px;
+}
+
 .debate-chart-panel,
 .wisdom-chart-panel,
 .debate-text-panel,
@@ -1597,11 +1622,53 @@ main::before {
   align-items: stretch;
 }
 
-.pakistan-chapter .section-text {
+.pakistan-copy-layout {
   grid-area: text;
-  width: min(760px, 100%);
+  width: calc(100% + 22px);
+  transform: translateX(-22px);
+  display: grid;
+  grid-template-columns: minmax(420px, 1fr) minmax(420px, .78fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
 }
 .pakistan-card { grid-area: card; }
+
+.pakistan-copy-layout .section-text {
+  width: 100%;
+  transform: none;
+}
+
+#pakistan .section-text.no-title p {
+  margin: 0;
+  font-size: 20px;
+  line-height: 2.08;
+}
+
+.pakistan-copy-art {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: clamp(18px, 2.4vw, 36px);
+  min-width: 0;
+}
+
+.pakistan-house-art,
+.pakistan-wind-art {
+  display: block;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 34px rgba(23, 103, 137, .12));
+  pointer-events: none;
+}
+
+.pakistan-house-art {
+  width: min(230px, 42%);
+  transform: translateX(22px);
+}
+
+.pakistan-wind-art {
+  width: min(280px, 52%);
+}
 
 .pakistan-tabs {
   display: inline-flex;
@@ -2291,6 +2358,14 @@ main::before {
       "text"
       "card";
   }
+  .pakistan-copy-layout {
+    width: 100%;
+    transform: none;
+    grid-template-columns: 1fr;
+  }
+  .pakistan-copy-art {
+    justify-content: flex-end;
+  }
   .finale-mosaic { grid-template-columns: 1fr 1fr; }
   .finale-mosaic figure:nth-child(2),
   .finale-mosaic figure:nth-child(4),
@@ -2844,6 +2919,17 @@ main::before {
   #trend .section-text.no-title .story-copy p {
     font-size: 19px;
     line-height: 2.02;
+  }
+  .wisdom-copy-stack .section-text.no-title {
+    transform: none;
+  }
+  #wisdom .section-text.no-title p,
+  #wisdom .section-text.no-title .story-copy p {
+    font-size: 18px;
+    line-height: 2;
+  }
+  .wisdom-photo-visual {
+    margin-top: 0;
   }
   .trend-art-copy {
     grid-column: auto;
