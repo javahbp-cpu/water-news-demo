@@ -1566,6 +1566,27 @@ export default function App() {
       gsap.utils.toArray('.chapter').forEach((section) => {
         gsap.to(section.querySelector('.chapter-bg'), { yPercent: -18, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } })
       })
+      const finaleDivider = document.querySelector('.finale-people-divider')
+      if (finaleDivider) {
+        const leftPeople = gsap.utils.toArray('.finale-people-run-left img')
+        const rightPeople = gsap.utils.toArray('.finale-people-run-right img')
+        const handsMark = finaleDivider.querySelector('.finale-hands-mark')
+        const handsImage = finaleDivider.querySelector('.finale-hands-mark img')
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: finaleDivider,
+            start: 'top 82%',
+            once: true
+          },
+          defaults: { ease: 'power3.out' }
+        })
+          .fromTo(finaleDivider, { '--finale-line-scale': 0, autoAlpha: 0.86 }, { '--finale-line-scale': 1, autoAlpha: 1, duration: 0.72 }, 0)
+          .fromTo(leftPeople, { x: -28, y: 12, autoAlpha: 0, scale: 0.92 }, { x: 0, y: 0, autoAlpha: 1, scale: 1, duration: 0.78, stagger: { each: 0.035, from: 'end' } }, 0.06)
+          .fromTo(rightPeople, { x: 28, y: 12, autoAlpha: 0, scale: 0.92 }, { x: 0, y: 0, autoAlpha: 1, scale: 1, duration: 0.78, stagger: { each: 0.035, from: 'start' } }, 0.06)
+          .fromTo(handsMark, { y: 8, autoAlpha: 0, scale: 0.82 }, { y: 0, autoAlpha: 1, scale: 1, duration: 0.68, ease: 'back.out(1.35)' }, 0.28)
+          .fromTo(handsImage, { rotation: -4 }, { rotation: 0, duration: 0.7, ease: 'power2.out' }, 0.32)
+      }
       gsap.to('.flow-node-glow', { scale: 1.2, opacity: 0.62, duration: 1.6, yoyo: true, repeat: -1, stagger: 0.2, ease: 'sine.inOut' })
     })
     return () => ctx.revert()

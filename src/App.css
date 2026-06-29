@@ -2366,6 +2366,7 @@ main::before {
 
 .finale-people-divider {
   position: relative;
+  --finale-line-scale: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(82px, 9vw, 136px) minmax(0, 1fr);
   align-items: end;
@@ -2374,6 +2375,7 @@ main::before {
   min-height: clamp(96px, 12vw, 164px);
   margin: 18px auto 24px;
   padding: 0 clamp(6px, 1.4vw, 18px) 14px;
+  will-change: opacity;
 }
 
 .finale-people-divider::before {
@@ -2385,6 +2387,9 @@ main::before {
   height: 2px;
   border-radius: 999px;
   background: linear-gradient(90deg, transparent, rgba(24, 133, 165, .46), rgba(122, 240, 201, .54), rgba(24, 133, 165, .46), transparent);
+  transform: scaleX(var(--finale-line-scale));
+  transform-origin: center;
+  will-change: transform;
 }
 
 .finale-people-run {
@@ -2411,6 +2416,7 @@ main::before {
   object-fit: contain;
   object-position: bottom center;
   filter: drop-shadow(0 14px 18px rgba(6, 45, 68, .12));
+  will-change: transform, opacity;
 }
 
 .finale-people-run img:nth-child(2n) {
@@ -2427,6 +2433,7 @@ main::before {
   display: grid;
   place-items: center;
   align-self: center;
+  will-change: transform, opacity;
 }
 
 .finale-hands-mark::before {
@@ -2444,6 +2451,8 @@ main::before {
   aspect-ratio: 1 / 1;
   object-fit: contain;
   filter: drop-shadow(0 18px 26px rgba(6, 45, 68, .14));
+  transform-origin: center;
+  will-change: transform;
 }
 
 .finale p {
