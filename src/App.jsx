@@ -21,7 +21,6 @@ import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.p
 import clientPakistanProjectTwo from './assets/client/china-pakistan-project-2.png'
 import illustrationWaterDrop from './assets/client/illustration-water-drop.png'
 import illustrationRiver from './assets/client/illustration-river.png'
-import illustrationFaucet from './assets/client/illustration-faucet.png'
 import illustrationRecycle from './assets/client/illustration-recycle.png'
 import illustrationHelp from './assets/client/illustration-help.png'
 import illustrationCooperation from './assets/client/illustration-cooperation.png'
@@ -1601,8 +1600,7 @@ export default function App() {
       <section className="chapter two-col" id="coverage">
         <div className="chapter-bg" />
         <SectionText kicker="图表说明">
-          <p><StrongMark>进一步的数据分析清晰表明：</StrongMark>虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。伴随着整体覆盖率不断向 100% 靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题。</p>
-          <ClientVisual image={illustrationFaucet} alt="clean water faucet illustration" variant="compact-visual" />
+          <p className="coverage-copy"><StrongMark>进一步的数据分析清晰表明：</StrongMark><br />虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。伴随着整体覆盖率不断向 100% 靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题。</p>
         </SectionText>
         <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><InsightChip>全球覆盖率接近 91.45%，但脆弱地区仍明显落后。</InsightChip><CoverageSwitcher /><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>资料来源：World Bank</SourceNote></div>
       </section>

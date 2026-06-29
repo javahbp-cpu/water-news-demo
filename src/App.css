@@ -2592,6 +2592,11 @@ main::before {
   will-change: opacity, transform;
 }
 
+.coverage-copy {
+  font-size: 20px !important;
+  line-height: 2.12 !important;
+}
+
 .china-heading {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
@@ -2664,6 +2669,10 @@ main::before {
   .turkana-copy p {
     font-size: 16px;
     line-height: 1.9;
+  }
+  .coverage-copy {
+    font-size: 18px !important;
+    line-height: 2 !important;
   }
   .kpi.with-accent {
     padding-right: 22px;
