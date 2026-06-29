@@ -2685,12 +2685,14 @@ main::before {
   display: grid;
   width: 100%;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
-  gap: 24px;
+  column-gap: 24px;
+  row-gap: 12px;
   align-items: start;
 }
 
 .china-heading p {
   grid-column: 1;
+  margin: 0;
   color: rgba(8, 48, 68, .56);
 }
 
@@ -2708,14 +2710,15 @@ main::before {
   grid-column: 2;
   grid-row: 1 / span 2;
   margin: 0;
-  align-self: stretch;
+  align-self: start;
   justify-self: end;
   width: 100%;
-  min-height: 420px;
+  height: 380px;
+  min-height: 0;
 }
 
 .china-quality-visual img {
-  min-height: 420px;
+  min-height: 0;
   object-fit: cover;
 }
 
