@@ -1943,6 +1943,11 @@ main::before {
   padding-top: 48px;
 }
 
+.turkana-case-layout {
+  display: grid;
+  gap: 22px;
+}
+
 .turkana-case-card {
   position: relative;
   display: block;
@@ -1957,7 +1962,8 @@ main::before {
 }
 
 .turkana-copy {
-  max-width: 880px;
+  width: 100%;
+  max-width: none;
 }
 
 .turkana-copy > span {
@@ -2310,6 +2316,10 @@ main::before {
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
   }
+  .scroll-copy {
+    opacity: 1 !important;
+    transform: none !important;
+  }
   .water-cursor { display: none; }
 }
 
@@ -2477,30 +2487,98 @@ main::before {
   object-fit: contain;
 }
 
-.turkana-case-card {
+.stress-copy-stack {
   display: grid;
-  grid-template-columns: minmax(280px, .9fr) minmax(0, 1.1fr);
-  gap: 28px;
-  align-items: stretch;
+  align-content: center;
+  gap: 30px;
+}
+
+.stress-copy-stack .section-text.no-title {
+  transform: none;
+}
+
+.client-visual.stress-pressure-visual {
+  width: 100%;
+  aspect-ratio: 1.55 / 1;
+  margin: 0;
+  border-radius: 22px;
+  background: rgba(255,255,255,.7);
+}
+
+.client-visual.stress-pressure-visual img {
+  object-fit: cover;
+  object-position: 50% 43%;
+}
+
+.map-copy-stack {
+  display: grid;
+  align-content: center;
+  gap: 34px;
+}
+
+.map-copy-stack .section-text.no-title {
+  transform: none;
+}
+
+.client-visual.map-project-visual {
+  width: 100%;
+  margin: 0;
+  border-radius: 22px;
+  background: rgba(255,255,255,.62);
+}
+
+.client-visual.map-project-visual img {
+  aspect-ratio: 2.65 / 1;
+  min-height: 0;
+  object-fit: cover;
+}
+
+.turkana-case-card {
+  width: 100%;
 }
 
 .turkana-visual {
-  min-height: 420px;
+  width: 100%;
+  aspect-ratio: 2.42 / 1;
+  min-height: 0;
   margin: 0;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: 0 28px 80px rgba(20, 108, 139, .16);
 }
 
 .turkana-visual img {
-  min-height: 420px;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
 }
 
 .case-art-title {
-  display: block;
-  color: #063654;
+  display: grid;
+  gap: 4px;
+  width: fit-content;
+  margin: 0 0 12px;
   font-family: "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", serif;
-  font-size: clamp(44px, 6vw, 88px);
   font-weight: 950;
-  line-height: .95;
+  line-height: .86;
   letter-spacing: 0;
+  color: #063654;
+  text-shadow: 0 16px 30px rgba(9, 89, 121, .16);
+}
+
+.case-art-title span {
+  font-size: clamp(54px, 6vw, 92px);
+}
+
+.case-art-title strong {
+  display: block;
+  font-size: clamp(72px, 8vw, 128px);
+  font-weight: 950;
+  background: linear-gradient(180deg, #063654 0%, #087fa0 58%, #42b5b6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .turkana-copy p {
@@ -2509,19 +2587,9 @@ main::before {
 }
 
 .scroll-copy {
-  opacity: .001;
-  transform: translateY(24px);
-  animation: scrollCopyIn .9s ease forwards;
-  animation-timeline: view();
-  animation-range: entry 12% cover 34%;
-}
-
-.scroll-copy:nth-of-type(2) {
-  animation-delay: .08s;
-}
-
-@keyframes scrollCopyIn {
-  to { opacity: 1; transform: translateY(0); }
+  opacity: 0;
+  transform: translateY(34px);
+  will-change: opacity, transform;
 }
 
 .china-heading {
@@ -2565,7 +2633,6 @@ main::before {
 }
 
 @media (max-width: 980px) {
-  .turkana-case-card,
   .china-heading {
     grid-template-columns: 1fr;
   }
@@ -2578,6 +2645,11 @@ main::before {
   .client-visual.portrait-visual {
     width: min(320px, 100%);
     margin-left: 0;
+  }
+
+  .client-visual.map-project-visual {
+    width: 100%;
+    margin-top: 0;
   }
 }
 
@@ -2597,8 +2669,6 @@ main::before {
     padding-right: 22px;
     padding-bottom: 86px;
   }
-  .turkana-visual,
-  .turkana-visual img,
   .china-quality-visual,
   .china-quality-visual img {
     min-height: 300px;

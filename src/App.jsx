@@ -530,13 +530,15 @@ function WorldPressureMap() {
 
 function TurkanaCasePanel() {
   return (
-    <div className="turkana-case-card reveal">
+    <div className="turkana-case-layout reveal">
       <ClientVisual image={clientTurkana} alt="Turkana water access scene" variant="turkana-visual" />
-      <div className="turkana-copy">
-        <span className="case-art-title">肯尼亚<br />图尔卡纳</span>
-        <p className="scroll-copy">肯尼亚图尔卡纳县便是这片干旱带上一个切面。作为肯尼亚第二大县，这里也是该国最干燥、水资源最匮乏的地区之一。五个孩子的母亲玛丽·洛克瓦洛普曾带着孩子步行 50-60 公里寻找水源，浑浊的河水是唯一的指望，牲畜在干旱中接连倒毙，孩子被迫辍学。</p>
-        <p className="scroll-copy"><StrongMark>在这片土地上，缺水从来不是地图上一个冰冷的数据点，而是每一个具体家庭日常中最为切肤的痛楚；每一处水源的抵达，改变的都是整条生命链条的运转。</StrongMark></p>
-        <SourceNote links={[{ label: 'UNICEF Kenya - Turkana case', url: sourceLinks.turkanaCase }]}>资料来源：UNICEF Kenya</SourceNote>
+      <div className="turkana-case-card">
+        <div className="turkana-copy">
+          <span className="case-art-title"><span>肯尼亚</span><strong>图尔卡纳</strong></span>
+          <p className="scroll-copy">肯尼亚图尔卡纳县便是这片干旱带上一个切面。作为肯尼亚第二大县，这里也是该国最干燥、水资源最匮乏的地区之一。五个孩子的母亲玛丽·洛克瓦洛普曾带着孩子步行 50-60 公里寻找水源，浑浊的河水是唯一的指望，牲畜在干旱中接连倒毙，孩子被迫辍学。</p>
+          <p className="scroll-copy"><StrongMark>在这片土地上，缺水从来不是地图上一个冰冷的数据点，而是每一个具体家庭日常中最为切肤的痛楚；每一处水源的抵达，改变的都是整条生命链条的运转。</StrongMark></p>
+          <SourceNote links={[{ label: 'UNICEF Kenya - Turkana case', url: sourceLinks.turkanaCase }]}>资料来源：UNICEF Kenya</SourceNote>
+        </div>
       </div>
     </div>
   )
@@ -1487,6 +1489,19 @@ export default function App() {
       gsap.utils.toArray('.reveal').forEach((el) => {
         gsap.fromTo(el, { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 78%' } })
       })
+      gsap.utils.toArray('.turkana-case-card .scroll-copy').forEach((el, index) => {
+        gsap.fromTo(el, { y: 34, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: `top ${index === 0 ? '82%' : '76%'}`,
+            end: 'top 54%',
+            scrub: 0.7
+          }
+        })
+      })
       gsap.utils.toArray('.chapter').forEach((section) => {
         gsap.to(section.querySelector('.chapter-bg'), { yPercent: -18, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } })
       })
@@ -1558,20 +1573,24 @@ export default function App() {
 
       <section className="chapter two-col" id="stress">
         <div className="chapter-bg" />
-        <SectionText kicker="图表说明">
-          <p><StrongMark>水资源压力以淡水提取量占可再生淡水资源总量的比例衡量。</StrongMark>埃及、巴林等国家数值远高于其他国家，因此图表采用对数轴展示，让极端压力和一般压力能够在同一画面中比较。</p>
-          <ClientVisual image={clientWaterPressure} alt="water pressure reference" variant="portrait-visual" />
-        </SectionText>
+        <div className="stress-copy-stack">
+          <SectionText kicker="图表说明">
+            <p>水资源压力以淡水提取量占可再生淡水资源总量的比例衡量。<br />埃及、巴林等国家数值远高于其他国家，因此图表采用对数轴展示，让极端压力和一般压力能够在同一画面中比较。</p>
+          </SectionText>
+          <ClientVisual image={clientWaterPressure} alt="water pressure reference" variant="stress-pressure-visual" />
+        </div>
         <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，图表采用对数轴展示。</InsightChip><StressRanking /><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
       </section>
 
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
         <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>资料来源：World Bank、CIDCA</SourceNote></div>
-        <SectionText kicker="图表说明">
-          <p>水资源承压严峻的国家大多沿干旱带呈条带、片区状聚集。将全球水资源压力指数与海外水利项目叠加在同一空间维度下观察，中东北非、南亚和中亚形成了一条清晰的高压力带。</p>
-          <ClientVisual image={illustrationRiver} alt="river basin illustration" variant="compact-visual" />
-        </SectionText>
+        <div className="map-copy-stack">
+          <SectionText kicker="图表说明">
+            <p><StrongMark>水资源承压严峻的国家大多沿干旱带呈条带、片区状聚集。</StrongMark>将全球水资源压力指数与海外水利项目叠加在同一空间维度下观察，中东北非、南亚和中亚形成了一条清晰的高压力带。</p>
+          </SectionText>
+          <ClientVisual image={clientPakistanProjectOne} alt="China Pakistan water cooperation project banner" variant="map-project-visual" />
+        </div>
       </section>
 
       <section className="chapter case-chapter" id="case">
