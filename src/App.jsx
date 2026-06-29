@@ -19,9 +19,8 @@ import clientTurkana from './assets/client/turkana.jpg'
 import clientWaterQuality from './assets/client/water-quality.jpg'
 import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.png'
 import clientPakistanProjectTwo from './assets/client/china-pakistan-project-2.png'
+import shortageSeedling from './assets/client/shortage-seedling.jpg'
 import illustrationWaterDrop from './assets/client/illustration-water-drop.png'
-import illustrationRiver from './assets/client/illustration-river.png'
-import illustrationRecycle from './assets/client/illustration-recycle.png'
 import illustrationHelp from './assets/client/illustration-help.png'
 import illustrationCooperation from './assets/client/illustration-cooperation.png'
 import endingDujiangyan from './assets/ending/dujiangyan.webp'
@@ -1608,20 +1607,23 @@ export default function App() {
       <section className="chapter two-col reverse" id="people">
         <div className="chapter-bg" />
         <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><InsightChip>比例换成人数后，撒哈拉以南非洲的缺口会被放大。</InsightChip><UnservedChart /><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>资料来源：World Bank</SourceNote></div>
-        <SectionText kicker="图表说明">
-          <p><StrongMark>把覆盖率换算成人数后，缺口会变得更加具体。</StrongMark>部分地区即使覆盖率持续提升，仍会因人口规模、基础设施薄弱和地理分散，让未获基本饮水服务的人口高度集中。</p>
-          <ClientVisual image={illustrationRiver} alt="river and water access illustration" variant="compact-visual" />
-        </SectionText>
+        <div className="people-copy-stack">
+          <SectionText kicker="图表说明">
+            <p><StrongMark>把覆盖率换算成人数后，缺口会变得更加具体。</StrongMark>部分地区即使覆盖率持续提升，仍会因人口规模、基础设施薄弱和地理分散，让未获基本饮水服务的人口高度集中。</p>
+          </SectionText>
+          <ClientVisual image={shortageSeedling} alt="干裂土地中新生幼苗的缺水场景" variant="people-shortage-visual" />
+        </div>
       </section>
 
       <section className="chapter two-col" id="trend">
         <div className="chapter-bg" />
-        <SectionText kicker="图表说明">
-          <p>同样是深陷水资源高压困境，缺水的内在成因却截然不同：<StrongMark>一部分地区受制于先天自然条件，属于原生性资源禀赋匮乏；另一部分区域则因水体环境遭到破坏，由后天污染造成可用水源短缺。</StrongMark>从区域数据走势可以清晰看到，中东北非地区的水资源压力始终居高不下，干旱的先天底色叠加人口增长与产业发展的需求，让每一滴水都维系着当地民众基本生存与社会运转。放眼全球，南亚、中亚等连片干旱区域，也长期深陷资源性缺水的桎梏，而不少工业化区域，则更多面临水质污染导致的可用水量缩减难题。</p>
-          <p className="art-copy"><StrongMark>以水为媒，人类正共同探寻“命运与共”的深层内涵。在水资源可持续管理领域，没有哪一方能独善其身，我们共享同一片流域、相连着共同命运，更从各自的实践中生长出可供彼此借鉴的智慧。</StrongMark></p>
-          <ClientVisual image={illustrationRecycle} alt="water cycle illustration" variant="compact-visual" />
-        </SectionText>
+        <div className="trend-copy-stack">
+          <SectionText kicker="图表说明">
+            <p>同样是深陷水资源高压困境，缺水的内在成因却截然不同：<StrongMark>一部分地区受制于先天自然条件，属于原生性资源禀赋匮乏；另一部分区域则因水体环境遭到破坏，由后天污染造成可用水源短缺。</StrongMark>从区域数据走势可以清晰看到，中东北非地区的水资源压力始终居高不下，干旱的先天底色叠加人口增长与产业发展的需求，让每一滴水都维系着当地民众基本生存与社会运转。放眼全球，南亚、中亚等连片干旱区域，也长期深陷资源性缺水的桎梏，而不少工业化区域，则更多面临水质污染导致的可用水量缩减难题。</p>
+          </SectionText>
+        </div>
         <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014—2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
+        <p className="trend-art-copy">以水为媒，人类正共同探寻“命运与共”的深层内涵。在水资源可持续管理领域，没有哪一方能独善其身，我们共享同一片流域、相连着共同命运，更从各自的实践中生长出可供彼此借鉴的智慧。</p>
       </section>
 
       <section className="chapter concept" id="concept">

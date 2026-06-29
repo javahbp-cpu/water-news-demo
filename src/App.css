@@ -2533,6 +2533,90 @@ main::before {
   object-fit: cover;
 }
 
+#trend {
+  align-items: start;
+}
+
+#trend > .glass-card {
+  align-self: start;
+}
+
+.trend-copy-stack {
+  display: grid;
+  align-content: start;
+  align-self: start;
+  gap: 24px;
+  width: 100%;
+}
+
+.trend-copy-stack .section-text.no-title {
+  width: 100%;
+  transform: none;
+}
+
+#trend .section-text.no-title p,
+#trend .section-text.no-title .story-copy p {
+  font-size: 22px;
+  line-height: 2.18;
+}
+
+#trend .section-text.no-title .text-mark {
+  color: inherit;
+  font-weight: inherit;
+}
+
+.trend-art-copy {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0 12px;
+  justify-self: center;
+  width: min(980px, 100%);
+  color: #063654;
+  font-family: "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", serif;
+  font-size: clamp(24px, 2.1vw, 32px);
+  font-weight: 950;
+  line-height: 1.68;
+  letter-spacing: 0;
+  text-align: center;
+  text-shadow: 0 10px 24px rgba(13, 103, 139, .16);
+  background: linear-gradient(180deg, #063654 0%, #087fa0 58%, #38aaa8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.people-copy-stack {
+  display: grid;
+  align-content: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.people-copy-stack .section-text.no-title {
+  width: 100%;
+  transform: none;
+}
+
+#people .section-text.no-title p,
+#people .section-text.no-title .story-copy p {
+  font-size: 20px;
+  line-height: 2.12;
+}
+
+.client-visual.people-shortage-visual {
+  width: 100%;
+  aspect-ratio: 1.5 / 1;
+  margin: 0;
+  border-radius: 22px;
+  background: rgba(255,255,255,.7);
+}
+
+.client-visual.people-shortage-visual img {
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
+}
+
 .turkana-case-card {
   width: 100%;
 }
@@ -2621,14 +2705,6 @@ main::before {
   object-fit: cover;
 }
 
-.art-copy {
-  padding: 18px 20px;
-  border: 1px solid rgba(5, 74, 106, .14);
-  border-radius: 24px;
-  background: rgba(255,255,255,.52);
-  text-align: center;
-}
-
 .finale-art-word {
   display: block;
   margin-bottom: 8px;
@@ -2673,6 +2749,23 @@ main::before {
   .coverage-copy {
     font-size: 18px !important;
     line-height: 2 !important;
+  }
+  #people .section-text.no-title p,
+  #people .section-text.no-title .story-copy p {
+    font-size: 18px;
+    line-height: 2;
+  }
+  #trend .section-text.no-title p,
+  #trend .section-text.no-title .story-copy p {
+    font-size: 19px;
+    line-height: 2.02;
+  }
+  .trend-art-copy {
+    grid-column: auto;
+    width: 100%;
+    padding: 0;
+    font-size: 22px;
+    line-height: 1.6;
   }
   .kpi.with-accent {
     padding-right: 22px;
