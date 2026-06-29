@@ -23,6 +23,7 @@ import shipIllustration from './assets/client/ship-illustration.png'
 import fishIllustration from './assets/client/fish-illustration.png'
 import houseIllustration from './assets/client/house-illustration.png'
 import windIllustration from './assets/client/wind-illustration.png'
+import oceanAnimalsIllustration from './assets/client/ocean-animals-illustration.png'
 import shortageSeedling from './assets/client/shortage-seedling.jpg'
 import illustrationWaterDrop from './assets/client/illustration-water-drop.png'
 import illustrationHelp from './assets/client/illustration-help.png'
@@ -1703,6 +1704,7 @@ export default function App() {
       <section className="chapter two-col wisdom-chapter" id="wisdom">
         <div className="chapter-bg" />
         <div className="wisdom-copy-stack">
+          <img className="wisdom-sea-art reveal" src={oceanAnimalsIllustration} alt="" loading="lazy" decoding="async" />
           <SectionText kicker="图表说明">
             <p><StrongMark>2015至2024年间，</StrongMark>中巴水利合作项目数量逐年稳步增长，同步带动巴基斯坦全国灌溉保证率持续提升，有效缓解了当地水资源承压困境。这些成效数据既是中国治水方案海外落地的有力实证，也完整诠释了南南水资源合作的实践价值，标志着中外水合作从基础技术援建，逐步升级为长效规则对话的理念交融，为全球缺水地区的水资源治理打造了成熟可行的合作范本。</p>
           </SectionText>

@@ -1254,11 +1254,21 @@ main::before {
 .wisdom-copy-stack {
   display: grid;
   align-content: start;
-  gap: 22px;
+  gap: 16px;
 }
 
 .wisdom-copy-stack .section-text.no-title {
-  transform: translateY(-34px);
+  transform: none;
+}
+
+.wisdom-sea-art {
+  display: block;
+  width: 100%;
+  height: clamp(210px, 21vw, 290px);
+  object-fit: cover;
+  object-position: center 61%;
+  filter: drop-shadow(0 18px 34px rgba(23, 103, 137, .12));
+  pointer-events: none;
 }
 
 #wisdom .section-text.no-title p,
@@ -1268,7 +1278,7 @@ main::before {
 }
 
 .wisdom-photo-visual {
-  margin-top: -22px;
+  margin-top: 0;
   min-height: 250px;
 }
 
@@ -2927,6 +2937,9 @@ main::before {
   #wisdom .section-text.no-title .story-copy p {
     font-size: 18px;
     line-height: 2;
+  }
+  .wisdom-sea-art {
+    height: 180px;
   }
   .wisdom-photo-visual {
     margin-top: 0;
