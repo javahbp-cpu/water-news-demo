@@ -1637,7 +1637,7 @@ export default function App() {
       <section className="chapter china-chapter" id="china">
         <div className="chapter-bg" />
         <div className="china-heading reveal">
-          <p><StrongMark>依托逐年稳步增加的农村供水资金投入，我国农村自来水普及率持续稳步攀升：</StrongMark>前期依托工程建设实现覆盖率快速提升，后期增长趋于平缓，治理重心转向规模化供水长效运维与水质安全保障，逐步将亿万农村群众纳入标准化现代供水体系，基本解决了乡村取水难、水质差的旧况。</p>
+          <p><StrongMark>依托逐年稳步增加的农村供水资金投入，我国农村自来水普及率持续稳步攀升：</StrongMark>前期依托工程建设实现覆盖率快速提升，后期增长趋于平缓，治理重心转向规模化供水长效运维与水质安全保障，逐步将亿万农村群众纳入标准化现代供水体系，<span className="china-deep-copy">基本解决了乡村取水难、水质差的旧况。</span></p>
           <p>然而，中国治水方案的优势远不止搭建供水体系。随着农村规模化供水全面落地，水环境与水质污染治理的新挑战接踵而至。精准的政策引导，直接推动了水环境质量实现系统性提升。一升一降两组数据，清晰勾勒出近九年来我国地表水水质持续改善的轨迹：<StrongMark>九年间，全国地表水优良断面占比由67.8%升至90.4%，劣V类水体占比从8.6%锐减至0.6%，标志着我国污染水体已基本消除。</StrongMark></p>
           <ClientVisual image={clientWaterQuality} alt="surface water quality improvement" variant="china-quality-visual" />
         </div>

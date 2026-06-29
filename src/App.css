@@ -2683,13 +2683,25 @@ main::before {
 
 .china-heading {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
   gap: 24px;
   align-items: start;
 }
 
 .china-heading p {
   grid-column: 1;
+  color: rgba(8, 48, 68, .56);
+}
+
+.china-heading .text-mark {
+  color: inherit;
+  font-weight: inherit;
+}
+
+.china-deep-copy {
+  color: #063654;
+  font-weight: 950;
 }
 
 .china-quality-visual {
@@ -2697,6 +2709,8 @@ main::before {
   grid-row: 1 / span 2;
   margin: 0;
   align-self: stretch;
+  justify-self: end;
+  width: 100%;
   min-height: 420px;
 }
 
