@@ -19,6 +19,9 @@ import clientTurkana from './assets/client/turkana.jpg'
 import clientWaterQuality from './assets/client/water-quality.jpg'
 import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.png'
 import clientPakistanProjectTwo from './assets/client/china-pakistan-project-2.png'
+import mapFlowIllustration from './assets/client/map-flow-illustration.png'
+import bottledWaterIllustration from './assets/client/bottled-water-illustration.png'
+import waterRecycleIllustration from './assets/client/water-recycle-illustration.png'
 import shipIllustration from './assets/client/ship-illustration.png'
 import fishIllustration from './assets/client/fish-illustration.png'
 import houseIllustration from './assets/client/house-illustration.png'
@@ -1046,7 +1049,6 @@ function DebateDashboard() {
           <figcaption>来源：中国新闻网</figcaption>
         </figure>
         <div className="debate-text-panel">
-          <span>反思与整改</span>
           <strong>从宏观改善到微观感知</strong>
           <p>大江大河水质改善之后，治理继续回到群众身边的小微水体、县乡黑臭水体、园区污染整治和地方执行能力。新闻稿截图作为材料出处，补足这部分“发现问题、公开通报、持续整改”的现实证据。</p>
         </div>
@@ -1865,7 +1867,7 @@ export default function App() {
           <WorldPressureMap />
           <SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote>
         </div>
-        <SectionText kicker="01 / GLOBAL CRISIS" title="全球水困局：共同的危机与交汇的挑战">
+        <SectionText kicker="01 / GLOBAL CRISIS" title="全球水困局：共同危机与交汇的挑战">
           <p><StrongMark>地球表面的颜色不仅是风景，更是人类生存状态的映射。</StrongMark><br />在南亚的部分农田，土壤正在经历不可逆的板结；在北非的村庄，居民每天为获取基本生活用水要跋涉数十公里。数据显示，全球有近7亿人口生活在极度缺水的阴影之下，且这一数字在部分年份甚至呈现16%的波动增长趋势。</p>
           <p>如果我们将视角从宏观的全球气泡图下沉至微观社区便能发现，水资源短缺并非均质分布的自然物理问题，而是分布高度集中的社会痛点。水资源承压严峻的国家大多沿干旱带呈条带、片区状聚集，足以说明，在特定地理区间内，缺水危机早已根植于当地的生存环境之中。</p>
         </SectionText>
@@ -1897,6 +1899,7 @@ export default function App() {
         <div className="chapter-bg" />
         <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>资料来源：World Bank、CIDCA</SourceNote></div>
         <div className="map-copy-stack">
+          <ClientVisual image={mapFlowIllustration} alt="mountain river flow illustration" variant="map-illustration-visual" />
           <SectionText kicker="图表说明">
             <p><StrongMark>水资源承压严峻的国家大多沿干旱带呈条带、片区状聚集。</StrongMark>将全球水资源压力指数与海外水利项目叠加在同一空间维度下观察，中东北非、南亚和中亚形成了一条清晰的高压力带。</p>
           </SectionText>
@@ -1911,9 +1914,15 @@ export default function App() {
 
       <section className="chapter two-col" id="coverage">
         <div className="chapter-bg" />
+        <div className="coverage-copy-stack">
+          <div className="coverage-illustrations">
+            <ClientVisual image={bottledWaterIllustration} alt="three bottled water illustrations" variant="coverage-bottle-visual" />
+            <ClientVisual image={waterRecycleIllustration} alt="water recycling illustration" variant="coverage-recycle-visual" />
+          </div>
         <SectionText kicker="图表说明">
           <p className="coverage-copy"><StrongMark>进一步的数据分析清晰表明：</StrongMark><br />虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。伴随着整体覆盖率不断向 100% 靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题。</p>
         </SectionText>
+        </div>
         <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><InsightChip>全球覆盖率接近 91.45%，但脆弱地区仍明显落后。</InsightChip><CoverageSwitcher /><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>资料来源：World Bank</SourceNote></div>
       </section>
 
@@ -1960,7 +1969,7 @@ export default function App() {
       <section className="chapter two-col reverse debate-chapter" id="debate">
         <div className="chapter-bg" />
         <div className="glass-card reveal debate-card">
-          <div className="card-head"><span>反思与整改</span><b>ITERATION</b></div>
+          <div className="card-head debate-card-head"><b>ITERATION</b></div>
           <DebateDashboard />
         </div>
         <SectionText kicker="03 / ITERATION" title="中国之治：在反思中精进的治理智慧">
