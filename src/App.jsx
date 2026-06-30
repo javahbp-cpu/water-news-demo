@@ -126,18 +126,157 @@ function AnimatedNumber({ value, decimals = 0, suffix = '', prefix = '' }) {
   )
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function playChartOnEnter(root, play) {
+  let played = false
+  const playOnce = (immediate = false) => {
+    if (played) return
+    played = true
+    play(immediate)
+  }
+
+  if (prefersReducedMotion()) {
+    playOnce(true)
+    return () => {}
+  }
+
+  const isReady = () => {
+    const rect = root.getBoundingClientRect()
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight
+    return rect.top < viewportHeight * 0.76 && rect.bottom > viewportHeight * 0.18
+  }
+
+  let frame = 0
+  const tick = () => {
+    if (played) return
+    if (isReady()) {
+      observer.disconnect()
+      playOnce()
+      return
+    }
+    frame = requestAnimationFrame(tick)
+  }
+
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting && isReady()) {
+      observer.disconnect()
+      playOnce()
+    }
+  }, {
+    threshold: 0.22,
+    rootMargin: '0px 0px -16% 0px'
+  })
+  observer.observe(root)
+  frame = requestAnimationFrame(tick)
+
+  return () => {
+    cancelAnimationFrame(frame)
+    observer.disconnect()
+  }
+}
+
+function chartSeriesList(series) {
+  if (!series) return []
+  return Array.isArray(series) ? series : [series]
+}
+
+function chartAxisList(axis) {
+  if (!axis) return []
+  return Array.isArray(axis) ? axis : [axis]
+}
+
+function chartValueAxis(option, series) {
+  const xAxis = chartAxisList(option.xAxis)[series.xAxisIndex || 0]
+  const yAxis = chartAxisList(option.yAxis)[series.yAxisIndex || 0]
+  if (series.type === 'bar' && (xAxis?.type === 'value' || xAxis?.type === 'log')) return xAxis
+  return yAxis
+}
+
+function chartBaseline(option, series) {
+  const axis = chartValueAxis(option, series)
+  if (typeof axis?.min === 'number') return axis.min
+  if (axis?.type === 'log') return 1
+  return 0
+}
+
+function chartBaselineData(option, series) {
+  if (!Array.isArray(series.data)) return series.data
+  const baseline = chartBaseline(option, series)
+
+  return series.data.map((item) => {
+    if (item == null) return item
+    if (typeof item === 'number') return baseline
+    if (Array.isArray(item)) return item.map((value) => (typeof value === 'number' ? baseline : value))
+    if (typeof item === 'object') {
+      if (typeof item.value === 'number') return { ...item, value: baseline }
+      if (Array.isArray(item.value)) {
+        return { ...item, value: item.value.map((value) => (typeof value === 'number' ? baseline : value)) }
+      }
+    }
+    return item
+  })
+}
+
+function prepareChartGrowthOption(option, active, animate = active) {
+  const seriesList = chartSeriesList(option.series)
+  if (!seriesList.length) return { ...option, animation: animate }
+
+  const nextSeries = seriesList.map((series, seriesIndex) => ({
+    ...series,
+    data: active ? series.data : (series.type === 'line' ? [] : chartBaselineData(option, series)),
+    clip: true,
+    animation: animate,
+    animationDuration: animate ? (series.animationDuration ?? (series.type === 'line' ? 1500 : 1100)) : 0,
+    animationDurationUpdate: animate ? (series.animationDurationUpdate ?? 850) : 0,
+    animationEasing: series.animationEasing || 'cubicOut',
+    animationDelay: series.type === 'line' ? seriesIndex * 140 : (dataIndex) => dataIndex * 34 + seriesIndex * 110,
+    animationDelayUpdate: (dataIndex) => dataIndex * 18 + seriesIndex * 70
+  }))
+
+  return {
+    ...option,
+    animation: animate,
+    animationThreshold: 2400,
+    series: Array.isArray(option.series) ? nextSeries : nextSeries[0]
+  }
+}
+
+function chartHasLineSeries(option) {
+  return chartSeriesList(option.series).some((series) => series.type === 'line')
+}
+
 function useEChart(ref, optionFactory, deps = []) {
   useEffect(() => {
     if (!ref.current) return undefined
-    const chart = echarts.init(ref.current)
-    chart.setOption(optionFactory())
+    const root = ref.current
+    const reduceMotion = prefersReducedMotion()
+    let played = reduceMotion
+    const chart = echarts.init(root)
+    const getOption = (active, animate = active && !reduceMotion) => prepareChartGrowthOption(optionFactory(), active, animate)
+    const hasLineSeries = chartHasLineSeries(optionFactory())
+    const renderFinal = (animate) => {
+      played = true
+      chart.setOption(getOption(true, animate), true)
+    }
+    const cleanupGrowth = reduceMotion ? (() => {}) : playChartOnEnter(root, () => renderFinal(true))
+
+    if (reduceMotion) {
+      renderFinal(false)
+    } else if (!hasLineSeries) {
+      chart.setOption(getOption(false, false), true)
+    }
     const onResize = () => {
       chart.resize()
-      chart.setOption(optionFactory(), true)
+      if (played) chart.setOption(getOption(true, false), true)
+      else if (!hasLineSeries) chart.setOption(getOption(false, false), true)
     }
     window.addEventListener('resize', onResize)
     return () => {
       window.removeEventListener('resize', onResize)
+      cleanupGrowth()
       chart.dispose()
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -437,10 +576,14 @@ function WorldPressureMap() {
   useEffect(() => {
     if (!ref.current) return undefined
     const root = ref.current
+    let cleanupGrowth = null
+    let hasPlayed = prefersReducedMotion()
 
     const draw = () => {
+      cleanupGrowth?.()
       const width = root.clientWidth || 760
       const height = Math.max(420, Math.min(560, width * 0.58))
+      d3.select(root).selectAll('*').interrupt()
       d3.select(root).selectAll('*').remove()
 
       const svg = d3.select(root).append('svg').attr('viewBox', `0 0 ${width} ${height}`)
@@ -488,36 +631,54 @@ function WorldPressureMap() {
         .on('mouseleave', () => tip.style('opacity', 0))
         .on('click', (_, d) => setSelected(d))
 
-      points.append('circle')
+      const halos = points.append('circle')
         .attr('class', 'map-point-halo')
         .attr('r', 0)
         .attr('fill', (d) => color(d.value))
-        .transition()
-        .duration(900)
-        .delay((_, i) => i * 70)
-        .attr('r', (d) => radius(d.value) * 1.8)
 
-      points.append('circle')
+      const cores = points.append('circle')
         .attr('class', 'map-point-core')
         .attr('r', 0)
         .attr('fill', (d) => color(d.value))
-        .transition()
-        .duration(900)
-        .delay((_, i) => i * 70)
-        .attr('r', (d) => radius(d.value))
 
       const labels = new Set(['EGY', 'SAU', 'PAK', 'TKM'])
-      points.filter((d) => labels.has(d.code))
+      const pointLabels = points.filter((d) => labels.has(d.code))
         .append('text')
         .attr('class', 'map-point-label')
         .attr('x', (d) => radius(d.value) + 5)
         .attr('y', 4)
+        .attr('opacity', 0)
         .text((d) => d.name.replace(', Arab Rep.', ''))
+
+      const completeGrowth = () => {
+        halos.attr('r', (d) => radius(d.value) * 1.8)
+        cores.attr('r', (d) => radius(d.value))
+        pointLabels.attr('opacity', 1)
+      }
+
+      if (hasPlayed) {
+        completeGrowth()
+        return
+      }
+
+      cleanupGrowth = playChartOnEnter(root, (immediate) => {
+        hasPlayed = true
+        if (immediate) {
+          completeGrowth()
+          return
+        }
+        halos.transition().duration(900).delay((_, i) => i * 70).attr('r', (d) => radius(d.value) * 1.8)
+        cores.transition().duration(900).delay((_, i) => i * 70).attr('r', (d) => radius(d.value))
+        pointLabels.transition().duration(420).delay(820).attr('opacity', 1)
+      })
     }
 
     draw()
     window.addEventListener('resize', draw)
-    return () => window.removeEventListener('resize', draw)
+    return () => {
+      cleanupGrowth?.()
+      window.removeEventListener('resize', draw)
+    }
   }, [])
 
   return (
@@ -636,9 +797,13 @@ function StressScatter() {
   useEffect(() => {
     if (!ref.current) return undefined
     const root = ref.current
+    let cleanupGrowth = null
+    let hasPlayed = prefersReducedMotion()
     const draw = () => {
       const width = root.clientWidth || 720
       const height = 430
+      cleanupGrowth?.()
+      d3.select(root).selectAll('*').interrupt()
       d3.select(root).selectAll('*').remove()
       const margin = { top: 24, right: 28, bottom: 54, left: 64 }
       const innerW = width - margin.left - margin.right
@@ -658,7 +823,7 @@ function StressScatter() {
       g.append('text').attr('transform', 'rotate(-90)').attr('x', -innerH / 2).attr('y', -45).attr('text-anchor', 'middle').attr('fill', '#8faabc').attr('font-size', 12).text('水资源压力指数 %（log）')
 
       const tip = d3.select(root).append('div').attr('class', 'd3-tip')
-      g.selectAll('circle').data(data.stressScatter).join('circle')
+      const circles = g.selectAll('circle').data(data.stressScatter).join('circle')
         .attr('cx', (d) => x(d.freshwaterPerCapita))
         .attr('cy', (d) => y(d.stress))
         .attr('r', 0)
@@ -670,19 +835,42 @@ function StressScatter() {
           tip.style('opacity', 1).style('left', `${event.offsetX + 12}px`).style('top', `${event.offsetY - 12}px`).html(`<b>${d.name}</b><br/>压力：${d.stress}%<br/>人均淡水：${d.freshwaterPerCapita} m³<br/>人口：${d.population}M`)
         })
         .on('mouseleave', () => tip.style('opacity', 0))
-        .transition().duration(900).delay((_, i) => i * 18).attr('r', (d) => r(d.population))
 
       const labels = ['Egypt, Arab Rep.', 'Pakistan', 'India', 'Saudi Arabia']
-      g.selectAll('.point-label').data(data.stressScatter.filter((d) => labels.includes(d.name))).join('text')
+      const pointLabels = g.selectAll('.point-label').data(data.stressScatter.filter((d) => labels.includes(d.name))).join('text')
         .attr('x', (d) => x(d.freshwaterPerCapita) + r(d.population) + 4)
         .attr('y', (d) => y(d.stress) + 4)
         .attr('fill', '#ecfbff')
         .attr('font-size', 11)
+        .attr('opacity', 0)
         .text((d) => d.name.replace(', Arab Rep.', ''))
+
+      const completeGrowth = () => {
+        circles.attr('r', (d) => r(d.population))
+        pointLabels.attr('opacity', 1)
+      }
+
+      if (hasPlayed) {
+        completeGrowth()
+        return
+      }
+
+      cleanupGrowth = playChartOnEnter(root, (immediate) => {
+        hasPlayed = true
+        if (immediate) {
+          completeGrowth()
+          return
+        }
+        circles.transition().duration(900).delay((_, i) => i * 18).attr('r', (d) => r(d.population))
+        pointLabels.transition().duration(420).delay(760).attr('opacity', 1)
+      })
     }
     draw()
     window.addEventListener('resize', draw)
-    return () => window.removeEventListener('resize', draw)
+    return () => {
+      cleanupGrowth?.()
+      window.removeEventListener('resize', draw)
+    }
   }, [])
 
   return <div className="d3-scatter" ref={ref} role="img" aria-label="国家水资源压力、人均淡水资源与人口关系散点图" />
@@ -943,10 +1131,14 @@ function OverseasProjectMap() {
   useEffect(() => {
     if (!ref.current) return undefined
     const root = ref.current
+    let cleanupGrowth = null
+    let hasPlayed = prefersReducedMotion()
 
     const draw = () => {
+      cleanupGrowth?.()
       const width = root.clientWidth || 760
       const height = Math.max(380, Math.min(520, width * 0.56))
+      d3.select(root).selectAll('*').interrupt()
       d3.select(root).selectAll('*').remove()
       const svg = d3.select(root).append('svg').attr('viewBox', `0 0 ${width} ${height}`)
       const projection = d3.geoNaturalEarth1().fitExtent([[22, 34], [width - 22, height - 34]], worldGeo)
@@ -983,28 +1175,43 @@ function OverseasProjectMap() {
         .on('mouseleave', () => tip.style('opacity', 0))
         .on('click', (_, d) => setSelected(d))
 
-      points.append('circle')
+      const halos = points.append('circle')
         .attr('class', 'project-halo')
         .attr('fill', (d) => color(d.type))
         .attr('r', 0)
-        .transition()
-        .duration(900)
-        .delay((_, i) => i * 80)
-        .attr('r', (d) => radius(d.investment || 3) * 1.9)
 
-      points.append('circle')
+      const cores = points.append('circle')
         .attr('class', 'project-core')
         .attr('fill', (d) => color(d.type))
         .attr('r', 0)
-        .transition()
-        .duration(900)
-        .delay((_, i) => i * 80)
-        .attr('r', (d) => radius(d.investment || 3))
+
+      const completeGrowth = () => {
+        halos.attr('r', (d) => radius(d.investment || 3) * 1.9)
+        cores.attr('r', (d) => radius(d.investment || 3))
+      }
+
+      if (hasPlayed) {
+        completeGrowth()
+        return
+      }
+
+      cleanupGrowth = playChartOnEnter(root, (immediate) => {
+        hasPlayed = true
+        if (immediate) {
+          completeGrowth()
+          return
+        }
+        halos.transition().duration(900).delay((_, i) => i * 80).attr('r', (d) => radius(d.investment || 3) * 1.9)
+        cores.transition().duration(900).delay((_, i) => i * 80).attr('r', (d) => radius(d.investment || 3))
+      })
     }
 
     draw()
     window.addEventListener('resize', draw)
-    return () => window.removeEventListener('resize', draw)
+    return () => {
+      cleanupGrowth?.()
+      window.removeEventListener('resize', draw)
+    }
   }, [])
 
   return (
