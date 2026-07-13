@@ -42,7 +42,8 @@ import './App.css'
 gsap.registerPlugin(ScrollTrigger)
 echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer])
 
-const WaterResourceGlobe = lazy(() => import('./GlobeScene'))
+const loadWaterResourceGlobe = () => import('./GlobeScene')
+const WaterResourceGlobe = lazy(loadWaterResourceGlobe)
 const WaterOrb = lazy(() => import('./WaterOrb'))
 
 const finalePersonImages = Object.entries(import.meta.glob('./assets/ending/people/figure-*.png', { eager: true, import: 'default' }))
@@ -342,21 +343,43 @@ function ClientVisual({ image, alt, caption, variant = '' }) {
   )
 }
 
-function LazyWhenVisible({ children, fallback = null, rootMargin = '480px' }) {
+function runWhenIdle(callback, timeout = 900) {
+  if (typeof window === 'undefined') return () => {}
+  if ('requestIdleCallback' in window) {
+    const idleId = window.requestIdleCallback(callback, { timeout })
+    return () => window.cancelIdleCallback(idleId)
+  }
+  const timeoutId = window.setTimeout(callback, Math.min(timeout, 300))
+  return () => window.clearTimeout(timeoutId)
+}
+
+function LazyWhenVisible({ children, fallback = null, rootMargin = '480px', idle = false, idleTimeout = 900 }) {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     if (visible || !ref.current) return undefined
+    let cancelled = false
+    let cancelIdle = () => {}
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        setVisible(true)
         observer.disconnect()
+        const show = () => {
+          if (!cancelled) setVisible(true)
+        }
+        cancelIdle = idle ? runWhenIdle(show, idleTimeout) : (() => {
+          show()
+          return () => {}
+        })()
       }
     }, { rootMargin })
     observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [rootMargin, visible])
+    return () => {
+      cancelled = true
+      cancelIdle()
+      observer.disconnect()
+    }
+  }, [idle, idleTimeout, rootMargin, visible])
 
   return <div ref={ref}>{visible ? children : fallback}</div>
 }
@@ -590,10 +613,13 @@ function WorldPressureMap() {
       d3.select(root).selectAll('*').remove()
 
       const svg = d3.select(root).append('svg').attr('viewBox', `0 0 ${width} ${height}`)
-      const projection = d3.geoNaturalEarth1().fitExtent([[22, 34], [width - 22, height - 34]], worldGeo)
+      const projection = d3.geoNaturalEarth1()
+        .center([48, 29])
+        .scale(width * 0.82)
+        .translate([width * 0.49, height * 0.48])
       const path = d3.geoPath(projection)
       const graticule = d3.geoGraticule10()
-      const radius = d3.scaleSqrt().domain(d3.extent(pressurePoints, (d) => d.value)).range([7, 32])
+      const radius = d3.scaleSqrt().domain(d3.extent(pressurePoints, (d) => d.value)).range([6, 27])
       const color = d3.scaleSequentialLog(d3.interpolateOrRd).domain(d3.extent(pressurePoints, (d) => d.value))
 
       svg.append('path')
@@ -645,11 +671,28 @@ function WorldPressureMap() {
         .attr('fill', (d) => color(d.value))
 
       const labels = new Set(['EGY', 'SAU', 'PAK', 'TKM'])
+      const labelOffsets = {
+        EGY: { x: -12, y: -18, anchor: 'end' },
+        SAU: { x: -12, y: 22, anchor: 'end' },
+        TKM: { x: 12, y: -18, anchor: 'start' },
+        PAK: { x: 12, y: 22, anchor: 'start' }
+      }
+
+      points.filter((d) => labels.has(d.code))
+        .append('line')
+        .attr('class', 'map-point-leader')
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', (d) => labelOffsets[d.code].x)
+        .attr('y2', (d) => labelOffsets[d.code].y)
+
       const pointLabels = points.filter((d) => labels.has(d.code))
         .append('text')
         .attr('class', 'map-point-label')
-        .attr('x', (d) => radius(d.value) + 5)
-        .attr('y', 4)
+        .attr('x', (d) => labelOffsets[d.code].x)
+        .attr('y', (d) => labelOffsets[d.code].y)
+        .attr('dy', (d) => labelOffsets[d.code].y < 0 ? '-0.25em' : '0.9em')
+        .attr('text-anchor', (d) => labelOffsets[d.code].anchor)
         .attr('opacity', 0)
         .text((d) => d.name.replace(', Arab Rep.', ''))
 
@@ -1700,6 +1743,13 @@ export default function App() {
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth <= 720) return undefined
+    return runWhenIdle(() => {
+      loadWaterResourceGlobe().catch(() => {})
+    }, 2200)
+  }, [])
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth <= 720) return undefined
     const lenis = new Lenis({
       duration: 0.82,
       smoothWheel: true,
@@ -1778,8 +1828,23 @@ export default function App() {
           ease: 'power4.out'
         }, 'title')
         .fromTo('.hero-copy', { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.72 }, 'title+=0.36')
-      gsap.utils.toArray('.reveal').forEach((el) => {
-        gsap.fromTo(el, { y: 54, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 78%', once: true } })
+      const revealItems = gsap.utils.toArray('.reveal')
+      gsap.set(revealItems, { y: 54, opacity: 0 })
+      ScrollTrigger.batch(revealItems, {
+        start: 'top 78%',
+        once: true,
+        batchMax: 6,
+        interval: 0.08,
+        onEnter: (batch) => {
+          gsap.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            stagger: 0.08,
+            ease: 'power3.out',
+            overwrite: 'auto'
+          })
+        }
       })
       gsap.utils.toArray('.turkana-case-card .scroll-copy').forEach((el, index) => {
         gsap.fromTo(el, { y: 34, opacity: 0 }, {
@@ -1897,7 +1962,7 @@ export default function App() {
 
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
-        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>资料来源：World Bank、CIDCA</SourceNote></div>
+        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />} rootMargin="1800px 0px" idle idleTimeout={1600}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>资料来源：World Bank、CIDCA</SourceNote></div>
         <div className="map-copy-stack">
           <ClientVisual image={mapFlowIllustration} alt="mountain river flow illustration" variant="map-illustration-visual" />
           <SectionText kicker="图表说明">

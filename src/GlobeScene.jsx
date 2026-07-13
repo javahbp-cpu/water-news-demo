@@ -138,9 +138,12 @@ export default function WaterResourceGlobe({ stressPoints, projects }) {
   const [focus, setFocus] = useState({ ...(stressPoints.find((item) => item.code === 'PAK') || stressPoints[0]), kind: 'stress' })
   const stageRef = useRef(null)
   const [active, setActive] = useState(false)
+  const [scrolling, setScrolling] = useState(false)
+  const scrollingRef = useRef(false)
   const topStress = useMemo(() => [...stressPoints].sort((a, b) => b.value - a.value).slice(0, 4), [stressPoints])
   const projectPreview = useMemo(() => projects.slice(0, 4), [projects])
   const focusName = focus.kind === 'project' ? focus.project : stressDisplayName(focus)
+  const renderActive = active && !scrolling
 
   useEffect(() => {
     const stage = stageRef.current
@@ -152,15 +155,42 @@ export default function WaterResourceGlobe({ stressPoints, projects }) {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    if (!active) {
+      setScrolling(false)
+      scrollingRef.current = false
+      return undefined
+    }
+
+    let settleTimer = 0
+    const onScroll = () => {
+      if (!scrollingRef.current) {
+        scrollingRef.current = true
+        setScrolling(true)
+      }
+      window.clearTimeout(settleTimer)
+      settleTimer = window.setTimeout(() => {
+        scrollingRef.current = false
+        setScrolling(false)
+      }, 140)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.clearTimeout(settleTimer)
+    }
+  }, [active])
+
   return (
     <div className="globe-3d-wrap">
       <div className="globe-3d-stage" ref={stageRef}>
         <Suspense fallback={<GlobeFallback />}>
           <Canvas
             camera={{ position: [0, 0, 360], fov: 42 }}
-            dpr={[1, 1.5]}
-            frameloop={active ? 'always' : 'demand'}
-            gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
+            dpr={[1, 1]}
+            frameloop={renderActive ? 'always' : 'demand'}
+            gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
           >
             <color attach="background" args={['transparent']} />
             <ambientLight intensity={1.35} />
@@ -172,7 +202,7 @@ export default function WaterResourceGlobe({ stressPoints, projects }) {
               enablePan={false}
               minPolarAngle={Math.PI / 2.5}
               maxPolarAngle={Math.PI / 1.55}
-              autoRotate={active}
+              autoRotate={renderActive}
               autoRotateSpeed={0.65}
             />
           </Canvas>

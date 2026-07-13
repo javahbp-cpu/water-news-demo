@@ -392,6 +392,12 @@ main { position: relative; overflow: hidden; }
   stroke: rgba(255,255,255,.72);
   stroke-width: 1.1;
 }
+.map-point-leader {
+  stroke: rgba(236,251,255,.72);
+  stroke-width: .9;
+  stroke-dasharray: 2 2;
+  pointer-events: none;
+}
 .map-point-label {
   fill: #ecfbff;
   font-size: 11px;
