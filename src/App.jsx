@@ -315,8 +315,43 @@ function ImagePanel({ image, eyebrow, title, caption, tone = 'blue' }) {
   )
 }
 
-function InsightChip({ children }) {
-  return <div className="insight-chip">{children}</div>
+function ChartAnnotation({ children }) {
+  return (
+    <div className="chart-annotation">
+      <span>图表注释</span>
+      <p>{children}</p>
+    </div>
+  )
+}
+
+function WaterStressMechanism() {
+  return (
+    <div className="water-stress-mechanism" aria-label="资源性缺水和水质性缺水成因机制图">
+      <div className="mechanism-heading">两类缺水成因</div>
+      <div className="mechanism-cause-grid">
+        <div className="mechanism-node resource">
+          <span>成因一 · 资源性缺水</span>
+          <strong>水量本身不足</strong>
+          <small>水资源分布不均、干旱或人均资源偏低；农业、人口与产业取水增加会进一步放大压力</small>
+        </div>
+        <div className="mechanism-node quality">
+          <span>成因二 · 水质性缺水</span>
+          <strong>有水但无法安全利用</strong>
+          <small>污染、富营养化或物理化学性质恶化，导致可用水量下降</small>
+        </div>
+      </div>
+      <div className="mechanism-arrow" aria-hidden="true">↓</div>
+      <div className="mechanism-result">
+        <strong>水资源压力升高</strong>
+        <span>淡水取水量 ÷ 可再生淡水资源总量</span>
+      </div>
+      <div className="mechanism-buffer">
+        <span>缓冲方式</span>
+        <strong>地下水超采 · 海水淡化 · 外部水源 · 虚拟水贸易</strong>
+        <small>可以维持供水，但不等于本地水资源压力消失</small>
+      </div>
+    </div>
+  )
 }
 
 function SourceNote({ children, links = [] }) {
@@ -595,6 +630,43 @@ const stressValueByCountry = new Map(
   pressurePoints.map((item) => [stressCountryAliases[item.name] || item.name, item.value])
 )
 
+const focusPressurePoints = pressurePoints.filter((point) => (
+  point.lon >= 20 && point.lon <= 94 && point.lat >= 2 && point.lat <= 52
+))
+
+const mapLabelNames = {
+  EGY: 'Egypt',
+  BHR: 'Bahrain',
+  TKM: 'Turkmenistan',
+  ARE: 'UAE',
+  SAU: 'Saudi Arabia',
+  LBY: 'Libya',
+  SDN: 'Sudan',
+  QAT: 'Qatar',
+  PAK: 'Pakistan',
+  UZB: 'Uzbekistan',
+  SYR: 'Syria',
+  YEM: 'Yemen',
+  AZE: 'Azerbaijan'
+}
+
+// Keep the geographic coordinates true, but offset crowded markers for legibility.
+const mapPointLayout = {
+  EGY: { offset: [-14, -14], label: [-8, -12], anchor: 'end' },
+  LBY: { offset: [-16, -8], label: [-8, -10], anchor: 'end' },
+  SDN: { offset: [-16, 16], label: [-8, 18], anchor: 'end' },
+  SYR: { offset: [-12, -14], label: [-8, -10], anchor: 'end' },
+  SAU: { offset: [-14, 18], label: [-8, 20], anchor: 'end' },
+  YEM: { offset: [18, 20], label: [10, 18], anchor: 'start' },
+  BHR: { offset: [30, -22], label: [9, -10], anchor: 'start' },
+  ARE: { offset: [28, -18], label: [9, -8], anchor: 'start' },
+  QAT: { offset: [44, -8], label: [9, -8], anchor: 'start' },
+  TKM: { offset: [16, -18], label: [9, -10], anchor: 'start' },
+  AZE: { offset: [18, -22], label: [9, -10], anchor: 'start' },
+  UZB: { offset: [32, 4], label: [9, 4], anchor: 'start' },
+  PAK: { offset: [22, 18], label: [9, 12], anchor: 'start' }
+}
+
 function WorldPressureMap() {
   const ref = useRef(null)
   const [selected, setSelected] = useState(pressurePoints.find((d) => d.code === 'PAK') || pressurePoints[0])
@@ -614,12 +686,12 @@ function WorldPressureMap() {
 
       const svg = d3.select(root).append('svg').attr('viewBox', `0 0 ${width} ${height}`)
       const projection = d3.geoNaturalEarth1()
-        .center([48, 29])
-        .scale(width * 0.82)
-        .translate([width * 0.49, height * 0.48])
+        .center([55, 28])
+        .scale(Math.min(width * 0.92, height * 1.18))
+        .translate([width * 0.5, height * 0.52])
       const path = d3.geoPath(projection)
       const graticule = d3.geoGraticule10()
-      const radius = d3.scaleSqrt().domain(d3.extent(pressurePoints, (d) => d.value)).range([6, 27])
+      const radius = d3.scaleSqrt().domain(d3.extent(focusPressurePoints, (d) => d.value)).range([5, 24])
       const color = d3.scaleSequentialLog(d3.interpolateOrRd).domain(d3.extent(pressurePoints, (d) => d.value))
 
       svg.append('path')
@@ -643,12 +715,13 @@ function WorldPressureMap() {
 
       const points = svg.append('g')
         .selectAll('g')
-        .data(pressurePoints)
+        .data(focusPressurePoints)
         .join('g')
         .attr('class', 'map-point')
         .attr('transform', (d) => {
           const [x, y] = projection([d.lon, d.lat])
-          return `translate(${x},${y})`
+          const [offsetX, offsetY] = mapPointLayout[d.code]?.offset || [0, 0]
+          return `translate(${x + offsetX},${y + offsetY})`
         })
         .on('mousemove', (event, d) => {
           tip
@@ -670,31 +743,24 @@ function WorldPressureMap() {
         .attr('r', 0)
         .attr('fill', (d) => color(d.value))
 
-      const labels = new Set(['EGY', 'SAU', 'PAK', 'TKM'])
-      const labelOffsets = {
-        EGY: { x: -12, y: -18, anchor: 'end' },
-        SAU: { x: -12, y: 22, anchor: 'end' },
-        TKM: { x: 12, y: -18, anchor: 'start' },
-        PAK: { x: 12, y: 22, anchor: 'start' }
-      }
-
-      points.filter((d) => labels.has(d.code))
+      points
         .append('line')
         .attr('class', 'map-point-leader')
-        .attr('x1', 0)
-        .attr('y1', 0)
-        .attr('x2', (d) => labelOffsets[d.code].x)
-        .attr('y2', (d) => labelOffsets[d.code].y)
+        .attr('x1', (d) => -(mapPointLayout[d.code]?.offset?.[0] || 0))
+        .attr('y1', (d) => -(mapPointLayout[d.code]?.offset?.[1] || 0))
+        .attr('x2', (d) => mapPointLayout[d.code]?.label?.[0] || 8)
+        .attr('y2', (d) => mapPointLayout[d.code]?.label?.[1] || 0)
+        .attr('opacity', (d) => mapPointLayout[d.code] ? 1 : 0)
 
-      const pointLabels = points.filter((d) => labels.has(d.code))
+      const pointLabels = points
         .append('text')
         .attr('class', 'map-point-label')
-        .attr('x', (d) => labelOffsets[d.code].x)
-        .attr('y', (d) => labelOffsets[d.code].y)
-        .attr('dy', (d) => labelOffsets[d.code].y < 0 ? '-0.25em' : '0.9em')
-        .attr('text-anchor', (d) => labelOffsets[d.code].anchor)
+        .attr('x', (d) => mapPointLayout[d.code]?.label?.[0] || 8)
+        .attr('y', (d) => mapPointLayout[d.code]?.label?.[1] || 0)
+        .attr('dy', (d) => (mapPointLayout[d.code]?.label?.[1] || 0) < 0 ? '-0.25em' : '0.9em')
+        .attr('text-anchor', (d) => mapPointLayout[d.code]?.anchor || 'start')
         .attr('opacity', 0)
-        .text((d) => d.name.replace(', Arab Rep.', ''))
+        .text((d) => mapLabelNames[d.code] || d.name.replace(', Arab Rep.', ''))
 
       const completeGrowth = () => {
         halos.attr('r', (d) => radius(d.value) * 1.8)
@@ -1123,19 +1189,19 @@ function ChinaActionDashboard() {
       </div>
       <div className="china-quality-panel">
         <div className="card-head"><span>全国地表水总体水质</span><b>2016—2025</b></div>
-        <InsightChip>Ⅰ—Ⅲ类断面占比从 67.8% 升至 90.2%，劣Ⅴ类下降到 0.4%（2025 为季度通报数据）。</InsightChip>
         <ChinaQualityChart />
+        <ChartAnnotation>Ⅰ—Ⅲ类断面占比从 67.8% 升至 90.2%，劣Ⅴ类下降到 0.4%；这组指标分别观察优良水体和严重污染水体的变化。</ChartAnnotation>
       </div>
         <div className="china-quality-panel">
           <div className="card-head"><span>农村自来水普及率与规模化供水</span><b>2015—2023</b></div>
-        <InsightChip>工程建设之后，稳定运行和水质保障变得更重要。</InsightChip>
         <RuralCoverageChart />
+        <ChartAnnotation>工程建设推动覆盖率提升后，治理重点会逐步转向稳定运行、水质保障和规模化供水的长期维护。</ChartAnnotation>
       </div>
       <div className="china-split">
         <div className="investment-panel">
           <div className="card-head"><span>农村供水投入</span><b>2018—2023</b></div>
-          <InsightChip>精准的政策蓝图，需要坚实的资金投入方能落地生根。</InsightChip>
           <InvestmentBarChart />
+          <ChartAnnotation>精准的政策蓝图，需要持续的资金投入才能落地；累计投入数据用于补充年度柱状图之外的长期规模。</ChartAnnotation>
           <div className="investment-stats">
             {chinaData.investments.filter((item) => item.type === 'cumulative').map((item) => (
               <article key={item.label}>
@@ -1927,9 +1993,11 @@ export default function App() {
       <section className="chapter two-col reverse shortage-section" id="shortage">
         <div className="chapter-bg" />
         <div className="glass-card reveal shortage-card">
-          <div className="card-head"><span>世界水资源短缺热力图</span><b>HOTSPOTS</b></div>
-          <InsightChip>深色国家与放大气泡代表更高水资源压力，帮助读者先看到“危机在哪里”。</InsightChip>
+          <div className="card-head"><span>中东—中亚—南亚水资源压力带</span><b>HOTSPOTS</b></div>
           <WorldPressureMap />
+          <ChartAnnotation>
+            水资源压力指数 = 淡水取水量 ÷ 可再生淡水资源总量 × 100%。例如埃及 7750% 约为 77.5 倍，巴林 3877.5% 约为 38.8 倍，表示取水压力远超本国可再生淡水供给。此类极端压力通常需要依赖地下水、海水淡化、外部水源或虚拟水贸易等方式维持供水；因此图表采用对数轴，同时容纳几十%、几百%与几千%的差异。
+          </ChartAnnotation>
           <SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote>
         </div>
         <SectionText kicker="01 / GLOBAL CRISIS" title="全球水困局：共同危机与交汇的挑战">
@@ -1940,7 +2008,7 @@ export default function App() {
 
       <section className="chapter two-col reverse" id="relation">
         <div className="chapter-bg" />
-        <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>代表国家</b></div><InsightChip>人口规模会改变压力的含义：高压力小国和人口大国不是同一种问题。</InsightChip><StressScatter /><SourceNote links={[{ label: 'World Bank · 人均淡水资源', url: sourceLinks.freshwater }]}>资料来源：World Bank</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>压力 × 人均淡水 × 人口</span><b>代表国家</b></div><StressScatter /><ChartAnnotation>横轴表示人均可再生淡水资源，纵轴表示水资源压力，气泡大小代表人口。高压力不一定等于缺水人口最多：小国可能压力极高，大国则可能因人口规模产生更大的供水缺口。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 人均淡水资源', url: sourceLinks.freshwater }]}>资料来源：World Bank</SourceNote></div>
         <div className="relation-copy-stack">
           <ClientVisual image={illustrationHelp} alt="earth help illustration" variant="relation-visual" />
           <SectionText kicker="图表说明">
@@ -1957,12 +2025,12 @@ export default function App() {
           </SectionText>
           <ClientVisual image={clientWaterPressure} alt="water pressure reference" variant="stress-pressure-visual" />
         </div>
-        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><InsightChip>极端值远高于普通国家，图表采用对数轴展示。</InsightChip><StressRanking /><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><StressRanking /><ChartAnnotation>水资源压力指数 = 淡水取水量 ÷ 可再生淡水资源总量 × 100%。埃及 7750% 约为 77.5 倍，巴林 3877.5% 约为 38.8 倍，远高于普通国家几十%或 100% 左右的水平，通常意味着当地需要依赖地下水超采、海水淡化、外部水源或虚拟水贸易维持供水。对数轴用于避免极端值把普通国家全部压缩在一起。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
       </section>
 
       <section className="chapter two-col reverse map-chapter" id="map">
         <div className="chapter-bg" />
-        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><InsightChip>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目。</InsightChip><LazyWhenVisible fallback={<ThreeFallback />} rootMargin="1800px 0px" idle idleTimeout={1600}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>资料来源：World Bank、CIDCA</SourceNote></div>
+        <div className="glass-card reveal map-card"><div className="card-head"><span>全球高水压与海外水利项目</span><b>3D GLOBE</b></div><LazyWhenVisible fallback={<ThreeFallback />} rootMargin="1800px 0px" idle idleTimeout={1600}><Suspense fallback={<ThreeFallback />}><WaterResourceGlobe stressPoints={pressurePoints} projects={overseasProjects} /></Suspense></LazyWhenVisible><ChartAnnotation>橙色点位表示高水资源压力国家，绿色点位和弧线表示中国海外水利项目；叠加观察可以看到，中东北非、南亚和中亚形成了连续的高压力带。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }, { label: 'CIDCA', url: sourceLinks.cidca }]}>资料来源：World Bank、CIDCA</SourceNote></div>
         <div className="map-copy-stack">
           <ClientVisual image={mapFlowIllustration} alt="mountain river flow illustration" variant="map-illustration-visual" />
           <SectionText kicker="图表说明">
@@ -1988,12 +2056,12 @@ export default function App() {
           <p className="coverage-copy"><StrongMark>进一步的数据分析清晰表明：</StrongMark><br />虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。伴随着整体覆盖率不断向 100% 靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题。</p>
         </SectionText>
         </div>
-        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><InsightChip>全球覆盖率接近 91.45%，但脆弱地区仍明显落后。</InsightChip><CoverageSwitcher /><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>资料来源：World Bank</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><CoverageSwitcher /><ChartAnnotation>覆盖率反映比例，缺口人口反映规模；同一地区即使覆盖率较高，只要人口基数足够大，仍可能存在数量庞大的未覆盖人口。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>资料来源：World Bank</SourceNote></div>
       </section>
 
       <section className="chapter two-col reverse" id="people">
         <div className="chapter-bg" />
-        <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><InsightChip>比例换成人数后，撒哈拉以南非洲的缺口会被放大。</InsightChip><UnservedChart /><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>资料来源：World Bank</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><UnservedChart /><ChartAnnotation>把覆盖率缺口换算成人数后，人口规模和基础设施分散程度的影响会更加直观；因此比例较小的地区，也可能对应较大的实际人口缺口。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>资料来源：World Bank</SourceNote></div>
         <div className="people-copy-stack">
           <SectionText kicker="图表说明">
             <p><StrongMark>把覆盖率换算成人数后，缺口会变得更加具体。</StrongMark>部分地区即使覆盖率持续提升，仍会因人口规模、基础设施薄弱和地理分散，让未获基本饮水服务的人口高度集中。</p>
@@ -2009,7 +2077,7 @@ export default function App() {
             <p>同样是深陷水资源高压困境，缺水的内在成因却截然不同：<StrongMark>一部分地区受制于先天自然条件，属于原生性资源禀赋匮乏；另一部分区域则因水体环境遭到破坏，由后天污染造成可用水源短缺。</StrongMark>从区域数据走势可以清晰看到，中东北非地区的水资源压力始终居高不下，干旱的先天底色叠加人口增长与产业发展的需求，让每一滴水都维系着当地民众基本生存与社会运转。放眼全球，南亚、中亚等连片干旱区域，也长期深陷资源性缺水的桎梏，而不少工业化区域，则更多面临水质污染导致的可用水量缩减难题。</p>
           </SectionText>
         </div>
-        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势</span><b>2014—2021</b></div><InsightChip>中东北非曲线长期处在最高位，2021 年达到 167.14%。</InsightChip><RegionTrendChart /><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
+        <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势：压力结果</span><b>2014—2021</b></div><RegionTrendChart /><WaterStressMechanism /><ChartAnnotation>折线图展示的是各区域水资源压力的结果和变化趋势，不能单独证明某一种成因。缺水成因可分为资源性缺水（水量本身不足）和水质性缺水（有水但无法安全利用）；中东北非曲线长期处在最高位，2021 年达到 167.14%，通常与自然供给不足、农业和人口用水增加，以及污染和气候变化对可用水量的压缩共同相关。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
         <p className="trend-art-copy">以水为媒，人类正共同探寻“命运与共”的深层内涵。在水资源可持续管理领域，没有哪一方能独善其身，我们共享同一片流域、相连着共同命运，更从各自的实践中生长出可供彼此借鉴的智慧。</p>
       </section>
 
@@ -2064,8 +2132,8 @@ export default function App() {
         </SectionText>
         <div className="glass-card reveal overseas-card">
           <div className="card-head"><span>中国海外水利项目</span><b>2006—2024</b></div>
-          <InsightChip>15 个项目覆盖 12 个国家，项目类型从水电站扩展到供水、水坝、灌溉和水利信息化。</InsightChip>
           <OverseasPortfolio />
+          <ChartAnnotation>15 个项目覆盖 12 个国家，项目类型从水电站扩展到供水、水坝、灌溉和水利信息化；点位数量体现空间分布，投资额仅统计已披露项目。</ChartAnnotation>
         </div>
       </section>
 
@@ -2109,8 +2177,8 @@ export default function App() {
         </div>
         <div className="glass-card reveal bri-card">
           <div className="card-head"><span>一带一路沿线水利合作</span><b>ROUTE</b></div>
-          <InsightChip>发光线连接中国与合作国家，年份柱用于增强历史纵深感。</InsightChip>
           <BeltRoadTimelineMap />
+          <ChartAnnotation>发光线连接中国与合作国家，年份柱用于增强历史纵深感；路线图强调合作网络和时间顺序，不代表地理距离或投资规模。</ChartAnnotation>
           <SourceNote links={[{ label: 'CIDCA', url: sourceLinks.cidca }, { label: '水利部国际合作', url: sourceLinks.mwrInternational }]}>资料来源：CIDCA、水利部国际合作公开资料</SourceNote>
         </div>
       </section>
