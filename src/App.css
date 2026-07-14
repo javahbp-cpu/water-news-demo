@@ -704,6 +704,9 @@ main { position: relative; overflow: hidden; }
   .chapter-nav { display: none; }
   .topline { flex-direction: column; font-size: 10px; }
   .hero-kpis, .two-col, .two-col.reverse, .concept { grid-template-columns: 1fr; }
+  .shortage-section { align-items: start; }
+  .shortage-section .shortage-card,
+  .shortage-copy-stack { height: auto; }
   .chapter { min-height: auto; padding: 84px 0; }
   .chart-tall { height: 460px; }
   .concept-card { min-height: 480px; }
@@ -2225,6 +2228,17 @@ main::before {
 
 .shortage-section {
   width: min(1240px, calc(100% - 40px));
+  align-items: stretch;
+}
+
+.shortage-section .shortage-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.shortage-section .shortage-card .source-note {
+  margin-top: auto;
 }
 
 #shortage .section-text h2 {
@@ -2238,11 +2252,11 @@ main::before {
 
 .shortage-copy-stack {
   display: grid;
-  align-self: start;
+  align-self: stretch;
   align-content: start;
   gap: 22px;
   width: 100%;
-  transform: translateY(-16px);
+  height: 100%;
 }
 
 .client-visual.drought-cracked-land-visual {
