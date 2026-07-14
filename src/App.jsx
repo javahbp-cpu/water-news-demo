@@ -2021,7 +2021,7 @@ export default function App() {
         <div className="chapter-bg" />
         <div className="stress-copy-stack">
           <SectionText kicker="图表说明">
-            <p>水资源压力以淡水提取量占可再生淡水资源总量的比例衡量。<br />埃及、巴林等国家数值远高于其他国家，因此图表采用对数轴展示，让极端压力和一般压力能够在同一画面中比较。</p>
+            <p>从 2022 年国家水资源压力排名能够清晰看见巨大分化，埃及、巴林、阿联酋等诸多国家淡水取用量显著超出本土可再生淡水资源上限，水资源供需缺口极为尖锐。</p>
           </SectionText>
           <ClientVisual image={clientWaterPressure} alt="water pressure reference" variant="stress-pressure-visual" />
         </div>
