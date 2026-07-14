@@ -15,6 +15,7 @@ import forestWaterfall from './assets/forest-waterfall.webp'
 import chinaNewsEcologyOne from './assets/china-news-ecology-1.png'
 import chinaNewsEcologyTwo from './assets/china-news-ecology-2.png'
 import clientWaterPressure from './assets/client/water-pressure.jpg'
+import droughtCrackedLand from './assets/client/drought-cracked-land.webp'
 import clientTurkana from './assets/client/turkana.jpg'
 import clientWaterQuality from './assets/client/water-quality.jpg'
 import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.png'
@@ -2000,10 +2001,13 @@ export default function App() {
           </ChartAnnotation>
           <SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote>
         </div>
-        <SectionText kicker="01 / GLOBAL CRISIS" title="全球水困局：共同危机与交汇的挑战">
-          <p><StrongMark>地球表面的颜色不仅是风景，更是人类生存状态的映射。</StrongMark><br />在南亚的部分农田，土壤正在经历不可逆的板结；在北非的村庄，居民每天为获取基本生活用水要跋涉数十公里。数据显示，全球有近7亿人口生活在极度缺水的阴影之下，且这一数字在部分年份甚至呈现16%的波动增长趋势。</p>
-          <p>如果我们将视角从宏观的全球气泡图下沉至微观社区便能发现，水资源短缺并非均质分布的自然物理问题，而是分布高度集中的社会痛点。不同地区的缺水成因并不相同：有的受自然水资源禀赋限制，有的则因污染导致可用水量下降，人口、农业和产业用水还会进一步放大压力。</p>
-        </SectionText>
+        <div className="shortage-copy-stack">
+          <SectionText kicker="01 / GLOBAL CRISIS" title="全球水困局：共同危机与交汇的挑战">
+            <p><StrongMark>地球表面的颜色不仅是风景，更是人类生存状态的映射。</StrongMark><br />在南亚的部分农田，土壤正在经历不可逆的板结；在北非的村庄，居民每天为获取基本生活用水要跋涉数十公里。数据显示，全球有近7亿人口生活在极度缺水的阴影之下，且这一数字在部分年份甚至呈现16%的波动增长趋势。</p>
+            <p>如果我们将视角从宏观的全球气泡图下沉至微观社区便能发现，水资源短缺并非均质分布的自然物理问题，而是分布高度集中的社会痛点。不同地区的缺水成因并不相同：有的受自然水资源禀赋限制，有的则因污染导致可用水量下降，人口、农业和产业用水还会进一步放大压力。</p>
+          </SectionText>
+          <ClientVisual image={droughtCrackedLand} alt="持续干旱导致大面积土地龟裂的典型景观" caption="图片来源：Dreamstime 商业图库" variant="drought-cracked-land-visual" />
+        </div>
       </section>
 
       <section className="chapter two-col reverse" id="relation">

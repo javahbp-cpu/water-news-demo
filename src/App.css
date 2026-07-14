@@ -2236,6 +2236,41 @@ main::before {
   margin-top: 14px;
 }
 
+.shortage-copy-stack {
+  display: grid;
+  align-self: start;
+  align-content: start;
+  gap: 22px;
+  width: 100%;
+  transform: translateY(-16px);
+}
+
+.client-visual.drought-cracked-land-visual {
+  width: 100%;
+  aspect-ratio: auto;
+  margin: 0;
+  border-radius: 22px;
+  background: rgba(255,255,255,.72);
+}
+
+.client-visual.drought-cracked-land-visual img {
+  height: auto;
+  aspect-ratio: 1.55 / 1;
+  object-fit: cover;
+  object-position: 50% 52%;
+}
+
+.client-visual.drought-cracked-land-visual figcaption {
+  display: block;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 10px 14px 12px;
+  background: rgba(255,255,255,.82);
+  color: rgba(8,48,68,.7);
+  line-height: 1.55;
+}
+
 .case-chapter {
   width: min(980px, calc(100% - 40px));
   min-height: auto;
