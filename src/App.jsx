@@ -2023,7 +2023,7 @@ export default function App() {
           <SectionText kicker="图表说明">
             <p>从 2022 年国家水资源压力排名能够清晰看见巨大分化，埃及、巴林、阿联酋等诸多国家淡水取用量显著超出本土可再生淡水资源上限，水资源供需缺口极为尖锐。</p>
           </SectionText>
-          <ClientVisual image={clientWaterPressure} alt="water pressure reference" variant="stress-pressure-visual" />
+          <ClientVisual image={clientWaterPressure} alt="water pressure reference" caption="制图数据源依托 World Bank《Water Stress》全球水资源压力数据库" variant="stress-pressure-visual" />
         </div>
         <div className="glass-card reveal"><div className="card-head"><span>国家水资源压力排行</span><b>2022</b></div><StressRanking /><ChartAnnotation>水资源压力指数 = 淡水取水量 ÷ 可再生淡水资源总量 × 100%。埃及 7750% 约为 77.5 倍，巴林 3877.5% 约为 38.8 倍，远高于普通国家几十%或 100% 左右的水平，通常意味着当地需要依赖地下水超采、海水淡化、外部水源或虚拟水贸易维持供水。对数轴用于避免极端值把普通国家全部压缩在一起。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 指标定义', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
       </section>
