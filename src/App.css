@@ -2981,15 +2981,28 @@ main::before {
 
 .client-visual.stress-pressure-visual {
   width: 100%;
-  aspect-ratio: 1.55 / 1;
+  aspect-ratio: auto;
   margin: 0;
   border-radius: 22px;
   background: rgba(255,255,255,.7);
 }
 
 .client-visual.stress-pressure-visual img {
+  height: auto;
+  aspect-ratio: 1.55 / 1;
   object-fit: cover;
   object-position: 50% 43%;
+}
+
+.client-visual.stress-pressure-visual figcaption {
+  display: block;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 10px 14px 12px;
+  background: rgba(255,255,255,.82);
+  color: rgba(8,48,68,.7);
+  line-height: 1.55;
 }
 
 .map-copy-stack {
