@@ -1996,7 +1996,7 @@ export default function App() {
           <div className="card-head"><span>中东—中亚—南亚水资源压力带</span><b>HOTSPOTS</b></div>
           <WorldPressureMap />
           <ChartAnnotation>
-            水资源压力指数 = 淡水取水量 ÷ 可再生淡水资源总量 × 100%。例如埃及 7750% 约为 77.5 倍，巴林 3877.5% 约为 38.8 倍，表示取水压力远超本国可再生淡水供给。此类极端压力通常需要依赖地下水、海水淡化、外部水源或虚拟水贸易等方式维持供水；因此图表采用对数轴，同时容纳几十%、几百%与几千%的差异。
+            水资源压力指数 = 淡水取水量 ÷ 可再生淡水资源总量 × 100%。例如埃及 7750% 约为 77.5 倍，巴林 3877.5% 约为 38.8 倍，表示取水压力远超本国可再生淡水供给。此类极端压力通常需要依赖地下水、海水淡化、外部水源或虚拟水贸易等方式维持供水；由于各国压力值跨度很大，地图采用对数色阶显示颜色，并使用平方根缩放控制气泡大小，避免极端值完全遮盖其他国家。
           </ChartAnnotation>
           <SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote>
         </div>
