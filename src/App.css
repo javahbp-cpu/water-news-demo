@@ -3347,6 +3347,7 @@ main::before {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform: translateY(-18px);
 }
 
 .client-visual.coverage-bottle-visual {
@@ -3464,6 +3465,10 @@ main::before {
   }
   .coverage-illustrations {
     gap: 14px;
+  }
+  .client-visual.coverage-bottle-visual img,
+  .client-visual.coverage-recycle-visual img {
+    transform: translateY(-8px);
   }
   .client-visual.coverage-bottle-visual {
     height: 172px;

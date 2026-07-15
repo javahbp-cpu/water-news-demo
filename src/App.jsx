@@ -2105,7 +2105,7 @@ export default function App() {
             <ClientVisual image={waterRecycleIllustration} alt="water recycling illustration" variant="coverage-recycle-visual" />
           </div>
         <SectionText kicker="图表说明">
-          <p className="coverage-copy"><StrongMark>进一步的数据分析清晰表明：</StrongMark><br />虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态与经济条件薄弱的脆弱地区。伴随着整体覆盖率不断向 100% 靠拢，尚未实现供水覆盖的偏远区域与少数群体，反而成为最难推进解决的遗留难题。</p>
+          <p className="coverage-copy"><StrongMark>进一步的数据分析清晰表明：</StrongMark><br />虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态环境承载力偏弱、经济发展水平不足的区域。伴随着整体供水覆盖率持续向 100% 迈进，尚未实现供水保障的偏远区域与弱势群体，逐步转变为最难攻克的遗留短板，剩余缺口的治理难度持续抬升。这也再次印证，水资源压力并不会在全球均匀分摊，严峻的缺水负担高度集中于部分国家与地区，且当地资源承载已逼近承载极限。</p>
         </SectionText>
         </div>
         <div className="glass-card reveal"><div className="card-head"><span>基本饮水服务覆盖率 / 缺口人口</span><b>2024</b></div><CoverageSwitcher /><ChartAnnotation>覆盖率反映比例，缺口人口反映规模；同一地区即使覆盖率较高，只要人口基数足够大，仍可能存在数量庞大的未覆盖人口。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 基本饮水服务', url: sourceLinks.drinkingWater }]}>资料来源：World Bank</SourceNote></div>
