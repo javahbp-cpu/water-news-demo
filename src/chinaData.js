@@ -179,5 +179,6 @@ export const sourceLinks = {
   cidca: 'http://www.cidca.gov.cn/',
   mwrInternational: 'http://www.mwr.gov.cn/',
   nsbd: 'https://www.nsbd.cn/zt/zxgctsszn/',
-  turkanaCase: 'https://www.unicef.org/kenya/stories/drought-hope-advancing-water-sanitation-and-hygiene-turkana-county'
+  turkanaCase: 'https://www.unicef.org/kenya/stories/drought-hope-advancing-water-sanitation-and-hygiene-turkana-county',
+  turkanaImage: 'https://www.voroniapp.com/'
 }

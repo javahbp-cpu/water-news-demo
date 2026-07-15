@@ -2296,6 +2296,31 @@ main::before {
   gap: 22px;
 }
 
+.case-series {
+  display: grid;
+  gap: 58px;
+}
+
+.regional-case-panel {
+  display: grid;
+  gap: 22px;
+}
+
+.regional-case-photo {
+  width: 100%;
+  aspect-ratio: auto;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: 0 28px 80px rgba(20, 108, 139, .16);
+}
+
+.regional-case-content {
+  display: block;
+}
+
 .turkana-case-card {
   position: relative;
   display: block;
@@ -2974,6 +2999,13 @@ main::before {
   color: rgba(8,48,68,.7);
   font-size: 12px;
   font-weight: 900;
+  line-height: 1.6;
+}
+
+.client-visual figcaption a {
+  color: #087f9f;
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .client-visual.text-visual {
@@ -3187,7 +3219,7 @@ main::before {
 
 .turkana-visual {
   width: 100%;
-  aspect-ratio: 2.42 / 1;
+  aspect-ratio: auto;
   min-height: 0;
   margin: 0;
   border: 0;
@@ -3198,8 +3230,41 @@ main::before {
 
 .turkana-visual img {
   min-height: 0;
+  height: auto;
+  aspect-ratio: 2.42 / 1;
   object-fit: cover;
   object-position: center;
+}
+
+.turkana-visual figcaption {
+  display: block;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 10px 14px 12px;
+  background: rgba(255,255,255,.82);
+  color: rgba(8,48,68,.7);
+  line-height: 1.55;
+}
+
+.regional-case-photo img {
+  height: auto;
+  aspect-ratio: 2.42 / 1;
+}
+
+.regional-case-photo figcaption {
+  display: block;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 10px 14px 12px;
+  background: rgba(255,255,255,.82);
+  color: rgba(8,48,68,.7);
+  line-height: 1.55;
+}
+
+.regional-case-photo figcaption strong {
+  color: rgba(8,48,68,.84);
 }
 
 .case-art-title {

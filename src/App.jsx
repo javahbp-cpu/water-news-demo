@@ -17,6 +17,8 @@ import chinaNewsEcologyTwo from './assets/china-news-ecology-2.png'
 import clientWaterPressure from './assets/client/water-pressure.jpg'
 import droughtCrackedLand from './assets/client/drought-cracked-land.webp'
 import clientTurkana from './assets/client/turkana.jpg'
+import somaliaDisplacement from './assets/client/somalia-displacement.png'
+import yemenAdenMarket from './assets/client/yemen-aden-market.png'
 import clientWaterQuality from './assets/client/water-quality.jpg'
 import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.png'
 import clientPakistanProjectTwo from './assets/client/china-pakistan-project-2.png'
@@ -815,7 +817,12 @@ function WorldPressureMap() {
 function TurkanaCasePanel() {
   return (
     <div className="turkana-case-layout reveal">
-      <ClientVisual image={clientTurkana} alt="Turkana water access scene" variant="turkana-visual" />
+      <ClientVisual
+        image={clientTurkana}
+        alt="妇女们在干旱稀树草原中运输储水容器"
+        variant="turkana-visual"
+        caption={<>妇女们依靠头顶、手提、拖拽等多种方式运载储水容器，在干旱稀树草原长途行进。图片来源：<a href={sourceLinks.turkanaImage} target="_blank" rel="noreferrer">https://www.voroniapp.com/</a></>}
+      />
       <div className="turkana-case-card">
         <div className="turkana-copy">
           <span className="case-art-title"><span>肯尼亚</span><strong>图尔卡纳</strong></span>
@@ -827,6 +834,23 @@ function TurkanaCasePanel() {
     </div>
   )
 }
+
+function RegionalCasePanel({ variant, country, title, image, imageAlt, caption, children }) {
+  return (
+    <article className={`regional-case-panel ${variant} reveal`}>
+      <ClientVisual image={image} alt={imageAlt} variant="regional-case-photo" caption={caption} />
+      <div className="turkana-case-card regional-case-card">
+        <div className="regional-case-content">
+          <div className="turkana-copy">
+            <span className="case-art-title"><span>{country}</span><strong>{title}</strong></span>
+            {children}
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 function StressRanking() {
   const ref = useRef(null)
   const rows = useMemo(() => [...data.stressTop].reverse(), [])
@@ -2046,7 +2070,31 @@ export default function App() {
 
       <section className="chapter case-chapter" id="case">
         <div className="chapter-bg" />
-        <TurkanaCasePanel />
+        <div className="case-series">
+          <TurkanaCasePanel />
+          <RegionalCasePanel
+            variant="somalia-case"
+            country="索马里"
+            title="努加尔州"
+            image={somaliaDisplacement}
+            imageAlt="索马里南部流离失所者营地中的两名年轻女孩"
+            caption={<><strong>联合国儿童基金会 / Said Fadhaye</strong>：两名年轻女孩穿行在索马里南部的流离失所者营地，那里收容着因干旱而流离失所的家庭。</>}
+          >
+            <p className="scroll-copy">索马里则展现出干旱气候与武装冲突交织放大水危机的残酷现实。在索马里东北部努加尔州的游牧社区，持续数十年的周期性干旱不断干涸季节性河谷，部族之间围绕残存水井、水塘的冲突频繁爆发。大量牧民被迫放弃草场涌入难民营，37岁的游牧民法图玛・阿里被迫每日排队数小时领取配给饮用水，洁净水源供给不稳定，腹泻、急性营养不良长期威胁家中幼童生存。</p>
+            <p className="scroll-copy"><StrongMark>气候干旱制造水源缺口，动荡局势摧毁供水基础设施，原本维系生存的水资源，持续演变为诱发流离失所、族群矛盾的导火索。</StrongMark></p>
+          </RegionalCasePanel>
+          <RegionalCasePanel
+            variant="yemen-case"
+            country="也门"
+            title="亚丁老城"
+            image={yemenAdenMarket}
+            imageAlt="两名也门商贩在亚丁老城街边售卖新鲜蔬果"
+            caption="两名也门商贩在亚丁老城街边售卖新鲜蔬果。当地农业与生鲜经营高度依赖地下水资源，地下水枯竭、供水系统崩坏持续冲击城市日常食品供给。摄于也门亚丁。佚名纪实摄影师。"
+          >
+            <p className="scroll-copy">也门的困境敲响了无节制开采地下水的长久警钟。地处阿拉伯干旱带的也门，曾是阿拉伯半岛农业重镇，数十年间民众无节制抽取深层地下水浇灌经济作物，全国地下水位持续断崖式下降，多数乡村传统水井彻底干涸。居住在萨达省乡村的居民穆罕默德・阿卜杜拉，过去依靠自家浅井维持全家生计，如今必须花费高额费用购买卡车运送的桶装水。</p>
+            <p className="scroll-copy"><StrongMark>当天然淡水资源被长期透支，再叠加战乱对市政供水系统的持续破坏，也门沦为中东水资源崩溃最典型的样本，普通人最先承受资源透支带来的生存代价。</StrongMark></p>
+          </RegionalCasePanel>
+        </div>
       </section>
 
       <section className="chapter two-col" id="coverage">
