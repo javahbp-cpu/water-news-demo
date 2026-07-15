@@ -31,6 +31,7 @@ import houseIllustration from './assets/client/house-illustration.png'
 import windIllustration from './assets/client/wind-illustration.png'
 import oceanAnimalsIllustration from './assets/client/ocean-animals-illustration.png'
 import shortageSeedling from './assets/client/shortage-seedling.jpg'
+import yangtzeEstuaryLandsat from './assets/client/yangtze-estuary-landsat.png'
 import illustrationWaterDrop from './assets/client/illustration-water-drop.png'
 import illustrationHelp from './assets/client/illustration-help.png'
 import endingDujiangyan from './assets/ending/dujiangyan.webp'
@@ -1670,9 +1671,16 @@ function PolicyFlow() {
   const [active, setActive] = useState('中央统筹')
   const flowRef = useRef(null)
   const yearThemes = {
+    2005: {
+      title: '全国统筹起步期',
+      desc: '农村饮水安全工程全面启动，国家涉水治理由区域帮扶迈向全国统筹，水量保障与流域水环境治理开始形成政策协同。',
+      nodes: ['中央统筹', '农村供水', '水污染治理'],
+      hotLines: ['l2'],
+      dotCount: 1
+    },
     2016: {
-      title: '基础建设启动期',
-      desc: '重点表现基础设施补短板，资源先流向农村供水和水污染治理两个基础领域。',
+      title: '十三五规划推进期',
+      desc: '“十三五”水利规划启动后，基础设施补短板持续推进，农村供水与水污染治理进入提质扩面阶段。',
       nodes: ['中央统筹', '农村供水', '水污染治理'],
       hotLines: ['l2'],
       dotCount: 2
@@ -1746,7 +1754,7 @@ function PolicyFlow() {
   return (
     <div className="policy-wrap">
       <div className="policy-years" aria-label="概念年份轴">
-        {[2016, 2019, 2022, 2024].map((item) => (
+        {[2005, 2016, 2019, 2022, 2024].map((item) => (
           <button key={item} className={year === item ? 'active' : ''} onClick={() => setYear(item)}>{item}</button>
         ))}
       </div>
@@ -1778,6 +1786,7 @@ function PolicyFlow() {
         <p>{activeNode.desc}</p>
         <p className="year-note">{yearTheme.desc}</p>
       </div>
+      <p className="policy-method-note"><strong>注释说明：</strong>阶段划分依据重大顶层政策迭代节点，不以均等时间间隔划分；2005—2015 年主要为农村饮水安全政策落地实施阶段。</p>
     </div>
   )
 }
@@ -2116,7 +2125,7 @@ export default function App() {
         <div className="glass-card reveal"><div className="card-head"><span>未获基本饮水服务人口估算</span><b>百万人</b></div><UnservedChart /><ChartAnnotation>把覆盖率缺口换算成人数后，人口规模和基础设施分散程度的影响会更加直观；因此比例较小的地区，也可能对应较大的实际人口缺口。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 人口', url: sourceLinks.population }]}>资料来源：World Bank</SourceNote></div>
         <div className="people-copy-stack">
           <SectionText kicker="图表说明">
-            <p><StrongMark>把覆盖率换算成人数后，缺口会变得更加具体。</StrongMark>部分地区即使覆盖率持续提升，仍会因人口规模、基础设施薄弱和地理分散，让未获基本饮水服务的人口高度集中。</p>
+            <p>饮水保障缺口在人口维度显著向<StrongMark>中低收入经济体、撒哈拉以南非洲、冲突脆弱地区</StrongMark>集中。即便部分区域饮水覆盖率降幅有限，庞大的人口基数仍造就规模可观的缺水人群，构成供水普及后期最难啃的攻坚单元。</p>
           </SectionText>
           <ClientVisual image={shortageSeedling} alt="干裂土地中新生幼苗的缺水场景" variant="people-shortage-visual" />
         </div>
@@ -2126,8 +2135,20 @@ export default function App() {
         <div className="chapter-bg" />
         <div className="trend-copy-stack">
           <SectionText kicker="图表说明">
-            <p>同样是深陷水资源高压困境，缺水的内在成因却截然不同：<StrongMark>一部分地区受制于先天自然条件，属于原生性资源禀赋匮乏；另一部分区域则因水体环境遭到破坏，由后天污染造成可用水源短缺。</StrongMark>从区域数据走势可以清晰看到，中东北非地区的水资源压力始终居高不下，干旱的先天底色叠加人口增长与产业发展的需求，让每一滴水都维系着当地民众基本生存与社会运转。放眼全球，南亚、中亚等连片干旱区域，也长期深陷资源性缺水的桎梏，而不少工业化区域，则更多面临水质污染导致的可用水量缩减难题。</p>
+            <p>同样深陷水资源高压困境，全球缺水危机的内在成因并不能简单依靠水资源压力指数完整概括。世界银行水资源压力折线仅量化取水规模与可再生水量的比值，却难以区分缺水的形成机理。依据水利部与联合国水机制（UN-Water）标准框架，缺水可以划分为资源性缺水与水质性缺水两大类型，二者时常在同一区域交织叠加，进一步放大生存风险。</p>
+            <p>中东北非、中亚等干旱带区域长期面临资源禀赋约束，天然水资源总量上限难以突破；而不少湿润区域虽降水充沛，却因污染侵蚀不断压缩可用淡水规模。值得注意的是，缺水类型并非永久固化的地理标签，粗放开发模式有可能推动单一缺水向复合型水危机演变，这也意味着应对水危机不能采取同质化治理方案，需要因地制宜识别核心矛盾、精准匹配治理工具。</p>
           </SectionText>
+          <ClientVisual
+            image={yangtzeEstuaryLandsat}
+            alt="中国长江河口卫星遥感影像，径流裹挟泥沙入海"
+            variant="trend-satellite-visual"
+            caption={(
+              <>
+                <span>中国长江河口卫星遥感影像。径流裹挟泥沙、污染物入海，直观展现流域人类活动与水文连通对近海水质的传导效应，是流域—近海水环境联动治理的典型地理样本。</span>
+                <small>影像原始数据源：NASA Landsat 卫星遥感数据集</small>
+              </>
+            )}
+          />
         </div>
         <div className="glass-card reveal"><div className="card-head"><span>全球主要区域水压力趋势：压力结果</span><b>2014—2021</b></div><RegionTrendChart /><WaterStressMechanism /><ChartAnnotation>折线图展示的是各区域水资源压力的结果和变化趋势，不能单独证明某一种成因。缺水成因可分为资源性缺水（水量本身不足）和水质性缺水（有水但无法安全利用）；中东北非曲线长期处在最高位，2021 年达到 167.14%，通常与自然供给不足、农业和人口用水增加，以及污染和气候变化对可用水量的压缩共同相关。</ChartAnnotation><SourceNote links={[{ label: 'World Bank · 水资源压力', url: sourceLinks.waterStress }]}>资料来源：World Bank</SourceNote></div>
         <p className="trend-art-copy">以水为媒，人类正共同探寻“命运与共”的深层内涵。在水资源可持续管理领域，没有哪一方能独善其身，我们共享同一片流域、相连着共同命运，更从各自的实践中生长出可供彼此借鉴的智慧。</p>
@@ -2136,7 +2157,8 @@ export default function App() {
       <section className="chapter concept" id="concept">
         <div className="chapter-bg" />
         <SectionText kicker="02 / CHINA SOLUTION" title="中国方案：系统性治理的实践与成效">
-          <p>中国水治理的智慧，从来不是无根之木。两千多年前，李冰父子在岷江上“乘势利导”修建都江堰，开创了人与自然和谐共生的东方治水哲学；如今，“山水林田湖草沙”的系统治理理念，正是这份古老智慧在当代的回响与升级。中国始终保持顶层设计的战略定力与精准施策，从流域统筹、农村供水到水环境治理，变的是技术手段，不变的是对民生福祉的终极关切与中国水治理制度韧性的空间化表达。</p>
+          <p>中国水治理的智慧，从来不是无根之木。两千多年前，李冰父子在岷江上“乘势利导”修建都江堰，开创了人与自然和谐共生的东方治水哲学；如今，“山水林田湖草沙”的系统治理理念，正是这份古老智慧在当代的回响与升级。根植于本土的治水脉络延续至现代，落地为持续迭代完善的现代涉水治理政策体系。</p>
+          <p>放眼国内水资源治理实践，早在2005年，中央便出台文件系统性部署饮用水安全保障工作，正式开启农村饮水安全工程建设，针对西北山区、西南偏远县域缺水问题开展初步帮扶，构成全国统筹水资源治理的起点。我国涉水治理工作自此由单纯解决饮水困难，转向水量供给与水质保障协同推进的综合施策阶段。</p>
         </SectionText>
         <div className="glass-card reveal concept-card"><PolicyFlow /></div>
       </section>
