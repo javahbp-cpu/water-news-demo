@@ -19,12 +19,15 @@ import droughtCrackedLand from './assets/client/drought-cracked-land.webp'
 import clientTurkana from './assets/client/turkana.jpg'
 import somaliaDisplacement from './assets/client/somalia-displacement.png'
 import yemenAdenMarket from './assets/client/yemen-aden-market.png'
-import clientWaterQuality from './assets/client/water-quality.jpg'
+import ruralWaterTreatment from './assets/client/rural-water-treatment.png'
+import ruralTapWater from './assets/client/rural-tap-water.png'
+import policyEvidence2005 from './assets/client/policy-evidence-2005.jpg'
+import policyEvidence2016 from './assets/client/policy-evidence-2016.jpg'
+import policyEvidence2025 from './assets/client/policy-evidence-2025.jpg'
 import clientPakistanProjectOne from './assets/client/china-pakistan-project-1.png'
 import clientPakistanProjectTwo from './assets/client/china-pakistan-project-2.png'
 import mapFlowIllustration from './assets/client/map-flow-illustration.png'
-import bottledWaterIllustration from './assets/client/bottled-water-illustration.png'
-import waterRecycleIllustration from './assets/client/water-recycle-illustration.png'
+import coverageWaterSplash from './assets/client/coverage-water-splash-cutout.png'
 import shipIllustration from './assets/client/ship-illustration.png'
 import fishIllustration from './assets/client/fish-illustration.png'
 import houseIllustration from './assets/client/house-illustration.png'
@@ -1256,6 +1259,67 @@ function ChinaActionDashboard() {
   )
 }
 
+const policyEvidenceItems = [
+  {
+    year: '2005',
+    image: policyEvidence2005,
+    title: '国务院办公厅关于加强饮用水安全保障工作的通知',
+    issuer: '国务院办公厅',
+    date: '2005-08-17 成文 / 2008-03-28 发布'
+  },
+  {
+    year: '2016',
+    image: policyEvidence2016,
+    title: '中华人民共和国国民经济和社会发展第十三个五年规划纲要',
+    issuer: '新华社（中国政府网发布）',
+    date: '2016-03-17'
+  },
+  {
+    year: '2025',
+    image: policyEvidence2025,
+    title: '中共中央办公厅 国务院办公厅关于全面推进江河保护治理的意见',
+    issuer: '中共中央办公厅、国务院办公厅',
+    date: '2025-06-27'
+  }
+]
+
+function PolicyEvidenceBand() {
+  return (
+    <section className="glass-card policy-evidence-band reveal" aria-labelledby="policy-evidence-title">
+      <header className="policy-evidence-heading">
+        <div>
+          <span className="eyebrow">POLICY EVIDENCE</span>
+          <h2 id="policy-evidence-title">从饮水安全到江河系统治理</h2>
+        </div>
+        <p>三份中央政策文件构成中国水治理持续演进的原始证据：保障基本饮水、纳入国家规划，再到统筹江河保护治理。</p>
+      </header>
+      <div className="policy-evidence-grid">
+        {policyEvidenceItems.map((item) => (
+          <article className={`policy-evidence-card policy-evidence-card-${item.year}`} key={item.year}>
+            <div className="policy-evidence-shot" aria-hidden="true">
+              <img src={item.image} alt="" loading="lazy" decoding="async" />
+              <span>{item.year}</span>
+            </div>
+            <div className="policy-evidence-content">
+              <h3>{item.title}</h3>
+              <dl>
+                <div>
+                  <dt>发布单位</dt>
+                  <dd>{item.issuer}</dd>
+                </div>
+                <div>
+                  <dt>日期</dt>
+                  <dd>{item.date}</dd>
+                </div>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 const projectTypeSummary = overseasProjects.reduce((acc, item) => {
   acc[item.type] = (acc[item.type] || 0) + 1
   return acc
@@ -2110,8 +2174,7 @@ export default function App() {
         <div className="chapter-bg" />
         <div className="coverage-copy-stack">
           <div className="coverage-illustrations">
-            <ClientVisual image={bottledWaterIllustration} alt="three bottled water illustrations" variant="coverage-bottle-visual" />
-            <ClientVisual image={waterRecycleIllustration} alt="water recycling illustration" variant="coverage-recycle-visual" />
+            <ClientVisual image={coverageWaterSplash} alt="蓝色水花跃出水面的横向插画" variant="coverage-water-visual" />
           </div>
         <SectionText kicker="图表说明">
           <p className="coverage-copy"><StrongMark>进一步的数据分析清晰表明：</StrongMark><br />虽然全球整体基础饮水覆盖率已实现稳步提升，但区域发展失衡问题依旧突出，饮水保障的短板高度集中在生态环境承载力偏弱、经济发展水平不足的区域。伴随着整体供水覆盖率持续向 100% 迈进，尚未实现供水保障的偏远区域与弱势群体，逐步转变为最难攻克的遗留短板，剩余缺口的治理难度持续抬升。这也再次印证，水资源压力并不会在全球均匀分摊，严峻的缺水负担高度集中于部分国家与地区，且当地资源承载已逼近承载极限。</p>
@@ -2161,6 +2224,7 @@ export default function App() {
           <p>放眼国内水资源治理实践，早在2005年，中央便出台文件系统性部署饮用水安全保障工作，正式开启农村饮水安全工程建设，针对西北山区、西南偏远县域缺水问题开展初步帮扶，构成全国统筹水资源治理的起点。我国涉水治理工作自此由单纯解决饮水困难，转向水量供给与水质保障协同推进的综合施策阶段。</p>
         </SectionText>
         <div className="glass-card reveal concept-card"><PolicyFlow /></div>
+        <PolicyEvidenceBand />
       </section>
 
       <section className="chapter china-chapter" id="china">
@@ -2168,7 +2232,14 @@ export default function App() {
         <div className="china-heading reveal">
           <p><StrongMark>依托逐年稳步增加的农村供水资金投入，我国农村自来水普及率持续稳步攀升：</StrongMark>前期依托工程建设实现覆盖率快速提升，后期增长趋于平缓，治理重心转向规模化供水长效运维与水质安全保障，逐步将亿万农村群众纳入标准化现代供水体系，<span className="china-deep-copy">基本解决了乡村取水难、水质差的旧况。</span></p>
           <p>然而，中国治水方案的优势远不止搭建供水体系。随着农村规模化供水全面落地，水环境与水质污染治理的新挑战接踵而至。精准的政策引导，直接推动了水环境质量实现系统性提升。一升一降两组数据，清晰勾勒出近九年来我国地表水水质持续改善的轨迹：<StrongMark>九年间，全国地表水优良断面占比由67.8%升至90.4%，劣V类水体占比从8.6%锐减至0.6%，标志着我国污染水体已基本消除。</StrongMark></p>
-          <ClientVisual image={clientWaterQuality} alt="surface water quality improvement" variant="china-quality-visual" />
+          <div className="china-quality-gallery" aria-label="农村供水保障场景">
+            <figure className="china-quality-shot">
+              <img src={ruralWaterTreatment} alt="农村供水处理设施运行场景" loading="lazy" decoding="async" />
+            </figure>
+            <figure className="china-quality-shot">
+              <img src={ruralTapWater} alt="农村居民在家中使用自来水清洗蔬菜" loading="lazy" decoding="async" />
+            </figure>
+          </div>
         </div>
         <div className="glass-card reveal china-card"><ChinaActionDashboard /></div>
       </section>
