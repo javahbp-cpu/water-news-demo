@@ -12,15 +12,14 @@ import { chinaData, overseasProjects, pakistanData, sourceLinks } from './chinaD
 import worldGeo from './assets/world.geo.json'
 import clearRiver from './assets/clear-river.webp'
 import forestWaterfall from './assets/forest-waterfall.webp'
-import chinaNewsEcologyOne from './assets/china-news-ecology-1.png'
-import chinaNewsEcologyTwo from './assets/china-news-ecology-2.png'
-import waterGovernanceReportThree from './assets/client/water-governance-report-03.png'
-import waterGovernanceReportFour from './assets/client/water-governance-report-04.png'
-import waterGovernanceReportFive from './assets/client/water-governance-report-05.png'
-import waterGovernanceReportSix from './assets/client/water-governance-report-06.png'
-import waterGovernanceReportSeven from './assets/client/water-governance-report-07.png'
-import waterGovernanceReportEight from './assets/client/water-governance-report-08.png'
-import waterGovernanceReportNine from './assets/client/water-governance-report-09.png'
+import waterGovernancePressConference from './assets/client/report-press-conference.jpg'
+import waterGovernancePolicyInterpretation from './assets/client/report-policy-interpretation.jpg'
+import waterGovernanceFiveActions from './assets/client/report-five-actions.jpg'
+import waterGovernanceInspectionCases from './assets/client/report-inspection-cases.jpg'
+import waterGovernanceActionPlan from './assets/client/report-action-plan.png'
+import waterGovernancePressQa from './assets/client/report-press-qa.png'
+import waterGovernanceReporterQuestion from './assets/client/report-reporter-question.png'
+import waterGovernanceOverseasDaily from './assets/client/report-overseas-daily.png'
 import waterGovernanceWordCloud from './assets/client/water-governance-word-cloud.png'
 import clientWaterPressure from './assets/client/water-pressure.jpg'
 import droughtCrackedLand from './assets/client/drought-cracked-land.webp'
@@ -38,6 +37,7 @@ import mapFlowIllustration from './assets/client/map-flow-illustration.png'
 import coverageWaterSplash from './assets/client/coverage-water-splash-cutout.png'
 import shipIllustration from './assets/client/ship-illustration.png'
 import fishIllustration from './assets/client/fish-illustration.png'
+import bakunHydropowerAerial from './assets/client/bakun-hydropower-station-aerial.png'
 import houseIllustration from './assets/client/house-illustration.png'
 import windIllustration from './assets/client/wind-illustration.png'
 import oceanAnimalsIllustration from './assets/client/ocean-animals-illustration.png'
@@ -382,6 +382,22 @@ function SourceNote({ children, links = [] }) {
 
 function StrongMark({ children }) {
   return <strong className="text-mark">{children}</strong>
+}
+
+const overseasArtQuote = '中国治水的海外实践，正沿着“一带一路”落地生根。'
+
+function OverseasArtQuote() {
+  return (
+    <blockquote id="overseas-art-quote" className="overseas-art-copy" aria-label={overseasArtQuote}>
+      <span className="overseas-art-rule" aria-hidden="true" />
+      <span className="overseas-art-text" aria-hidden="true">
+        {[...overseasArtQuote].map((character, index) => (
+          <span className="overseas-art-char" key={`${character}-${index}`}>{character}</span>
+        ))}
+      </span>
+      <span className="overseas-art-shimmer" aria-hidden="true" />
+    </blockquote>
+  )
 }
 
 function ClientVisual({ image, alt, caption, variant = '' }) {
@@ -1184,62 +1200,57 @@ function RuralCoverageChart() {
 
 const debateReportPages = [
   {
-    src: chinaNewsEcologyOne,
-    alt: '生态环境部五大攻坚行动解决群众家门口突出水环境问题的报道截图',
-    source: '中国新闻网',
-    shape: 'portrait'
+    src: waterGovernancePressConference,
+    alt: '生态环境部例行新闻发布会现场',
+    source: '生态环境部 · 例行新闻发布会',
+    shape: 'landscape'
   },
   {
-    src: chinaNewsEcologyTwo,
-    alt: '中央生态环境保护督察集中通报四省典型案例的报道截图',
-    source: '中国新闻网',
-    shape: 'square'
+    src: waterGovernancePolicyInterpretation,
+    alt: '美丽河湖保护与建设行动方案解读页面',
+    source: '生态环境部 · 文件库',
+    shape: 'landscape'
   },
   {
-    src: waterGovernanceReportThree,
-    alt: '从主动脉到毛细血管，把小微水体建成美丽水细胞的报道截图',
+    src: waterGovernanceFiveActions,
+    alt: '生态环境部五大攻坚行动解决群众家门口突出水环境问题的报道页面',
+    source: '中国新闻网',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceInspectionCases,
+    alt: '中央生态环境保护督察集中通报典型案例页面',
+    source: '生态环境部 · 督察管理',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceActionPlan,
+    alt: '群众身边水体保护治理行动方案通知页面',
+    source: '水利部 · 国务院办公厅文件',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernancePressQa,
+    alt: '2026年6月生态环境部例行新闻发布会答问实录截图',
+    source: '生态环境部',
+    note: '2026年6月例行新闻发布会答问实录：回应群众身边水环境治理安排',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceReporterQuestion,
+    alt: '生态环境部例行新闻发布会记者现场提问',
+    source: '生态环境部 · 例行新闻发布会',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceOverseasDaily,
+    alt: '人民日报海外版美丽水细胞报道及报纸版面截图',
     source: '人民日报海外版',
-    shape: 'tall'
-  },
-  {
-    src: waterGovernanceReportFour,
-    alt: '生态环境部新闻发布会现场报道截图',
-    source: '生态环境部',
-    shape: 'landscape'
-  },
-  {
-    src: waterGovernanceReportFive,
-    alt: '巩固深化水环境综合治理、推动水环境质量不断改善的政策文件截图',
-    source: '生态环境部',
-    shape: 'landscape'
-  },
-  {
-    src: waterGovernanceReportSix,
-    alt: '生态环境部水生态环境政策文件库截图',
-    source: '生态环境部',
-    shape: 'landscape'
-  },
-  {
-    src: waterGovernanceReportSeven,
-    alt: '中央生态环境保护督察典型案例页面截图',
-    source: '生态环境部',
-    shape: 'landscape'
-  },
-  {
-    src: waterGovernanceReportEight,
-    alt: '群众身边水体保护治理行动方案相关文件截图',
-    source: '中国政府网',
-    shape: 'landscape'
-  },
-  {
-    src: waterGovernanceReportNine,
-    alt: '群众身边水体保护治理行动方案正文截图',
-    source: '公开政策文件',
     shape: 'landscape'
   }
 ]
 
-const debateReportRotations = [-3.8, 2.7, -2.4, 3.4, -3.1, 2.2, -1.8, 3, -2.6]
+const debateReportRotations = [-3.8, 2.7, -2.4, 3.4, -3.1, 2.2, -1.8, 3]
 
 function DebateDashboard() {
   const stackRef = useRef(null)
@@ -1372,16 +1383,19 @@ function DebateDashboard() {
       <div className="report-stack" ref={stackRef}>
         <div className="report-stack-meta" aria-hidden="true">
           <span>REPORT ARCHIVE</span>
-          <strong>09 FILES</strong>
+          <strong>08 FILES</strong>
         </div>
-        <div className="report-stack-stage" role="group" aria-label="九张水治理政策与督察报道截图的动态堆叠展示">
+        <div className="report-stack-stage" role="group" aria-label="八张水治理政策、督察与新闻发布会报道截图的动态堆叠展示">
           {debateReportPages.map((page, index) => (
             <figure className={`report-sheet report-sheet-${page.shape}`} key={page.alt}>
               <div className="report-paper">
                 <img src={page.src} alt={page.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
                 <figcaption>
                   <span>{String(index + 1).padStart(2, '0')}</span>
-                  {page.source}
+                  <span className="report-caption-copy">
+                    <strong>{page.source}</strong>
+                    {page.note && <small>{page.note}</small>}
+                  </span>
                 </figcaption>
               </div>
             </figure>
@@ -2239,6 +2253,25 @@ export default function App() {
           }
         })
       })
+      const overseasQuote = document.querySelector('.overseas-art-copy')
+      if (overseasQuote) {
+        const quoteChars = gsap.utils.toArray('.overseas-art-char', overseasQuote)
+        const quoteRule = overseasQuote.querySelector('.overseas-art-rule')
+        const quoteShimmer = overseasQuote.querySelector('.overseas-art-shimmer')
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: overseasQuote,
+            start: 'top 84%',
+            once: true
+          },
+          defaults: { ease: 'power3.out' }
+        })
+          .fromTo(overseasQuote, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.58 }, 0)
+          .fromTo(quoteRule, { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: 0.9 }, 0.06)
+          .fromTo(quoteChars, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.58, stagger: 0.035 }, 0.12)
+          .fromTo(quoteShimmer, { xPercent: -125, autoAlpha: 0 }, { xPercent: 125, autoAlpha: 0.62, duration: 1.15, ease: 'power2.inOut' }, 0.42)
+      }
       gsap.utils.toArray('.chapter').forEach((section) => {
         gsap.to(section.querySelector('.chapter-bg'), { yPercent: -18, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true } })
       })
@@ -2470,32 +2503,43 @@ export default function App() {
           <p>然而在大江大河水质明显改善的同时，中国生态环境部始终保持在行进中不断回望、在成绩前始终清醒的反思自觉。在树立和践行正确政绩观的学习教育活动中，生态环境部官方公开复盘明确指出：“当前我国水环境改善基础<StrongMark>尚不稳固</StrongMark>，治理工作长期存在<StrongMark>重干流、轻支流，重大水体、轻小微水体</StrongMark>的结构性偏差”。水质改善的宏观数据与微观感知之间的温差，正是治理精度需要再次校准的地方。</p>
           <p>针对政策落地过程中暴露的治理盲区与治理不均衡问题，国家多部门主动补位纠偏。2026年6月，国务院办公厅转发生态环境部等六部门联合印发《群众身边水体保护治理行动方案》，直面过往治理薄弱环节，精准部署“工业园区水污染整治、县乡黑臭水体治理、畜禽粪污综合治理、乡村河湖库管护、小微水体排查整治”五大攻坚行动，将治理重心从大江大河“主动脉”全面下沉至基层小微水体“水细胞”，补齐基层水环境治理短板，破解“看得见的成效、感受不到的改善”的治理落差。</p>
           <p>与此同时，第三轮中央生态环境保护督察坚持“不回避问题、不遮掩短板”的督察导向，主动深挖水治理领域形式主义、整改敷衍、监管缺位等深层问题。公开通报多地存在“污水管网配套滞后、雨污混流、农村粪污直排、小微水体排查走过场”等典型问题，曝光部分地区重纸面整改、轻实地治理的治理惰性。国家通过常态化督察问责、公开通报倒逼地方纠偏整改，彻底破除以往“重指标、轻民生”的片面治理逻辑，<StrongMark>推动水治理从数据达标向群众真实满意深度转型</StrongMark>。</p>
-          <p className="debate-art-copy">这种精益求精的治理逻辑，将静态的中国方案转化为一个不断动态发展的治理生态系统。当这套“反思——整改——提升”的闭环机制持续运转，中国水治理便拥有了向内扎根的深度，而这恰恰是它向外生长的底气。</p>
         </SectionText>
+        <p className="debate-art-copy reveal">这种精益求精的治理逻辑，将静态的中国方案转化为一个不断动态发展的治理生态系统。当这套“反思——整改——提升”的闭环机制持续运转，中国水治理便拥有了向内扎根的深度，而这恰恰是它向外生长的底气。</p>
       </section>
 
       <section className="chapter two-col overseas-chapter" id="overseas">
         <div className="chapter-bg" />
-        <SectionText
-          kicker="04 / OVERSEAS PROJECTS"
-          title={(
-            <span className="overseas-title-wrap">
-              <img className="overseas-ship-illustration" src={shipIllustration} alt="" loading="lazy" decoding="async" />
-              <span className="overseas-title-stack">
-                <img className="overseas-fish-background" src={fishIllustration} alt="" loading="lazy" decoding="async" />
-                <span className="overseas-title-copy">出海之路：<br />系统方案与国际合作的双向赋能</span>
+        <div className="overseas-copy-stack">
+          <SectionText
+            kicker="04 / OVERSEAS PROJECTS"
+            title={(
+              <span className="overseas-title-wrap">
+                <img className="overseas-ship-illustration" src={shipIllustration} alt="" loading="lazy" decoding="async" />
+                <span className="overseas-title-stack">
+                  <img className="overseas-fish-background" src={fishIllustration} alt="" loading="lazy" decoding="async" />
+                  <span className="overseas-title-copy">出海之路：<br />系统方案与国际合作的双向赋能</span>
+                </span>
               </span>
-            </span>
-          )}
-        >
-          <p>如今，中国治水的实践半径正从国内流域延伸至全球缺水地区——水龙头背后的治水故事，正在被书写进更广阔的世界版图，中国治水的出海之路由此开启。</p>
-          <p>当我们把视线聚焦到具体的水坝点位，一幅更清晰的图景浮现出来<br /><StrongMark>——中国治水的海外实践，正沿着“一带一路”落地生根。</StrongMark></p>
-        </SectionText>
+            )}
+          >
+            <p>如今，中国治水的实践半径正从国内流域延伸至全球缺水地区——水龙头背后的治水故事，正在被书写进更广阔的世界版图，中国治水的出海之路由此开启。</p>
+            <p>当我们把视线聚焦到具体的水坝点位，一幅更清晰的图景浮现出来。</p>
+          </SectionText>
+          <figure className="bakun-project-visual reveal">
+            <img src={bakunHydropowerAerial} alt="马来西亚砂拉越州巴贡水电站航拍图" loading="lazy" decoding="async" />
+            <figcaption>
+              <strong>马来西亚砂拉越州巴贡水电站航拍图</strong>
+              <span>该电站是东南亚大型综合水利枢纽，由中国水电集团联营体承建，兼具发电、径流调控功能，是我国海外承建规模最大水电站中的中国方案。</span>
+              <small>图片来源：中国电建官网</small>
+            </figcaption>
+          </figure>
+        </div>
         <div className="glass-card reveal overseas-card">
           <div className="card-head"><span>中国海外水利项目</span><b>2006—2024</b></div>
           <OverseasPortfolio />
           <ChartAnnotation>15 个项目覆盖 12 个国家，项目类型从水电站扩展到供水、水坝、灌溉和水利信息化；点位数量体现空间分布，投资额仅统计已披露项目。</ChartAnnotation>
         </div>
+        <OverseasArtQuote />
       </section>
 
       <section className="chapter two-col reverse pakistan-chapter" id="pakistan">

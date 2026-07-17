@@ -1411,6 +1411,7 @@ main::before {
 
 .debate-chapter {
   align-items: stretch;
+  row-gap: clamp(30px, 4vw, 48px);
 }
 
 .debate-card {
@@ -1578,7 +1579,7 @@ main::before {
 .report-stack-stage {
   position: relative;
   flex: 1;
-  min-height: 820px;
+  min-height: 460px;
   margin: 8px 8px 10px;
   perspective: 1200px;
 }
@@ -1644,6 +1645,27 @@ main::before {
   font-variant-numeric: tabular-nums;
 }
 
+.report-paper figcaption .report-caption-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  color: rgba(215,241,249,.78);
+}
+
+.report-caption-copy strong {
+  color: inherit;
+  font-size: inherit;
+  line-height: 1.35;
+}
+
+.report-caption-copy small {
+  color: rgba(167,234,255,.72);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: .02em;
+}
+
 
 .debate-word-cloud {
   position: relative;
@@ -1704,13 +1726,13 @@ main::before {
 }
 
 @media (max-width: 980px) {
-  .report-stack-stage { min-height: 700px; }
+  .report-stack-stage { min-height: 580px; }
 }
 
 @media (max-width: 640px) {
   .report-stack { border-radius: 22px; }
   .report-stack-meta { padding: 14px 14px 0; }
-  .report-stack-stage { min-height: 610px; margin: 4px 4px 8px; }
+  .report-stack-stage { min-height: 440px; margin: 4px 4px 8px; }
   .report-sheet-portrait .report-paper { width: min(86%, 310px); }
   .report-sheet-square .report-paper { width: min(90%, 320px); }
   .report-sheet-tall .report-paper { width: min(82%, 286px); }
@@ -1893,6 +1915,20 @@ main::before {
 
 .overseas-chapter {
   grid-template-columns: minmax(360px, .9fr) minmax(500px, 1.1fr);
+  align-items: stretch;
+  column-gap: clamp(28px, 5vw, 72px);
+  row-gap: clamp(32px, 4vw, 48px);
+}
+
+.overseas-copy-stack {
+  display: grid;
+  align-content: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.overseas-copy-stack .section-text {
+  transform: translateY(-16px);
 }
 
 .overseas-chapter .section-text h2 {
@@ -1952,6 +1988,120 @@ main::before {
 #overseas .section-text .text-mark {
   color: #063654;
   font-weight: 950;
+}
+
+.bakun-project-visual {
+  margin: -8px 0 0;
+  overflow: hidden;
+  border: 1px solid rgba(8, 95, 126, .14);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .76);
+  box-shadow: 0 22px 56px rgba(16, 91, 119, .15);
+}
+
+.bakun-project-visual img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.75 / 1;
+  object-fit: cover;
+  object-position: center 56%;
+}
+
+.bakun-project-visual figcaption {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px 16px;
+  color: rgba(8, 48, 68, .72);
+  font-size: 12px;
+  line-height: 1.62;
+}
+
+.bakun-project-visual figcaption strong {
+  color: #063654;
+  font-size: 15px;
+}
+
+.bakun-project-visual figcaption small {
+  color: #087f9f;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+@media (min-width: 981px) {
+  .overseas-copy-stack {
+    gap: 16px;
+  }
+
+  .overseas-copy-stack .section-text {
+    transform: translateY(-24px);
+  }
+
+  .overseas-title-wrap {
+    padding-top: clamp(34px, 3.2vw, 48px);
+  }
+
+  .overseas-ship-illustration {
+    top: clamp(-54px, -3vw, -42px);
+  }
+
+  .bakun-project-visual img {
+    aspect-ratio: 2.05 / 1;
+    object-position: center 56%;
+  }
+}
+
+.overseas-art-copy {
+  position: relative;
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(1120px, 100%);
+  margin: 0;
+  padding: clamp(24px, 3vw, 38px) clamp(22px, 5vw, 68px);
+  overflow: hidden;
+  border: 1px solid rgba(22, 151, 181, .14);
+  border-radius: 22px;
+  color: #075479;
+  background: rgba(224, 248, 252, .88);
+  box-shadow: 0 22px 54px rgba(16, 91, 119, .12);
+  font-family: "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", serif;
+  font-size: clamp(26px, 2.7vw, 38px);
+  font-weight: 950;
+  line-height: 1.72;
+  letter-spacing: .06em;
+  text-align: center;
+  text-shadow: 0 10px 24px rgba(13, 103, 139, .14);
+}
+
+.overseas-art-text {
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+
+.overseas-art-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.overseas-art-rule {
+  position: absolute;
+  left: clamp(22px, 5vw, 68px);
+  right: clamp(22px, 5vw, 68px);
+  bottom: 18px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(7, 127, 159, .42), transparent);
+}
+
+.overseas-art-shimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .72), transparent);
+  transform: skewX(-18deg);
+  will-change: transform, opacity;
 }
 
 .project-lock-card span {
@@ -2650,6 +2800,8 @@ main::before {
 
 .bri-card {
   min-width: 0;
+  width: min(1180px, 100%);
+  justify-self: center;
   overflow: hidden;
   padding: 24px;
 }
@@ -2658,6 +2810,8 @@ main::before {
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(320px, .85fr);
+  align-items: stretch;
   gap: 14px;
 }
 
@@ -2675,6 +2829,13 @@ main::before {
   display: block;
   width: 100%;
   height: auto;
+}
+
+@media (min-width: 981px) {
+  .bri-map svg {
+    transform: translateY(12px) scale(1.16);
+    transform-origin: center;
+  }
 }
 
 .bri-country {
@@ -2732,12 +2893,15 @@ main::before {
 
 .bri-timeline {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
 .bri-timeline article {
   min-width: 0;
+  display: grid;
+  align-content: center;
   padding: 10px;
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 18px;
@@ -2921,12 +3085,18 @@ main::before {
 
 @media (max-width: 980px) {
   .chapter { min-height: auto; padding: 76px 0; }
+  .overseas-chapter { grid-template-columns: 1fr; }
+  .bakun-project-visual img {
+    aspect-ratio: 1.5 / 1;
+    object-position: center;
+  }
   .hero-photo { width: min(100%, 520px); top: auto; }
   .hero-water-3d { right: -110px; top: 20vh; width: min(44vw, 420px); opacity: .34; }
   .globe-3d-wrap { grid-template-columns: 1fr; min-height: auto; }
   .globe-3d-stage, .globe-fallback { max-height: none; }
   .globe-info-panel { max-height: none; }
-  .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid, .debate-grid, .wisdom-grid, .bri-timeline { grid-template-columns: 1fr; }
+  .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid, .debate-grid, .wisdom-grid { grid-template-columns: 1fr; }
+  .bri-map-wrap { grid-template-columns: 1fr; }
   .groundwater-grid, .cooperation-card-grid { grid-template-columns: 1fr 1fr; }
   .investment-stats { grid-template-columns: 1fr; }
   .pakistan-chapter {
@@ -2981,6 +3151,27 @@ main::before {
     width: min(280px, 86%);
     opacity: .24;
   }
+  .overseas-copy-stack {
+    gap: 20px;
+  }
+  .overseas-copy-stack .section-text {
+    transform: none;
+  }
+  .bakun-project-visual {
+    margin-top: 0;
+    border-radius: 20px;
+  }
+  .bakun-project-visual figcaption {
+    padding: 12px 14px 14px;
+  }
+  .overseas-art-copy {
+    padding: 22px 16px 28px;
+    border-radius: 18px;
+    font-size: clamp(22px, 7vw, 29px);
+    line-height: 1.62;
+    letter-spacing: .02em;
+  }
+  .overseas-art-rule { bottom: 14px; }
   #overseas .section-text p { font-size: 17px; line-height: 1.9; }
   .route-art-copy {
     gap: 10px;
@@ -3072,6 +3263,8 @@ main::before {
   }
   .report-stack-toggle { display: none; }
   .water-cursor { display: none; }
+  .overseas-art-char,
+  .overseas-art-shimmer { will-change: auto; }
 }
 
 /* Section background plates: use the six client-provided images in original order */
@@ -3409,9 +3602,9 @@ main::before {
 }
 
 .trend-art-copy,
-.section-text p.debate-art-copy {
+.debate-art-copy {
   grid-column: 1 / -1;
-  margin: 0;
+  margin: 0 auto;
   padding: 0 12px;
   justify-self: center;
   width: min(980px, 100%);
@@ -3754,8 +3947,8 @@ main::before {
     margin-top: 0;
   }
   .trend-art-copy,
-  .section-text p.debate-art-copy {
-    grid-column: auto;
+  .debate-art-copy {
+    grid-column: 1 / -1;
     width: 100%;
     padding: 0;
     font-size: 22px;
