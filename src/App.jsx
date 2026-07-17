@@ -14,6 +14,14 @@ import clearRiver from './assets/clear-river.webp'
 import forestWaterfall from './assets/forest-waterfall.webp'
 import chinaNewsEcologyOne from './assets/china-news-ecology-1.png'
 import chinaNewsEcologyTwo from './assets/china-news-ecology-2.png'
+import waterGovernanceReportThree from './assets/client/water-governance-report-03.png'
+import waterGovernanceReportFour from './assets/client/water-governance-report-04.png'
+import waterGovernanceReportFive from './assets/client/water-governance-report-05.png'
+import waterGovernanceReportSix from './assets/client/water-governance-report-06.png'
+import waterGovernanceReportSeven from './assets/client/water-governance-report-07.png'
+import waterGovernanceReportEight from './assets/client/water-governance-report-08.png'
+import waterGovernanceReportNine from './assets/client/water-governance-report-09.png'
+import waterGovernanceWordCloud from './assets/client/water-governance-word-cloud.png'
 import clientWaterPressure from './assets/client/water-pressure.jpg'
 import droughtCrackedLand from './assets/client/drought-cracked-land.webp'
 import clientTurkana from './assets/client/turkana.jpg'
@@ -1174,24 +1182,232 @@ function RuralCoverageChart() {
   return <div className="chart rural-coverage-chart" ref={ref} role="img" aria-label="2015 至 2023 年农村自来水普及率与规模化供水覆盖率趋势图" />
 }
 
+const debateReportPages = [
+  {
+    src: chinaNewsEcologyOne,
+    alt: '生态环境部五大攻坚行动解决群众家门口突出水环境问题的报道截图',
+    source: '中国新闻网',
+    shape: 'portrait'
+  },
+  {
+    src: chinaNewsEcologyTwo,
+    alt: '中央生态环境保护督察集中通报四省典型案例的报道截图',
+    source: '中国新闻网',
+    shape: 'square'
+  },
+  {
+    src: waterGovernanceReportThree,
+    alt: '从主动脉到毛细血管，把小微水体建成美丽水细胞的报道截图',
+    source: '人民日报海外版',
+    shape: 'tall'
+  },
+  {
+    src: waterGovernanceReportFour,
+    alt: '生态环境部新闻发布会现场报道截图',
+    source: '生态环境部',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceReportFive,
+    alt: '巩固深化水环境综合治理、推动水环境质量不断改善的政策文件截图',
+    source: '生态环境部',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceReportSix,
+    alt: '生态环境部水生态环境政策文件库截图',
+    source: '生态环境部',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceReportSeven,
+    alt: '中央生态环境保护督察典型案例页面截图',
+    source: '生态环境部',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceReportEight,
+    alt: '群众身边水体保护治理行动方案相关文件截图',
+    source: '中国政府网',
+    shape: 'landscape'
+  },
+  {
+    src: waterGovernanceReportNine,
+    alt: '群众身边水体保护治理行动方案正文截图',
+    source: '公开政策文件',
+    shape: 'landscape'
+  }
+]
+
+const debateReportRotations = [-3.8, 2.7, -2.4, 3.4, -3.1, 2.2, -1.8, 3, -2.6]
+
 function DebateDashboard() {
+  const stackRef = useRef(null)
+  const timelineRef = useRef(null)
+  const isVisibleRef = useRef(false)
+  const isPlayingRef = useRef(true)
+  const [isPlaying, setIsPlaying] = useState(true)
+
+  useEffect(() => {
+    const root = stackRef.current
+    if (!root) return undefined
+
+    const media = gsap.matchMedia()
+    media.add({
+      all: 'all',
+      isCompact: '(max-width: 640px)',
+      reduceMotion: '(prefers-reduced-motion: reduce)'
+    }, (context) => {
+      const { isCompact, reduceMotion } = context.conditions
+      const sheets = gsap.utils.toArray('.report-sheet', root)
+      if (!sheets.length) return undefined
+
+      if (reduceMotion) {
+        gsap.set(sheets, {
+          autoAlpha: (index) => (index >= sheets.length - 3 ? 1 : 0),
+          xPercent: (index) => (index >= sheets.length - 3 ? (index - sheets.length + 2) * 2.2 : 0),
+          yPercent: (index) => (index >= sheets.length - 3 ? (sheets.length - index - 1) * 1.2 : 0),
+          rotation: (index) => debateReportRotations[index],
+          scale: 1,
+          zIndex: (index) => index + 1
+        })
+        return undefined
+      }
+
+      const entryX = isCompact ? 104 : 118
+      const entryY = isCompact ? 8 : 12
+      const initialState = {
+        autoAlpha: 0,
+        xPercent: entryX,
+        yPercent: entryY,
+        rotation: isCompact ? 7 : 10,
+        scale: 0.92,
+        zIndex: (index) => index + 1
+      }
+
+      gsap.set(sheets, initialState)
+      gsap.set(sheets[0], {
+        autoAlpha: 1,
+        xPercent: 0,
+        yPercent: 0,
+        rotation: debateReportRotations[0],
+        scale: 1
+      })
+
+      const timeline = gsap.timeline({
+        paused: true,
+        repeat: -1,
+        defaults: { duration: 0.78, ease: 'power3.out' }
+      })
+
+      sheets.slice(1).forEach((sheet, offset) => {
+        const pageIndex = offset + 1
+        const label = `report-${pageIndex + 1}`
+        timeline
+          .addLabel(label, `+=${pageIndex === 1 ? 1.45 : 1.08}`)
+          .to(sheet, {
+            autoAlpha: 1,
+            xPercent: 0,
+            yPercent: 0,
+            rotation: debateReportRotations[pageIndex],
+            scale: 1
+          }, label)
+          .to(sheets[pageIndex - 1], {
+            xPercent: -1.5,
+            yPercent: 1.1,
+            rotation: debateReportRotations[pageIndex - 1] - 0.8,
+            scale: 0.985
+          }, label)
+      })
+
+      timeline
+        .addLabel('rewind', '+=2')
+        .to(sheets.slice(1).reverse(), {
+          autoAlpha: 0,
+          xPercent: -entryX,
+          yPercent: -entryY,
+          rotation: isCompact ? -6 : -9,
+          duration: 0.58,
+          stagger: 0.065,
+          ease: 'power2.in'
+        }, 'rewind')
+        .set(sheets, initialState, '>')
+        .set(sheets[0], {
+          autoAlpha: 1,
+          xPercent: 0,
+          yPercent: 0,
+          rotation: debateReportRotations[0],
+          scale: 1
+        }, '<')
+
+      timelineRef.current = timeline
+      const observer = new IntersectionObserver(([entry]) => {
+        isVisibleRef.current = entry.isIntersecting
+        if (entry.isIntersecting && isPlayingRef.current) timeline.play()
+        else timeline.pause()
+      }, { threshold: 0.24 })
+      observer.observe(root)
+
+      return () => {
+        observer.disconnect()
+        timeline.kill()
+        if (timelineRef.current === timeline) timelineRef.current = null
+        isVisibleRef.current = false
+      }
+    }, root)
+
+    return () => media.revert()
+  }, [])
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying
+    const timeline = timelineRef.current
+    if (!timeline) return
+    if (isPlaying && isVisibleRef.current) timeline.play()
+    else timeline.pause()
+  }, [isPlaying])
+
   return (
     <div className="debate-dashboard">
-      <div className="debate-news-grid">
-        <figure>
-          <img src={chinaNewsEcologyOne} alt="中国新闻网生态环境治理新闻稿截图一" loading="lazy" decoding="async" />
-          <figcaption>来源：中国新闻网</figcaption>
-        </figure>
-        <figure>
-          <img src={chinaNewsEcologyTwo} alt="中国新闻网中央生态环保督察新闻稿截图二" loading="lazy" decoding="async" />
-          <figcaption>来源：中国新闻网</figcaption>
-        </figure>
-        <div className="debate-text-panel">
-          <strong>从宏观改善到微观感知</strong>
-          <p>大江大河水质改善之后，治理继续回到群众身边的小微水体、县乡黑臭水体、园区污染整治和地方执行能力。新闻稿截图作为材料出处，补足这部分“发现问题、公开通报、持续整改”的现实证据。</p>
+      <div className="report-stack" ref={stackRef}>
+        <div className="report-stack-meta" aria-hidden="true">
+          <span>REPORT ARCHIVE</span>
+          <strong>09 FILES</strong>
         </div>
+        <div className="report-stack-stage" role="group" aria-label="九张水治理政策与督察报道截图的动态堆叠展示">
+          {debateReportPages.map((page, index) => (
+            <figure className={`report-sheet report-sheet-${page.shape}`} key={page.alt}>
+              <div className="report-paper">
+                <img src={page.src} alt={page.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
+                <figcaption>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {page.source}
+                </figcaption>
+              </div>
+            </figure>
+          ))}
+        </div>
+        <figure className="debate-word-cloud">
+          <img
+            src={waterGovernanceWordCloud}
+            alt="&#20013;&#22269;&#27700;&#29615;&#22659;&#27835;&#29702;&#21453;&#24605;&#19982;&#25972;&#25913;&#20851;&#38190;&#35789;&#35789;&#20113;"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>
+            &#27835;&#29702;&#20851;&#38190;&#35789; / &#21453;&#24605; &middot; &#25972;&#25913; &middot; &#25552;&#21319;
+          </figcaption>
+        </figure>
+        <button
+          type="button"
+          className="report-stack-toggle"
+          aria-pressed={!isPlaying}
+          onClick={() => setIsPlaying((playing) => !playing)}
+        >
+          {isPlaying ? '暂停翻页' : '继续翻页'}
+        </button>
       </div>
-      <SourceNote>资料来源：中国新闻网、生态环境部公开信息</SourceNote>
+      <SourceNote>资料来源：中国新闻网、人民日报海外版、生态环境部及公开政策文件</SourceNote>
     </div>
   )
 }
@@ -2251,10 +2467,10 @@ export default function App() {
           <DebateDashboard />
         </div>
         <SectionText kicker="03 / ITERATION" title="中国之治：在反思中精进的治理智慧">
-          <p>然而在大江大河水质明显改善的同时，中国生态环境部始终保持在行进中不断回望、在成绩前始终清醒的反思自觉。在树立和践行正确政绩观的学习教育活动中，他们注意到，群众身边的细小支流、坑塘沟渠仍然存在异色异味的状况。<StrongMark>水质改善的宏观数据与微观感知之间的温差，正是治理精度需要再次校准的地方。</StrongMark></p>
-          <p>2026年6月，生态环境部会同国家发展改革委、工信部、住建部、水利部、农业农村部，精准部署五大攻坚行动：工业园区水污染整治、县乡黑臭水体治理、畜禽粪污综合治理、乡村河湖库管护、小微水体排查整治，让人民群众放心用水，不断提升幸福感、获得感。</p>
-          <p>同期，第三轮第六批中央生态环境保护督察深入一线，查实了一批突出生态环境问题，核实了一批不作为、慢作为、不担当、不碰硬、甚至敷衍应对、形式主义的问题，并公开通报、以儆效尤。从辽宁葫芦岛生活污水收集处理短板，到多地违规取水与监管不严，国家督察始终坚定“问题不怕暴露，怕的是回避”的工作导向和治理立场，始终把人民的利益放在第一位。</p>
-          <p>这种精益求精的治理逻辑，将静态的中国方案转化为一个不断动态发展的治理生态系统。当这套“反思——整改——提升”的闭环机制持续运转，中国水治理便拥有了向内扎根的深度，而这恰恰是它向外生长的底气。</p>
+          <p>然而在大江大河水质明显改善的同时，中国生态环境部始终保持在行进中不断回望、在成绩前始终清醒的反思自觉。在树立和践行正确政绩观的学习教育活动中，生态环境部官方公开复盘明确指出：“当前我国水环境改善基础<StrongMark>尚不稳固</StrongMark>，治理工作长期存在<StrongMark>重干流、轻支流，重大水体、轻小微水体</StrongMark>的结构性偏差”。水质改善的宏观数据与微观感知之间的温差，正是治理精度需要再次校准的地方。</p>
+          <p>针对政策落地过程中暴露的治理盲区与治理不均衡问题，国家多部门主动补位纠偏。2026年6月，国务院办公厅转发生态环境部等六部门联合印发《群众身边水体保护治理行动方案》，直面过往治理薄弱环节，精准部署“工业园区水污染整治、县乡黑臭水体治理、畜禽粪污综合治理、乡村河湖库管护、小微水体排查整治”五大攻坚行动，将治理重心从大江大河“主动脉”全面下沉至基层小微水体“水细胞”，补齐基层水环境治理短板，破解“看得见的成效、感受不到的改善”的治理落差。</p>
+          <p>与此同时，第三轮中央生态环境保护督察坚持“不回避问题、不遮掩短板”的督察导向，主动深挖水治理领域形式主义、整改敷衍、监管缺位等深层问题。公开通报多地存在“污水管网配套滞后、雨污混流、农村粪污直排、小微水体排查走过场”等典型问题，曝光部分地区重纸面整改、轻实地治理的治理惰性。国家通过常态化督察问责、公开通报倒逼地方纠偏整改，彻底破除以往“重指标、轻民生”的片面治理逻辑，<StrongMark>推动水治理从数据达标向群众真实满意深度转型</StrongMark>。</p>
+          <p className="debate-art-copy">这种精益求精的治理逻辑，将静态的中国方案转化为一个不断动态发展的治理生态系统。当这套“反思——整改——提升”的闭环机制持续运转，中国水治理便拥有了向内扎根的深度，而这恰恰是它向外生长的底气。</p>
         </SectionText>
       </section>
 

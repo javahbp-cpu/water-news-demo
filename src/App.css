@@ -1409,6 +1409,25 @@ main::before {
   padding: 28px;
 }
 
+.debate-chapter {
+  align-items: stretch;
+}
+
+.debate-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.debate-card .debate-dashboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.debate-card .source-note {
+  margin-top: auto;
+}
+
 .debate-card-head {
   justify-content: flex-end;
 }
@@ -1508,40 +1527,197 @@ main::before {
   line-height: 1.85;
 }
 
-.debate-news-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  align-items: start;
-}
-
-.debate-news-grid figure {
-  margin: 0;
+.report-stack {
+  position: relative;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 24px;
-  background: rgba(232, 250, 255, .92);
-  box-shadow: 0 24px 70px rgba(0, 24, 46, .26);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(167, 234, 255, .18);
+  border-radius: 26px;
+  background:
+    linear-gradient(145deg, rgba(15, 75, 108, .54), rgba(3, 28, 51, .78)),
+    rgba(4, 38, 62, .82);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  isolation: isolate;
 }
 
-.debate-news-grid img {
+.report-stack::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .24;
+  background:
+    linear-gradient(rgba(117, 223, 255, .11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(117, 223, 255, .11) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, #000, transparent 78%);
+  pointer-events: none;
+}
+
+.report-stack-meta {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 0;
+  color: rgba(214, 245, 255, .7);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .15em;
+}
+
+.report-stack-meta strong {
+  color: #7af0c9;
+  font-size: 10px;
+}
+
+.report-stack-stage {
+  position: relative;
+  flex: 1;
+  min-height: 820px;
+  margin: 8px 8px 10px;
+  perspective: 1200px;
+}
+
+.report-sheet {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform-origin: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.report-sheet:first-child {
+  opacity: 1;
+  visibility: visible;
+}
+
+.report-paper {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.95);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow:
+    0 30px 70px rgba(0, 12, 30, .42),
+    0 8px 20px rgba(0, 18, 38, .24);
+}
+
+.report-sheet-portrait .report-paper { width: min(82%, 460px); }
+.report-sheet-square .report-paper { width: min(86%, 480px); }
+.report-sheet-tall .report-paper { width: min(74%, 410px); }
+.report-sheet-landscape .report-paper { width: min(94%, 520px); }
+
+.report-paper img {
   display: block;
   width: 100%;
-  max-height: 460px;
+  height: auto;
+  max-height: 760px;
   object-fit: contain;
+  object-position: center top;
   background: #fff;
 }
 
-.debate-news-grid figcaption {
-  padding: 10px 14px;
-  color: rgba(215,241,249,.76);
-  background: rgba(4, 21, 39, .82);
-  font-size: 12px;
+.report-paper figcaption {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  color: rgba(215,241,249,.78);
+  background: rgba(4, 21, 39, .94);
+  font-size: 11px;
   font-weight: 900;
+  letter-spacing: .04em;
 }
 
-.debate-news-grid .debate-text-panel {
-  grid-column: 1 / -1;
+.report-paper figcaption span {
+  color: #7af0c9;
+  font-variant-numeric: tabular-nums;
+}
+
+
+.debate-word-cloud {
+  position: relative;
+  z-index: 20;
+  flex: 0 0 auto;
+  margin: 0 8px 10px;
+  overflow: hidden;
+  border: 1px solid rgba(167, 234, 255, .18);
+  border-radius: 14px;
+  background: rgba(230, 249, 255, .96);
+  box-shadow: 0 16px 36px rgba(0, 18, 38, .2);
+}
+
+.debate-word-cloud img {
+  display: block;
+  width: 100%;
+  max-height: 230px;
+  object-fit: contain;
+}
+
+.debate-word-cloud figcaption {
+  padding: 8px 12px;
+  color: rgba(215, 241, 249, .78);
+  background: rgba(4, 21, 39, .94);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.report-stack-toggle {
+  position: absolute;
+  right: 18px;
+  bottom: 276px;
+  z-index: 30;
+  padding: 8px 12px;
+  border: 1px solid rgba(122, 240, 201, .3);
+  border-radius: 999px;
+  color: rgba(226, 251, 255, .9);
+  background: rgba(3, 25, 44, .76);
+  box-shadow: 0 10px 28px rgba(0, 14, 34, .22);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+}
+
+.report-stack-toggle:hover,
+.report-stack-toggle:focus-visible {
+  border-color: rgba(122, 240, 201, .7);
+  background: rgba(8, 54, 76, .9);
+  transform: translateY(-1px);
+}
+
+.report-stack-toggle:focus-visible {
+  outline: 2px solid #7af0c9;
+  outline-offset: 3px;
+}
+
+@media (max-width: 980px) {
+  .report-stack-stage { min-height: 700px; }
+}
+
+@media (max-width: 640px) {
+  .report-stack { border-radius: 22px; }
+  .report-stack-meta { padding: 14px 14px 0; }
+  .report-stack-stage { min-height: 610px; margin: 4px 4px 8px; }
+  .report-sheet-portrait .report-paper { width: min(86%, 310px); }
+  .report-sheet-square .report-paper { width: min(90%, 320px); }
+  .report-sheet-tall .report-paper { width: min(82%, 286px); }
+  .report-sheet-landscape .report-paper { width: min(96%, 330px); }
+  .report-stack-toggle { right: 14px; bottom: 230px; }
+  .debate-word-cloud { margin: 0 4px 8px; border-radius: 12px; }
+  .debate-word-cloud img { max-height: 190px; }
 }
 
 .groundwater-grid,
@@ -2750,7 +2926,7 @@ main::before {
   .globe-3d-wrap { grid-template-columns: 1fr; min-height: auto; }
   .globe-3d-stage, .globe-fallback { max-height: none; }
   .globe-info-panel { max-height: none; }
-  .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid, .debate-grid, .debate-news-grid, .wisdom-grid, .bri-timeline { grid-template-columns: 1fr; }
+  .china-metric-grid, .method-grid, .china-split, .portfolio-kpis, .pakistan-grid, .debate-grid, .wisdom-grid, .bri-timeline { grid-template-columns: 1fr; }
   .groundwater-grid, .cooperation-card-grid { grid-template-columns: 1fr 1fr; }
   .investment-stats { grid-template-columns: 1fr; }
   .pakistan-chapter {
@@ -2894,6 +3070,7 @@ main::before {
     opacity: 1 !important;
     transform: none !important;
   }
+  .report-stack-toggle { display: none; }
   .water-cursor { display: none; }
 }
 
@@ -3231,7 +3408,8 @@ main::before {
   letter-spacing: .04em;
 }
 
-.trend-art-copy {
+.trend-art-copy,
+.section-text p.debate-art-copy {
   grid-column: 1 / -1;
   margin: 0;
   padding: 0 12px;
@@ -3575,7 +3753,8 @@ main::before {
   .wisdom-photo-visual {
     margin-top: 0;
   }
-  .trend-art-copy {
+  .trend-art-copy,
+  .section-text p.debate-art-copy {
     grid-column: auto;
     width: 100%;
     padding: 0;
