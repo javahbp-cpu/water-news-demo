@@ -3738,6 +3738,10 @@ main::before {
   color: transparent;
 }
 
+.debate-art-copy {
+  width: min(1180px, 100%);
+}
+
 .people-copy-stack {
   display: grid;
   align-content: center;
