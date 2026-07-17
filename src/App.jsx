@@ -68,6 +68,35 @@ const finalePersonImages = Object.entries(import.meta.glob('./assets/ending/peop
 const finalePeopleLeft = finalePersonImages.slice(0, 9)
 const finalePeopleRight = finalePersonImages.slice(9)
 
+const referenceSources = [
+  { title: '联合国大学报告：世界已步入全球水资源破产时代｜联合国新闻', url: 'https://www.ungeneva.org/zh/news-media/news/2026/01/115063/lianheguodaxuebaogaoshijieyiburuquanqiushuiziyuanpochanshidai' },
+  { title: 'Nature｜2024 全球水资源短缺首次出现与消失时间－流域人居系统研究中心', url: 'https://rbhrc.pku.edu.cn/info/1126/2098.htm' },
+  { title: 'WMO：《2022年全球水资源状况报告》称全球水文循环正在发生重大变化－中国气象局', url: 'https://www.cma.gov.cn/ztbd/kjdsj/20231025/202311/t20231109_5878942.html' },
+  { title: 'UNU-INWEH｜联合国大学水、环境与健康研究所', url: 'https://unu.edu/inweh' },
+  { title: 'Search－World Bank Data Catalog', url: 'https://datacatalog.worldbank.org/search' },
+  { title: '水资源压力｜World Bank', url: sourceLinks.waterStress },
+  { title: '人均淡水资源｜World Bank', url: sourceLinks.freshwater },
+  { title: '国家国际发展合作署', url: sourceLinks.cidca },
+  { title: '肯尼亚图尔卡纳缺水案例｜UNICEF Kenya', url: sourceLinks.turkanaCase },
+  { title: '基本饮水服务覆盖率｜World Bank', url: sourceLinks.drinkingWater },
+  { title: '基本饮水服务覆盖率换算人口数据｜World Bank Population', url: sourceLinks.population },
+  { title: '2025年中国生态环境状况公报', url: 'https://www.mee.gov.cn/hjzl/sthjzk/zghjzkgb/202606/P020260604583244574595.pdf' },
+  { title: '生态环境部公布2026年第一季度全国地表水环境质量状况', url: 'https://www.mee.gov.cn/ywdt/xwfb/202604/t20260427_1150289.shtml' },
+  { title: '生态环境部：五大攻坚行动集中解决“家门口”的突出水环境问题｜中新网', url: 'https://www.chinanews.com.cn/sh/2026/05-29/10631076.shtml' },
+  { title: '中央生态环境保护督察集中通报典型案例｜生态环境部', url: 'https://www.mee.gov.cn/ywgz/zysthjbhdc/dcjl/202605/t20260519_1154770.shtml' },
+  { title: '中华人民共和国水利部国际合作', url: sourceLinks.mwrInternational },
+  { title: '巴基斯坦水资源压力数据｜World Bank', url: sourceLinks.pakistan },
+  { title: '巴基斯坦大型灌溉系统中的地表水和地下水', url: 'https://www.kdocs.cn/l/coBdtKwA3qsj' },
+  { title: '2024年全国水利发展统计公报｜水利部', url: 'http://www.mwr.gov.cn/sj/tjgb/slfztjgb/' },
+  { title: '中非合作的“水利定制”｜中国一带一路网', url: 'https://www.yidaiyilu.gov.cn/newSearch/project/all/c0M2R1FRTjREbTJVMU85QkNHd2U0dz09?page=37&searchScope=0&sortField=0&timeFilter=0' },
+  { title: '也门经济观察，2022年春季——也门上空是否会放晴？｜World Bank', url: 'https://www.worldbank.org/en/country/yemen/publication/yemen-economic-monitor-clearing-skies-over-yemen-spring-2022' },
+  { title: '2022年中国水资源公报｜水利部', url: 'http://www.mwr.gov.cn/xw/slyw/202306/t20230629_1672395.html' },
+  { title: '联合国世界水发展报告2023｜UN-Water', url: 'https://www.unwater.org/publications/un-world-water-development-report-2023' },
+  { title: '田学斌：让亿万农村居民喝上放心水', url: 'https://www.carta.org.cn/info/742' },
+  { title: '6月例行新闻发布会答问实录｜生态环境部', url: 'https://www.mee.gov.cn/ywdt/xwfb/202606/t20260625_1160269.shtml' },
+  { title: '把小微水体建成“美丽水细胞”｜人民日报海外版', url: 'https://paper.people.com.cn/rmrbhwb/pc/content/202607/06/content_30166781.html' }
+]
+
 const nameZh = {
   World: '全球',
   'High income': '高收入地区',
@@ -2618,7 +2647,25 @@ export default function App() {
             <figure><img src={endingNewater} alt="新加坡循环水治理空间" loading="lazy" decoding="async" /><figcaption>化污为清</figcaption></figure>
             <figure><img src={endingSharedFuture} alt="世界各国人民携手共同治水" loading="lazy" decoding="async" /><figcaption>同舟共济</figcaption></figure>
           </div>
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>回到顶部</button>
+        </div>
+      </section>
+
+      <section className="reference-library" id="sources" aria-labelledby="sources-title">
+        <div className="reference-library-inner reveal">
+          <span className="eyebrow">DATA &amp; REFERENCES</span>
+          <div className="reference-library-heading">
+            <h2 id="sources-title">数据与资料来源</h2>
+            <p>本文数据、案例与政策材料主要取自国际组织、政府部门、学术机构及权威媒体公开资料。</p>
+          </div>
+          <ol className="reference-grid">
+            {referenceSources.map((source, index) => (
+              <li key={source.title}>
+                <span className="reference-index">[{index + 1}]</span>
+                <a href={source.url} target="_blank" rel="noreferrer">{source.title}<span aria-hidden="true">↗</span></a>
+              </li>
+            ))}
+          </ol>
+          <button className="source-back-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>回到顶部</button>
         </div>
       </section>
     </main>
